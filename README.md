@@ -12,6 +12,7 @@ final assignment for java lesson.
 - [ ] 新闻看过灰色标记
 - [ ] 新闻搜索
 - [ ] 分享收藏
+- [ ] 报告
 ### Bonus:
 - [ ] 新闻推荐
 - [ ] 语音播报
