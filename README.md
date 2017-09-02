@@ -20,3 +20,4 @@ final assignment for java lesson.
 - [ ] 新闻屏蔽
 - [ ] 夜间模式
 - [ ] 文字模式、图片模式转换
+
