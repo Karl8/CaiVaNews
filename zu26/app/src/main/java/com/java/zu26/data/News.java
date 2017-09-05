@@ -10,6 +10,8 @@ public final class News {
 
     private final String mId;
 
+    private final String mAuthor;
+
     private final String mTitle;
 
     private final String mClassTag;
@@ -26,14 +28,15 @@ public final class News {
 
     private final boolean mRead;
 
-    private final String mAuthor;
 
     private final String mContent;
 
     private final boolean mFavorite;
 
-    public News(String id, String title, String classTag, String pictures, String source, String time, String url, String intro) {
+    //public ()
+    public News(String id, String author, String title, String classTag, String pictures, String source, String time, String url, String intro) {
         mId = id;
+        mAuthor = author;
         mTitle = title;
         mClassTag = classTag;
         mPictures = pictures;
@@ -42,7 +45,6 @@ public final class News {
         mUrl = url;
         mIntro = intro;
         mRead = false;
-        mAuthor = "";
         mContent = "";
         mFavorite = false;
     }

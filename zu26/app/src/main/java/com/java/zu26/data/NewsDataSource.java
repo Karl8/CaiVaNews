@@ -24,7 +24,7 @@ public interface NewsDataSource {
         void onDataNotAvailable();
     }
 
-    void getLatestNewsList(@NonNull LoadNewsListCallback callback, int amount);
+    void getLatestNewsList(int page, @NonNull LoadNewsListCallback callback);
 
     void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback);
 

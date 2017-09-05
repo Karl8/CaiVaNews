@@ -14,6 +14,7 @@ public final class NewsPersistenceContract {
         // list item
         public static final String TABLE_NAME = "news";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
+        public static final String COLUMN_NAME_AUTHOR = "author";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_CLASS_TAG = "classTag";
         public static final String COLUMN_NAME_PICTURES = "pictures";
@@ -23,8 +24,7 @@ public final class NewsPersistenceContract {
         public static final String COLUMN_NAME_INTRO = "intro";
         public static final String COLUMN_NAME_READ = "read";
         //--------------------------------------------------------------
-        // detail:
-        public static final String COLUMN_NAME_AUTHOR = "author";
+        // detail
         public static final String COLUMN_NAME_CONTENT = "content";
         public static final String COLUMN_NAME_FAVORITE = "favorite";
     }

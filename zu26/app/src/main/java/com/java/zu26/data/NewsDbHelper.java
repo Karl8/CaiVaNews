@@ -22,16 +22,17 @@ public class NewsDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + NewsPersistenceContract.NewsEntry.TABLE_NAME + " (" +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " PRIMARY KEY," +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_AUTHOR + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_CLASS_TAG + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_PICTURES + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_SOURCE + TEXT_TYPE + COMMA_SEP +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_INTRO + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_READ + BOOLEAN_TYPE + COMMA_SEP +
-                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_AUTHOR + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
-                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_AUTHOR + BOOLEAN_TYPE +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_FAVORITE + BOOLEAN_TYPE +
                     " )";
 
     public NewsDbHelper(Context context) {
