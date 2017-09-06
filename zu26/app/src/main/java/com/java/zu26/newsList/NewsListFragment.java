@@ -131,6 +131,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
     @Override
     public void showNews(int page, int category, ArrayList<News> newslist) {
+        Log.d("TAG", "showNews: " + newslist.size());
         mAdapter.replaceData(newslist);
         mPage = page;
         mCategory = category;
@@ -183,7 +184,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         }
 
         public void replaceData(ArrayList<News> _newslist) {
-            this.newslist = new ArrayList<News>(_newslist);
+            this.newslist.addAll(_newslist);
         }
 
         public News getItem(int i) {

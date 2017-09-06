@@ -51,6 +51,7 @@ public class NewsRepository implements NewsDataSource {
     @Override
     public void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback) {
         Log.d("TAG", "getNewsList: ");
+        /*
         if (mCachedNewsDetail != null && mCachedNewsListId != null && mCachedNewsListId.get(category).size() >= 10 * page) {
             ArrayList<News> newsList = new ArrayList<>();
             for (int i = page * 10 - 10; i < page * 10; i++) {
@@ -59,7 +60,7 @@ public class NewsRepository implements NewsDataSource {
             }
             callback.onNewsListLoaded(newsList);
             return;
-        }
+        }*/
         getNewsListFromRemoteDataSource(page, category, callback);
     }
     //public void reefreshCache()

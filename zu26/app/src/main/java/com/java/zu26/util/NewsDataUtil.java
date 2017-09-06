@@ -19,6 +19,7 @@ import java.util.*;
 
 public class NewsDataUtil {
     public static ArrayList<News> parseLastedNewsListJson(String content) {
+        Log.d("TAG", "parseLastedNewsListJson: " + content);
         ArrayList<News> newsList = new ArrayList<News>();
         try{
             JSONObject listJsonObj = new JSONObject(content);
