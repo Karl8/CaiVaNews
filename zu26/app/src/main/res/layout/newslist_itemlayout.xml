@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:clickable="true"
+    app:contentPadding="15dp"
+    tools:context=".newsList.NewsListActivity">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="0">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:minWidth="70dp"
+                android:minHeight="80dp">
+
+                <ImageView
+                    android:id="@+id/news_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="70dp"
+                    android:maxWidth="70dp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/news_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingEnd="20dp"
+                android:paddingRight="20dp"
+                android:paddingStart="5dp"
+                android:paddingLeft="5dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/news_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/news_source"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+
+        </TableRow>
+
+    </TableLayout>
+
+</android.support.v7.widget.CardView>

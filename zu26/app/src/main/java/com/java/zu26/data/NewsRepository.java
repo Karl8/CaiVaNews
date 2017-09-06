@@ -25,7 +25,7 @@ public class NewsRepository implements NewsDataSource {
     ArrayList<ArrayList<String>> mCachedNewsListId;
 
     private NewsRepository(@NonNull NewsDataSource newsRemoteDataSource,
-                            @NonNull NewsDataSource newsLocalDataSource) {
+                           @NonNull NewsDataSource newsLocalDataSource) {
         mNewsRemoteDataSource = newsRemoteDataSource;
         mNewsLocalDataSource = newsLocalDataSource;
         // =>>> read cache file
@@ -37,7 +37,7 @@ public class NewsRepository implements NewsDataSource {
     }
 
     public static NewsRepository getInstance(NewsDataSource newsRemoteDataSource,
-                                              NewsDataSource newsLocalDataSource) {
+                                             NewsDataSource newsLocalDataSource) {
         if (INSTANCE == null) {
             INSTANCE = new NewsRepository(newsRemoteDataSource, newsLocalDataSource);
         }
