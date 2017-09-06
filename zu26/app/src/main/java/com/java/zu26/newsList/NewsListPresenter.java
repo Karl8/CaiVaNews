@@ -1,5 +1,6 @@
 package com.java.zu26.newsList;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -28,23 +29,9 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
     private boolean mFirstLoad;
 
-    private int mPage;
-
-    private int mCategory;
-
-    final Handler handler = new Handler() {
-        public void handleMessage(Message message) {
-            Log.d("TAG", "handleMessage: ");
-            ArrayList<News> newsToShow = (ArrayList<News>)(message.obj);
-            Log.d("TAG", "handleMessage: " + newsToShow.get(1).getTitle());
-            processNews(mPage, mCategory, newsToShow);
-        }
-    };
-
     public NewsListPresenter(@NonNull NewsRepository newsRepository, @NonNull NewsListContract.View newsView) {
         mNewsRepository = checkNotNull(newsRepository, "newsRepository cannot be null");
         mNewsView = checkNotNull(newsView, "newsView cannot be null!");
-
         mNewsView.setPresenter(this);
     }
 
@@ -52,8 +39,6 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
     @Override
     public void loadNews(int page, int category, boolean forceUpdate) {
-        mPage = page;
-        mCategory = category;
         loadNewsList(page, category, forceUpdate || mFirstLoad, true);
         mFirstLoad = false;
     }
@@ -70,9 +55,15 @@ public class NewsListPresenter implements NewsListContract.Presenter{
         if(forceUpdate) {
             //mNewsRepository.refreshNews();
         }
-        ArrayList<News> newsList = new ArrayList<>();
-        newsList.add(new News("123456", "123456", "123456", "123456", "123456", "123456", "123456", "123456", "123456"));
-        processNews(1, 1, newsList);
+        final Handler handler = new Handler() {
+            public void handleMessage(Message message) {
+                Log.d("TAG", "handleMessage: ");
+                ArrayList<News> newsToShow = (ArrayList<News>)(message.obj);
+                Log.d("TAG", "handleMessage: " + newsToShow.get(1).getTitle());
+                processNews(page, category, newsToShow);
+            }
+        };
+
         mNewsRepository.getNewsList(page, category, new NewsDataSource.LoadNewsListCallback() {
 
             @Override
@@ -97,10 +88,16 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
             }
         });
+        try {
 
+            Thread.sleep(2000);
+        }
+        catch (Exception e) {
+
+        }
     }
 
-    private void processNews(int page, int category, ArrayList<News> newslist) {
+    public void processNews(int page, int category, ArrayList<News> newslist) {
 
         if(newslist.isEmpty()) {
             Log.d("TAG", "empty: ");
@@ -115,9 +112,7 @@ public class NewsListPresenter implements NewsListContract.Presenter{
     @Override
     public void start()
     {
-        mPage = 1;
-        mCategory = 1;
-        loadNews(mPage, mCategory, false);
+        loadNews(1, 1, false);
     }
 
 

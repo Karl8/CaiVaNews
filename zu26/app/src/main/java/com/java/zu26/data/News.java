@@ -38,7 +38,7 @@ public final class News implements Parcelable {
     //public ()
     private News(Parcel in){
         mTitle = in.readString();
-        mSource = in.readString();
+        mSource = "";
         mId = "";
         mAuthor = "";
         //mTitle = "";
@@ -123,7 +123,7 @@ public final class News implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        //parcel.writeString(title);
+        parcel.writeString(mTitle);
         //parcel.writeString(sourceUrl);
         //parcel.writeString(updateTime);
     }

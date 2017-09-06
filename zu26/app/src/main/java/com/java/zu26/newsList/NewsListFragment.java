@@ -1,6 +1,8 @@
 package com.java.zu26.newsList;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -97,7 +99,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
             public void onRefresh() {
 
                 // 其实应该改成true，但是没有关系，因为老师的数据库不会更新.
-                mPresenter.loadNews(0, mCategory, false);
+                mPresenter.loadNews(1, mCategory, false);
             }
         });
 
