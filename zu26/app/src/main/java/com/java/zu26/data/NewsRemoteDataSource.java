@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,8 +53,8 @@ public class NewsRemoteDataSource implements NewsDataSource {
     */
 
     @Override
-    public void getLatestNewsList(int page, @NonNull final LoadNewsListCallback callback) {
-        String url = "http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page);
+    public void getLatestNewsList(int page, int category, @NonNull final LoadNewsListCallback callback) {
+        String url = "http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + String.valueOf(category);
         class URLThread extends Thread{
             private URL url;
             public URLThread(String path) throws MalformedURLException {
@@ -93,17 +94,27 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
-    public void readNews(@NonNull News news) {
+    public void readNews(@NonNull String newsId) {
 
     }
 
     @Override
-    public void favoriteNews(@NonNull News news) {
+    public void favoriteNews(@NonNull String newsId) {
 
     }
 
     @Override
-    public void unfavoriteNews(@NonNull News news) {
+    public void unfavoriteNews(@NonNull String newsId) {
+
+    }
+
+    @Override
+    public void saveNewsList(@NonNull ArrayList<News> newsList) {
+
+    }
+
+    @Override
+    public void saveNews(@NonNull News news) {
 
     }
 

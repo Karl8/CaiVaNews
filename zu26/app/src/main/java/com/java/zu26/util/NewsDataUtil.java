@@ -18,8 +18,8 @@ import java.util.*;
  */
 
 public class NewsDataUtil {
-    public static List<News> parseLastedNewsListJson(String content) {
-        List<News> newsList = new ArrayList<News>();
+    public static ArrayList<News> parseLastedNewsListJson(String content) {
+        ArrayList<News> newsList = new ArrayList<News>();
         try{
             JSONObject listJsonObj = new JSONObject(content);
             JSONArray listJsonArray = listJsonObj.getJSONArray("list");
@@ -35,7 +35,7 @@ public class NewsDataUtil {
                 String title = newsJsonObj.getString("news_Title");
                 String url = newsJsonObj.getString("news_URL");
                 String intro = newsJsonObj.getString("news_Intro");
-                Log.d("TAG", id + " " + author + " " + intro + " " + time);
+                Log.d("TAG", "parse:" + id + " " + author + " " + intro + " " + time);
                 newsList.add(new News(id, author, title, classTag, pictures, source, time, url, intro));
 
             }

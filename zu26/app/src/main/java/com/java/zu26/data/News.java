@@ -55,7 +55,7 @@ public final class News {
 
     public String getTitle() { return mTitle; }
 
-    public String getmClassTag() { return mClassTag; }
+    public String getClassTag() { return mClassTag; }
 
     public String getPictures() { return mPictures; }
 

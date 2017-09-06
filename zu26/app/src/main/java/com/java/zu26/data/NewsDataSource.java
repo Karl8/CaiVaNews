@@ -2,6 +2,7 @@ package com.java.zu26.data;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,16 +25,20 @@ public interface NewsDataSource {
         void onDataNotAvailable();
     }
 
-    void getLatestNewsList(int page, @NonNull LoadNewsListCallback callback);
+    void getLatestNewsList(int page, int category, @NonNull LoadNewsListCallback callback);
 
     void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback);
 
 
-    void readNews(@NonNull News news);
+    void readNews(@NonNull String newsId);
 
-    void favoriteNews(@NonNull News news);
+    void favoriteNews(@NonNull String newsId);
 
-    void unfavoriteNews(@NonNull News news);
+    void unfavoriteNews(@NonNull String newsId);
+
+    void saveNewsList(@NonNull ArrayList<News> newsList);
+
+    void saveNews(@NonNull News news);
 
     // share news callback ???
 }
