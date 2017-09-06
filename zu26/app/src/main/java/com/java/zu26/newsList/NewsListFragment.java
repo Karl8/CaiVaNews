@@ -2,6 +2,7 @@ package com.java.zu26.newsList;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import com.java.zu26.newsPage.NewsPageActivity;
 import com.java.zu26.utils.News;
 import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -56,11 +59,6 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         return new NewsListFragment();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mAdapter = new NewsListAdapter(context, new ArrayList<News>(0));
-    }
 
     @Nullable
     @Override
@@ -68,6 +66,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         View root = inflater.inflate(R.layout.fragment_newslist, container, false);
 
         mRecyclerView = root.findViewById(R.id.recyclerView);
+        mAdapter = new NewsListAdapter(getContext(), new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
         SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1);
@@ -216,16 +215,21 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            Log.d("TAG", "onBindViewHolder: ");
             if(holder instanceof ItemViewHolder) {
                 News news = newslist.get(position);
                 ItemViewHolder itemHolder = (ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
-                String url = news.getPictures();
+                String url = news.getCoverPicture();
                 try {
-                    if (url != null && url.length() > 0)
+                    if (url != null && url.length() > 0) {
+                        Log.d("aaa","asaa");
                         Picasso.with(context).load(url).into(itemHolder.newsImage);
+                        //itemHolder.newsImage.setImageBitmap(BitmapFactory.decodeStream(myurl.openStream()));
+                    }
+
                 }
                 catch(Exception e) {
                     e.printStackTrace();

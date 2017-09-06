@@ -21,6 +21,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <RelativeLayout
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:minWidth="70dp"
+                android:minHeight="80dp">
+
+                <ImageView
+                    android:id="@+id/news_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="70dp"
+                    android:maxWidth="70dp"/>
+
+            </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/news_linear_layout"
                 android:layout_width="match_parent"
@@ -49,22 +66,6 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:minWidth="70dp"
-                android:minHeight="80dp">
-
-                <ImageView
-                    android:id="@+id/news_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:adjustViewBounds="true"
-                    android:maxHeight="70dp"
-                    android:maxWidth="70dp"/>
-
-            </RelativeLayout>
 
         </TableRow>
 

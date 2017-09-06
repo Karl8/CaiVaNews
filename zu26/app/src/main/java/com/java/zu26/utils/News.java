@@ -22,7 +22,7 @@ public class News implements Parcelable {
     String source = "新华网";
     String title = "TEST";
     String updateTime = "1h";
-    String pictures = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504700572201&di=e8e7d47eda3dfb47b9b6e0db53912402&imgtype=0&src=http%3A%2F%2Ff2.ldjty.com%2Fuploads%2Fallimg%2F150719%2F021933J51-4.jpg";
+    String pictures = "http://himg2.huanqiu.com/attachment2010/2016/0912/13/16/20160912011621140.png";
 
     public News() {}
 
@@ -39,7 +39,7 @@ public class News implements Parcelable {
     public String getTime(){return updateTime;}
     public String getTitle(){return title;}
     public String getSource(){return source;}
-    public String getPictures(){return pictures;}
+    public String getCoverPicture(){return pictures;}
 
     @Override
     public int describeContents() {
