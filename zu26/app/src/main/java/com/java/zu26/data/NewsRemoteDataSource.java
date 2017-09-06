@@ -53,40 +53,31 @@ public class NewsRemoteDataSource implements NewsDataSource {
     */
 
     @Override
-    public void getNewsList(int page, int category, @NonNull final LoadNewsListCallback callback) {
-        String url = "http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + String.valueOf(category);
-        class URLThread extends Thread{
-            private URL url;
-            public URLThread(String path) throws MalformedURLException {
-                url = new URL(path);
-            }
+    public void getNewsList(final int page, final int category, @NonNull final LoadNewsListCallback callback) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run(){
                 StringBuilder content = new StringBuilder();
                 try {
+                    URL url = new URL("http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + String.valueOf(category));
+                    /*
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     String line;
                     while ((line = bufferedReader.readLine()) != null) {
                         content.append(line + "\n");
                     }
-                    bufferedReader.close();
-                    ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
-                    //NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance();
-                    //newsLocalDataSource.saveNewsList(newsList);
-                    callback.onNewsListLoaded(newsList);
+                    bufferedReader.close();*/
+                    //ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
+                    callback.onNewsListLoaded(new ArrayList<News>());
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("TAG", "getUrlContent failed");
                 }
             }
-        }
-        try {
-            new URLThread(url).start();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        }, 5000);
     }
 
     @Override

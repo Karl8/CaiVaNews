@@ -1,17 +1,10 @@
 package com.java.zu26.newsList;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.java.zu26.R;
+import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsRepository;
-import com.java.zu26.utils.News;
 
 import java.util.ArrayList;
 
@@ -56,13 +49,13 @@ public class NewsListPresenter implements NewsListContract.Presenter{
             mNewsView.setLoadingIndicator(true);
         }
         if(forceUpdate) {
-            mNewsRepository.refreshNews();
+            //mNewsRepository.refreshNews();
         }
 
-        mNewsRepository.getNewsList(page, category, new NewsDataSource.LoadNewsCallback() {
+        mNewsRepository.getNewsList(page, category, new NewsDataSource.LoadNewsListCallback() {
 
             @Override
-            public void onNewsLoaded(ArrayList<News> news) {
+            public void onNewsListLoaded(ArrayList<News> news) {
                 ArrayList<News> newsToShow = new ArrayList<News>(news);
 
                 if(!mNewsView.isActive()) {

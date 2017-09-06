@@ -1,6 +1,6 @@
 package com.java.zu26.newsList;
 
-import com.java.zu26.utils.News;
+import com.java.zu26.data.News;
 
 import java.util.ArrayList;
 

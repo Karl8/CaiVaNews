@@ -1,5 +1,6 @@
 package com.java.zu26.newsList;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.java.zu26.R;
+import com.java.zu26.data.NewsLocalDataSource;
+import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.utils.ActivityUtils;
 
@@ -21,6 +24,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     private NewsListPresenter mNewsPresenter;
 
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +44,12 @@ public class NewsListActivity extends AppCompatActivity {
                     getSupportFragmentManager(), newsListFragment, R.id.contentFrame);
         }
 
+
         // Create the presenter
-        mNewsPresenter = new NewsListPresenter(NewsRepository.getInstance(), newsListFragment);
+        mContext = NewsListActivity.this;
+        NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
+        NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
+        mNewsPresenter = new NewsListPresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsListFragment);
 
     }
 

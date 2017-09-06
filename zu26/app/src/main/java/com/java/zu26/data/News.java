@@ -1,12 +1,14 @@
 package com.java.zu26.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  * Created by kaer on 2017/9/3.
  */
 
-public final class News {
+public final class News implements Parcelable {
 
     private final String mId;
 
@@ -34,6 +36,24 @@ public final class News {
     private final boolean mFavorite;
 
     //public ()
+    private News(Parcel in){
+        mTitle = in.readString();
+        mSource = in.readString();
+        mId = "";
+        mAuthor = "";
+        //mTitle = "";
+        mClassTag = "";
+        mPictures = "";
+        //mSource = "";
+        mTime = "";
+        mUrl = "";
+        mIntro = "";
+        mRead = false;
+        mContent = "";
+        mFavorite = false;
+    }
+
+
     public News(String id, String author, String title, String classTag, String pictures, String source, String time, String url, String intro) {
         mId = id;
         mAuthor = author;
@@ -96,7 +116,28 @@ public final class News {
     public boolean isFavorite() { return mFavorite; }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        //parcel.writeString(title);
+        //parcel.writeString(sourceUrl);
+        //parcel.writeString(updateTime);
+    }
+
+    public static final Parcelable.Creator<News> CREATOR = new Parcelable.Creator<News>() {
+
+        public News createFromParcel(Parcel in) {
+            return new News(in);
+        }
+
+        public News[] newArray(int size) {
+            return new News[size];
+        }
+    };
 
 
 }
