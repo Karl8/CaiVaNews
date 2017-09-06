@@ -9,66 +9,37 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.java.zu26.data.News;
-import com.java.zu26.data.NewsDbHelper;
+import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsLocalDataSource;
-import com.java.zu26.data.NewsPersistenceContract;
-import com.java.zu26.util.NewsDataUtil;
+import com.java.zu26.data.NewsRemoteDataSource;
+import com.java.zu26.data.NewsRepository;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
     public void test(int page, int category) {
-        String url = "http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + String.valueOf(category);
-        class URLThread extends Thread{
-            private URL url;
-            public URLThread(String path) throws MalformedURLException {
-                url = new URL(path);
-            }
+        NewsRemoteDataSource  rds = NewsRemoteDataSource.getInstance();
+        NewsLocalDataSource lds = NewsLocalDataSource.getInstance(mContext);
+        NewsRepository r = NewsRepository.getInstance(rds, lds);
+        r.getNewsList(1, 1, new NewsDataSource.LoadNewsListCallback() {
             @Override
-            public void run(){
-                StringBuilder content = new StringBuilder();
-                try {
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        content.append(line + "\n");
-                    }
-                    bufferedReader.close();
-
-                } catch (Exception e) {
-                    Log.d("TAG", "getUrlContent failed");
-                }
-                ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
-                NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
-                //newsLocalDataSource.saveNewsList(newsList);
-                newsLocalDataSource.find("20160913041301d5fc6a41214a149cd8a0581d3a014f");
+            public void onNewsListLoaded(ArrayList<News> newsList) {
+                Log.d("TAG", "onNewsListLoaded: " + newsList.get(1).getPictures() + "\n" + newsList.get(1).getCoverPicture());
             }
-        }
-        try {
-            new URLThread(url).start();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = MainActivity.this;
-
-        Log.d("TAG", "onCreate:");
+        Log.d("TAG", "onCreate:???");
         test(1, 1);
     }
 }

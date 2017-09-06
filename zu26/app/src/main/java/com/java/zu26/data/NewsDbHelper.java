@@ -21,7 +21,8 @@ public class NewsDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + NewsPersistenceContract.NewsEntry.TABLE_NAME + " (" +
-                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " PRIMARY KEY," +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_INDEX + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_AUTHOR + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_CLASS_TAG + TEXT_TYPE + COMMA_SEP +

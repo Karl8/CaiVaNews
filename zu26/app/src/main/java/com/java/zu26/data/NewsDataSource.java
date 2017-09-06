@@ -13,9 +13,11 @@ public interface NewsDataSource {
 
     interface LoadNewsListCallback {
 
-        void onNewslistLoaded(List<News> newsList);
+        void onNewsListLoaded(ArrayList<News> newsList);
 
         void onDataNotAvailable();
+
+
     }
 
     interface GetNewsCallback {
@@ -25,7 +27,7 @@ public interface NewsDataSource {
         void onDataNotAvailable();
     }
 
-    void getLatestNewsList(int page, int category, @NonNull LoadNewsListCallback callback);
+    void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback);
 
     void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback);
 

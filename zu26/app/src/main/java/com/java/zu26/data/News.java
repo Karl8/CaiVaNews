@@ -49,7 +49,27 @@ public final class News {
         mFavorite = false;
     }
 
+    public News(String id, String author, String title, String classTag, String pictures, String source, String time, String url, String intro, boolean read, String content, boolean favorite) {
+        mId = id;
+        mAuthor = author;
+        mTitle = title;
+        mClassTag = classTag;
+        mPictures = pictures;
+        mSource = source;
+        mTime = time;
+        mUrl = url;
+        mIntro = intro;
+        mRead = read;
+        mContent = content;
+        mFavorite = favorite;
+    }
     // public News From json
+    public String getCoverPicture() {
+        int pos = mPictures.indexOf(';');
+        if (pos != -1)
+            return mPictures.substring(0, pos);
+        return new String("");
+    }
 
     public String getId() { return mId; }
 

@@ -13,6 +13,7 @@ public final class NewsPersistenceContract {
     public static abstract class NewsEntry implements BaseColumns {
         // list item
         public static final String TABLE_NAME = "news";
+        public static final String COLUMN_NAME_INDEX = "index";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
         public static final String COLUMN_NAME_AUTHOR = "author";
         public static final String COLUMN_NAME_TITLE = "title";

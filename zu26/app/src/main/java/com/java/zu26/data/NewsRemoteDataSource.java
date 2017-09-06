@@ -53,7 +53,7 @@ public class NewsRemoteDataSource implements NewsDataSource {
     */
 
     @Override
-    public void getLatestNewsList(int page, int category, @NonNull final LoadNewsListCallback callback) {
+    public void getNewsList(int page, int category, @NonNull final LoadNewsListCallback callback) {
         String url = "http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + String.valueOf(category);
         class URLThread extends Thread{
             private URL url;
@@ -71,11 +71,12 @@ public class NewsRemoteDataSource implements NewsDataSource {
                         content.append(line + "\n");
                     }
                     bufferedReader.close();
-                    List<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
+                    ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
                     //NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance();
                     //newsLocalDataSource.saveNewsList(newsList);
-                    callback.onNewslistLoaded(newsList);
+                    callback.onNewsListLoaded(newsList);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     Log.d("TAG", "getUrlContent failed");
                 }
             }

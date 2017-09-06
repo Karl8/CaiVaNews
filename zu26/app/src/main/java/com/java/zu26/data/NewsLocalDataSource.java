@@ -33,7 +33,37 @@ public class NewsLocalDataSource implements NewsDataSource {
         return INSTANCE;
     }
     @Override
-    public void getLatestNewsList(int page, int category, @NonNull LoadNewsListCallback callback) {
+    public void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback) {
+        ArrayList<News> newsList = new ArrayList<>();
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE " + NewsEntry.COLUMN_NAME_CLASS_TAG
+                        + " = ? ORDER BY " + NewsEntry.COLUMN_NAME_INDEX + " LIMIT 10 OFFSET " + String.valueOf(page * 10 - 10),
+                new String[]{String.valueOf(category)});
+
+
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String classTag = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String author = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String pictures = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String source = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String time = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String title = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String url = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String intro = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                boolean read = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_READ)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_FAVORITE)) == 1;
+                String content = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CONTENT));
+                News news = new News(id, author, title, classTag, pictures, source, time, url, intro, read, content, favorite);
+                newsList.add(news);
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
 
     }
 
@@ -176,6 +206,9 @@ public class NewsLocalDataSource implements NewsDataSource {
         if (cursor != null && cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
                 Log.d("TAG", "find: ");
+            }
+            else {
+                Log.d("TAG", "not find");
             }
         }
         else {
