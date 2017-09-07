@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.java.zu26."
+    tools:context="com.java.zu26.newsPage.NewsPageActivity"
     app:theme="@style/AppTheme.NoActionBar">
 
     <android.support.design.widget.AppBarLayout
@@ -22,9 +22,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <WebView
-        android:id="@+id/news_page_webview"
+    <FrameLayout
+        android:id="@+id/page_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent" />
 </LinearLayout>
