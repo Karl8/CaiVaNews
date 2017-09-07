@@ -55,14 +55,6 @@ public class NewsListPresenter implements NewsListContract.Presenter{
         if(forceUpdate) {
             //mNewsRepository.refreshNews();
         }
-        final Handler handler = new Handler() {
-            public void handleMessage(Message message) {
-                Log.d("TAG", "handleMessage: ");
-                ArrayList<News> newsToShow = (ArrayList<News>)(message.obj);
-                Log.d("TAG", "handleMessage: " + newsToShow.get(1).getTitle());
-                processNews(page, category, newsToShow);
-            }
-        };
 
         mNewsRepository.getNewsList(page, category, new NewsDataSource.LoadNewsListCallback() {
 
@@ -77,10 +69,8 @@ public class NewsListPresenter implements NewsListContract.Presenter{
                 if(showLoadingUI) {
                     mNewsView.setLoadingIndicator(false);
                 }
-                Message message = new Message();
-                message.obj = newsToShow;
-                handler.sendMessage(message);
-                Log.d("TAG", "send message!!! ");
+
+                processNews(page, category, newsToShow);
             }
 
             @Override

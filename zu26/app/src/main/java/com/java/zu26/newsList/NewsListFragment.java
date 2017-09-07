@@ -138,6 +138,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         mPage = page;
         mCategory = category;
         mRecyclerView.setVisibility(View.VISIBLE);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
