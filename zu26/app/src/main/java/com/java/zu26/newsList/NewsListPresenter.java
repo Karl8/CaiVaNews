@@ -27,7 +27,7 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
     private NewsListContract.View mNewsView;
 
-    private boolean mFirstLoad;
+    private boolean mFirstLoad = true;
 
     public NewsListPresenter(@NonNull NewsRepository newsRepository, @NonNull NewsListContract.View newsView) {
         mNewsRepository = checkNotNull(newsRepository, "newsRepository cannot be null");
@@ -52,8 +52,11 @@ public class NewsListPresenter implements NewsListContract.Presenter{
         if(showLoadingUI) {
             mNewsView.setLoadingIndicator(true);
         }
-        if(forceUpdate) {
-            //mNewsRepository.refreshNews();
+        if(!forceUpdate) {
+            if(showLoadingUI) {
+                mNewsView.setLoadingIndicator(false);
+            }
+            return;
         }
 
         mNewsRepository.getNewsList(page, category, new NewsDataSource.LoadNewsListCallback() {
@@ -78,13 +81,7 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
             }
         });
-        try {
 
-            Thread.sleep(2000);
-        }
-        catch (Exception e) {
-
-        }
     }
 
     public void processNews(int page, int category, ArrayList<News> newslist) {

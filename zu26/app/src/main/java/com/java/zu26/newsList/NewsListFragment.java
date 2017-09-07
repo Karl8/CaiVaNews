@@ -18,10 +18,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
 import com.java.zu26.newsPage.NewsPageActivity;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -39,11 +39,23 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
     private RecyclerView mRecyclerView;
 
+    private Context mContext;
+
     private int lastVisibleItem = 0;
 
     private int mPage = 0;
 
     private int mCategory = 0;
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case 0:
+                    mAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
     public NewsListFragment() {
 
@@ -60,7 +72,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         View root = inflater.inflate(R.layout.fragment_newslist, container, false);
 
         mRecyclerView = root.findViewById(R.id.recyclerView);
-        mAdapter = new NewsListAdapter(getContext(), new ArrayList<News>(0));
+        mContext = getContext();
+        mAdapter = new NewsListAdapter(mContext, new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
         SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1);
@@ -76,19 +89,22 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mAdapter.getItemCount()) {
 
-                    // 不需要向上更新新闻，只需要向下读取内容，因此为false.
-                    mPresenter.loadNews(mPage + 1, mCategory, false);
+
+                    mPresenter.loadNews(mPage + 1, mCategory, true);
                     //Toast.makeText(activity-context, "加载成功", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+
             }
         });
 
@@ -138,7 +154,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         mPage = page;
         mCategory = category;
         mRecyclerView.setVisibility(View.VISIBLE);
-        mAdapter.notifyDataSetChanged();
+        handler.sendEmptyMessage(0);
     }
 
     @Override
@@ -179,7 +195,6 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
         private Context context;
 
-
         public NewsListAdapter(Context _context, ArrayList<News> _newslist) {
             this.inflater = LayoutInflater.from(_context);
             this.newslist = _newslist;
@@ -196,23 +211,33 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public int getItemViewType(int position) {
+            if(position <= getItemCount() )return 1;
+            else return 0;
+        }
 
-            final View view = inflater.inflate(R.layout.newslist_itemlayout, parent, false);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemListener != null)
-                        itemListener.onItemClick(v,(int)v.getTag());
-                }
-            });
-            return new ItemViewHolder(view);
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if(viewType == 1) {
+                final View view = inflater.inflate(R.layout.newslist_itemlayout, parent, false);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (itemListener != null)
+                            itemListener.onItemClick(v,(int)v.getTag());
+                    }
+                });
+
+                return new ItemViewHolder(view);
+            }
+            return null;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             Log.d("TAG", "onBindViewHolder: ");
             if(holder instanceof ItemViewHolder) {
+                Log.d("TAG", "onBindViewHolder: " + position);
                 News news = newslist.get(position);
                 ItemViewHolder itemHolder = (ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
@@ -221,9 +246,13 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 String url = news.getCoverPicture();
                 try {
                     if (url != null && url.length() > 0) {
-                        Log.d("aaa","asaa");
-                        Picasso.with(context).load(url).into(itemHolder.newsImage);
+                        //Picasso.with(context).load(itemHolder.url).into(itemHolder.newsImage);
                         //itemHolder.newsImage.setImageBitmap(BitmapFactory.decodeStream(myurl.openStream()));
+                        Glide.with(context).load(url).placeholder(R.drawable.downloading).into(itemHolder.newsImage);
+                    }
+
+                    else {
+                        Glide.with(context).load(R.drawable.downloading).into(itemHolder.newsImage);
                     }
 
                 }
