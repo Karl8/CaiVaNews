@@ -114,6 +114,25 @@ public class NewsRepository implements NewsDataSource {
         }
     }
 
+    public void refreshNewsCache(ArrayList<News> newsList) {
+        Log.d("TAG", "refreshNews from newsList: ");
+        if (mCachedNewsDetail == null) {
+            mCachedNewsDetail = new HashMap<>();
+        }
+        for (int i = 0; i < newsList.size(); i++) {
+            Log.d("TAG", "refreshNewsListCache: " + newsList.get(i).getId());
+            mCachedNewsDetail.put(newsList.get(i).getId(), newsList.get(i));
+        }
+    }
+
+    public void refreshNewsCache(News news) {
+        Log.d("TAG", "refreshNews from newsList: ");
+        if (mCachedNewsDetail == null) {
+            mCachedNewsDetail = new HashMap<>();
+        }
+        mCachedNewsDetail.put(news.getId(), news);
+    }
+
     @Override
     public void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback) {
 
@@ -144,6 +163,24 @@ public class NewsRepository implements NewsDataSource {
     @Override
     public void saveNews(@NonNull News news) {
 
+    }
+
+    @Override
+    public void searchNews(String keyWord, int page, @NonNull final LoadNewsListCallback callback) {
+        mNewsRemoteDataSource.searchNews(keyWord, page, new LoadNewsListCallback() {
+            @Override
+            public void onNewsListLoaded(ArrayList<News> newsList) {
+                //不缓存，也不保存到本地，否则本地中新闻列表的顺序会乱
+                //refreshNewsCache(newsList);
+                //mNewsLocalDataSource.saveNewsList(newsList);
+                callback.onNewsListLoaded(newsList);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
 }

@@ -42,5 +42,7 @@ public interface NewsDataSource {
 
     void saveNews(@NonNull News news);
 
+    void searchNews(String keyWord, int page, @NonNull LoadNewsListCallback callback);
+
     // share news callback ???
 }

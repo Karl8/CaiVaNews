@@ -110,5 +110,31 @@ public class NewsRemoteDataSource implements NewsDataSource {
 
     }
 
+    @Override
+    public void searchNews(final String keyWord, final int page, @NonNull final LoadNewsListCallback callback) {
+        new Thread() {
+            @Override
+            public void run(){
+                StringBuilder content = new StringBuilder();
+                try {
+                    URL url = new URL("http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + keyWord);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        content.append(line + "\n");
+                    }
+                    bufferedReader.close();
+                    Log.d("remote", "search: " + keyWord);
+                    ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
+                    callback.onNewsListLoaded(newsList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("TAG", "search news failed");
+                }
+            }
+        }.start();
+    }
+
 
 }

@@ -195,6 +195,11 @@ public class NewsLocalDataSource implements NewsDataSource {
         db.close();
     }
 
+    @Override
+    public void searchNews(String keyWord, int page, @NonNull LoadNewsListCallback callback) {
+
+    }
+
     public void saveNewsDetail(@NonNull News news) {
         // 是否需要先查询？？？？？？？？
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
