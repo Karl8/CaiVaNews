@@ -1,12 +1,12 @@
-package com.java.zu26.newsList;
+package com.java.zu26.search;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -21,34 +21,36 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
-import com.java.zu26.data.NewsLocalDataSource;
-import com.java.zu26.data.NewsRemoteDataSource;
-import com.java.zu26.data.NewsRepository;
+import com.java.zu26.newsList.NewsListPresenter;
 import com.java.zu26.newsPage.NewsPageActivity;
 
 import java.util.ArrayList;
 
 /**
- * Created by lucheng on 2017/9/3.
+ * Created by kaer on 2017/9/7.
  */
 
-public class NewsListFragment extends Fragment implements NewsListContract.View{
+public class SearchFragment extends Fragment implements SearchContract.View{
 
-    private NewsListContract.Presenter mPresenter;
+    private Context mContext;
 
-    private NewsListAdapter mAdapter;
+    private SearchContract.Presenter mPresenter;
+
+    private SearchAdapter mAdapter;
 
     private LinearLayoutManager mLayoutManager;
 
     private RecyclerView mRecyclerView;
 
-    private Context mContext;
-
     private int lastVisibleItem = 0;
 
     private int mPage = 0;
 
-    private int mCategory = 0;
+    private String mKeyWord = "";
+
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
+    }
 
     Handler handler = new Handler() {
         @Override
@@ -60,22 +62,13 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         }
     };
 
-    public NewsListFragment() {
-    }
-
-    public static NewsListFragment newInstance() {
-        return new NewsListFragment();
-    }
-
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_newslist, container, false);
 
         mRecyclerView = root.findViewById(R.id.recyclerView);
         mContext = getContext();
-        mAdapter = new NewsListAdapter(mContext, new ArrayList<News>(0));
+        mAdapter = new SearchFragment.SearchAdapter(mContext, new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
         SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1);
@@ -96,7 +89,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mAdapter.getItemCount()) {
 
 
-                    mPresenter.loadNews(mPage + 1, mCategory, true);
+                    mPresenter.loadNews(mKeyWord, mPage + 1, true);
                     //Toast.makeText(activity-context, "加载成功", Toast.LENGTH_SHORT).show();
                 }
 
@@ -109,7 +102,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
             }
         });
-
+        /*
         // 实现顶部上拉刷新(其实没有刷新23333)
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -120,16 +113,16 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 mPresenter.loadNews(1, mCategory, false);
             }
         });
+        */
 
-
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new SearchFragment.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
                 intent.setClass(getContext(), NewsPageActivity.class);
 
                 Bundle bundle = new Bundle();
-                bundle.putString("newsId", mAdapter.getItem(position).getId());
+                bundle.putParcelable("news", mAdapter.getItem(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -139,46 +132,29 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.start();
+    public void setPresenter(SearchPresenter presenter) {
+
     }
 
     @Override
-    public void setPresenter(NewsListPresenter presenter) {
-        mPresenter = presenter;
-    }
-
-    @Override
-    public void showNews(int page, int category, ArrayList<News> newslist) {
-        Log.d("TAG", "showNews: " + newslist.size());
-        mAdapter.replaceData(newslist);
+    public void showNews(String keyWord, int page, ArrayList<News> newsList) {
+        Log.d("TAG", "showNews: " + newsList.size());
+        mAdapter.replaceData(newsList);
         mPage = page;
-        mCategory = category;
+        mKeyWord = keyWord;
         mRecyclerView.setVisibility(View.VISIBLE);
         handler.sendEmptyMessage(0);
     }
 
-    @Override
-    public void showNoNews(int page, int category, ArrayList<News> newslist) {
-
+    public void clearNews() {
+        Log.d("", "clearNews: ");
+        mAdapter.clearData();
+        handler.sendEmptyMessage(0);
     }
 
-
     @Override
-    public void setLoadingIndicator(final boolean active) {
-        if(getView() == null){
-            return;
-        }
-        final SwipeRefreshLayout srl = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout1);
+    public void setLoadingIndicator(boolean active) {
 
-        // Make sure setRefreshing() is called after the layout is done with everything else.
-        srl.post(new Runnable() {
-            @Override
-            public void run() {
-                srl.setRefreshing(active);
-            }
-        });
     }
 
     @Override
@@ -186,29 +162,40 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         return isAdded();
     }
 
+    @Override
+    public void showNoNews(String keyWord, int page, ArrayList<News> newsList) {
 
+    }
 
-    private class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater inflater;
 
-        private ArrayList<News> newslist;
+        private ArrayList<News> newsList;
 
-        private OnItemClickListener itemListener;
+        private SearchFragment.OnItemClickListener itemListener;
 
         private Context context;
 
-        public NewsListAdapter(Context _context, ArrayList<News> _newsList) {
+        public SearchAdapter(Context _context, ArrayList<News> _newsList) {
             this.inflater = LayoutInflater.from(_context);
-            this.newslist = _newsList;
+            this.newsList = _newsList;
             this.context = _context;
         }
 
         public void replaceData(ArrayList<News> _newsList) {
-            this.newslist.addAll(_newsList);
+            this.newsList.addAll(_newsList);
         }
 
+        public void clearData() {
+            Log.d("TAG", "onclearData:");
+            if (newsList == null) {
+                Log.d("TAG", "clearData: NULL");
+            }
+            else
+                this.newsList.clear();
+        }
         public News getItem(int i) {
-            return newslist.get(i);
+            return newsList.get(i);
 
         }
 
@@ -230,7 +217,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                     }
                 });
 
-                return new ItemViewHolder(view);
+                return new SearchFragment.ItemViewHolder(view);
             }
             return null;
         }
@@ -238,10 +225,10 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             Log.d("TAG", "onBindViewHolder: ");
-            if(holder instanceof ItemViewHolder) {
+            if(holder instanceof SearchFragment.ItemViewHolder) {
                 Log.d("TAG", "onBindViewHolder: " + position);
-                News news = newslist.get(position);
-                ItemViewHolder itemHolder = (ItemViewHolder)holder;
+                News news = newsList.get(position);
+                SearchFragment.ItemViewHolder itemHolder = (SearchFragment.ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
@@ -268,10 +255,10 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
         @Override
         public int getItemCount() {
-            return newslist.size();
+            return newsList.size();
         }
 
-        void setOnItemClickListener(OnItemClickListener listener) {
+        void setOnItemClickListener(SearchFragment.OnItemClickListener listener) {
             itemListener = listener;
         }
     }
@@ -295,7 +282,4 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
-
 }
-
-

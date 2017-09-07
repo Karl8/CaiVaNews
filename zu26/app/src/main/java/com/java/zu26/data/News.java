@@ -36,6 +36,23 @@ public final class News implements Parcelable {
     private final boolean mFavorite;
 
     //public ()
+
+    public News(News news, boolean favorite) {
+        mId = news.getId();
+        mAuthor = news.getAuthor();
+        mTitle = news.getTitle();
+        mCategory = news.getCategory();
+        mPictures = news.getPictures();
+        mSource = news.getSource();
+        mTime = news.getTime();
+        mUrl = news.getUrl();
+        mIntro = news.getIntro();
+        mRead = news.isRead();
+        mContent = news.getContent();
+        mFavorite = favorite;
+    }
+
+
     private News(Parcel in){
         mTitle = in.readString();
         mSource = "";
@@ -69,7 +86,8 @@ public final class News implements Parcelable {
         mFavorite = false;
     }
 
-    public News(String id, String author, String title, String category, String pictures, String source, String time, String url, String intro, boolean read, String content, boolean favorite) {
+    public News(String id, String author, String title, String category, String pictures, String source,
+                String time, String url, String intro, boolean read, String content, boolean favorite) {
         mId = id;
         mAuthor = author;
         mTitle = title;
@@ -114,7 +132,6 @@ public final class News implements Parcelable {
     public String getContent() { return mContent; }
 
     public boolean isFavorite() { return mFavorite; }
-
 
     @Override
     public int describeContents() {

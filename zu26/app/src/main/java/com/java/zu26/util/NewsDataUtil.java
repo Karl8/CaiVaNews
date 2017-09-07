@@ -19,11 +19,11 @@ import static com.java.zu26.data.NewsPersistenceContract.NewsEntry.categoryMap;
  */
 
 public class NewsDataUtil {
-    public static ArrayList<News> parseLastedNewsListJson(String content) {
-        Log.d("TAG", "parseLastedNewsListJson: " + content);
+    public static ArrayList<News> parseLastedNewsListJson(String json) {
+        Log.d("TAG", "parseLastedNewsListJson: " + json);
         ArrayList<News> newsList = new ArrayList<News>();
         try{
-            JSONObject listJsonObj = new JSONObject(content);
+            JSONObject listJsonObj = new JSONObject(json);
             JSONArray listJsonArray = listJsonObj.getJSONArray("list");
             for (int i = 0; i < listJsonArray.length(); i++) {
                 JSONObject newsJsonObj = (JSONObject) listJsonArray.get(i);
@@ -45,6 +45,29 @@ public class NewsDataUtil {
         }catch (Exception e){e.printStackTrace();}
         return newsList;
     }
+
+    public static News parseNewsDetail(String json) {
+        Log.d("TAG", "parse news detail from Json: " + json);
+        News news = null;
+        try{
+            JSONObject newsJsonObj = new JSONObject(json);
+            String id = newsJsonObj.getString("news_ID");
+            String category = categoryMap.get(newsJsonObj.getString("newsClassTag"));
+            String author = newsJsonObj.getString("news_Author");
+            String pictures = newsJsonObj.getString("news_Pictures");
+            String source = newsJsonObj.getString("news_Source");
+            String time = newsJsonObj.getString("news_Time");
+            String title = newsJsonObj.getString("news_Title");
+            String url = newsJsonObj.getString("news_URL");
+            String intro = "";
+            String content = newsJsonObj.getString("news_Content");
+            Log.d("TAG", "parse:" + category + " " + id + " " + author + " " + intro + " " + time);
+            news = new News(id, author, title, category, pictures, source, time, url, intro, true, content, false);
+
+        }catch (Exception e){e.printStackTrace();}
+        return news;
+    }
+
     public static void getUrlContent(String path) throws Exception{ // callback?
         class URLThread extends Thread{
             private URL url;

@@ -81,6 +81,7 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
             }
         });
+
     }
 
     public void processNews(int page, int category, ArrayList<News> newslist) {

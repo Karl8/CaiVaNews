@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.java.zu26.R;
 import com.java.zu26.newsList.NewsListActivity;
 import com.java.zu26.newsPage.NewsPageActivity;
+import com.java.zu26.search.SearchActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,5 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startActivity(new Intent(this, NewsListActivity.class));
+        //startActivity(new Intent(this, SearchActivity.class));
     }
 }
