@@ -16,7 +16,7 @@ public final class News implements Parcelable {
 
     private final String mTitle;
 
-    private final String mClassTag;
+    private final String mCategory;
 
     private final String mPictures;
 
@@ -42,7 +42,7 @@ public final class News implements Parcelable {
         mId = "";
         mAuthor = "";
         //mTitle = "";
-        mClassTag = "";
+        mCategory = "";
         mPictures = "";
         //mSource = "";
         mTime = "";
@@ -54,11 +54,11 @@ public final class News implements Parcelable {
     }
 
 
-    public News(String id, String author, String title, String classTag, String pictures, String source, String time, String url, String intro) {
+    public News(String id, String author, String title, String category, String pictures, String source, String time, String url, String intro) {
         mId = id;
         mAuthor = author;
         mTitle = title;
-        mClassTag = classTag;
+        mCategory = category;
         mPictures = pictures;
         mSource = source;
         mTime = time;
@@ -69,11 +69,11 @@ public final class News implements Parcelable {
         mFavorite = false;
     }
 
-    public News(String id, String author, String title, String classTag, String pictures, String source, String time, String url, String intro, boolean read, String content, boolean favorite) {
+    public News(String id, String author, String title, String category, String pictures, String source, String time, String url, String intro, boolean read, String content, boolean favorite) {
         mId = id;
         mAuthor = author;
         mTitle = title;
-        mClassTag = classTag;
+        mCategory = category;
         mPictures = pictures;
         mSource = source;
         mTime = time;
@@ -95,7 +95,7 @@ public final class News implements Parcelable {
 
     public String getTitle() { return mTitle; }
 
-    public String getClassTag() { return mClassTag; }
+    public String getCategory() { return mCategory; }
 
     public String getPictures() { return mPictures; }
 

@@ -54,6 +54,7 @@ public class NewsListActivity extends AppCompatActivity {
 
         // Create the presenter
         mContext = NewsListActivity.this;
+        //mContext.deleteDatabase("News.db");
         NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
         mNewsPresenter = new NewsListPresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsListFragment);

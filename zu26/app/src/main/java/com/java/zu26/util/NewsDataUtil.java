@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import static com.java.zu26.data.NewsPersistenceContract.NewsEntry.categoryMap;
 
 /**
  * Created by kaer on 2017/9/5.
@@ -26,9 +27,10 @@ public class NewsDataUtil {
             JSONArray listJsonArray = listJsonObj.getJSONArray("list");
             for (int i = 0; i < listJsonArray.length(); i++) {
                 JSONObject newsJsonObj = (JSONObject) listJsonArray.get(i);
+
                 //News news = new News();
                 String id = newsJsonObj.getString("news_ID");
-                String classTag = newsJsonObj.getString("newsClassTag");
+                String category = categoryMap.get(newsJsonObj.getString("newsClassTag"));
                 String author = newsJsonObj.getString("news_Author");
                 String pictures = newsJsonObj.getString("news_Pictures");
                 String source = newsJsonObj.getString("news_Source");
@@ -36,8 +38,8 @@ public class NewsDataUtil {
                 String title = newsJsonObj.getString("news_Title");
                 String url = newsJsonObj.getString("news_URL");
                 String intro = newsJsonObj.getString("news_Intro");
-                Log.d("TAG", "parse:" + id + " " + author + " " + intro + " " + time);
-                newsList.add(new News(id, author, title, classTag, pictures, source, time, url, intro));
+                Log.d("TAG", "parse:" + category + " " + id + " " + author + " " + intro + " " + time);
+                newsList.add(new News(id, author, title, category, pictures, source, time, url, intro));
 
             }
         }catch (Exception e){e.printStackTrace();}

@@ -2,6 +2,8 @@ package com.java.zu26.data;
 
 import android.provider.BaseColumns;
 
+import java.util.HashMap;
+
 /**
  * Created by kaer on 2017/9/2.
  */
@@ -13,11 +15,11 @@ public final class NewsPersistenceContract {
     public static abstract class NewsEntry implements BaseColumns {
         // list item
         public static final String TABLE_NAME = "news";
-        public static final String COLUMN_NAME_INDEX = "index";
+        public static final String COLUMN_NAME_INDEX = "idx";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
         public static final String COLUMN_NAME_AUTHOR = "author";
         public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_CLASS_TAG = "classTag";
+        public static final String COLUMN_NAME_CATEGORY = "category";
         public static final String COLUMN_NAME_PICTURES = "pictures";
         public static final String COLUMN_NAME_SOURCE = "source";
         public static final String COLUMN_NAME_TIME = "time";
@@ -28,6 +30,23 @@ public final class NewsPersistenceContract {
         // detail
         public static final String COLUMN_NAME_CONTENT = "content";
         public static final String COLUMN_NAME_FAVORITE = "favorite";
+
+        public static final HashMap<String, String> categoryMap = new HashMap<>();
+        static
+        {
+            categoryMap.put("科技", "1");
+            categoryMap.put("教育", "2");
+            categoryMap.put("军事", "3");
+            categoryMap.put("国内", "4");
+            categoryMap.put("社会", "5");
+            categoryMap.put("文化", "6");
+            categoryMap.put("汽车", "7");
+            categoryMap.put("国际", "8");
+            categoryMap.put("体育", "9");
+            categoryMap.put("财经", "10");
+            categoryMap.put("健康", "11");
+            categoryMap.put("娱乐", "12");
+        }
     }
 }
 /*
