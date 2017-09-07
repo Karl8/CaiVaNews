@@ -16,6 +16,10 @@ public interface NewsPageContract {
 
         void showNews(News news);
 
+        void onGetNews();
+
+        boolean getFavorite();
+
     }
 
     interface Presenter {
@@ -29,5 +33,7 @@ public interface NewsPageContract {
         void addToFavorites();
 
         void removeFromFavorites();
+
+        void prepareToolbar(boolean isFavorite);
     }
 }

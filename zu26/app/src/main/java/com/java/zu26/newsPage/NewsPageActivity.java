@@ -1,5 +1,6 @@
 package com.java.zu26.newsPage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ public class NewsPageActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +48,13 @@ public class NewsPageActivity extends AppCompatActivity {
                     getSupportFragmentManager(), newsPageFragment, R.id.page_frame);
         }
 
-        final NewsPageActivity mContext = NewsPageActivity.this;
+        mContext = NewsPageActivity.this;
         NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
-        mPresenter = new NewsPagePresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsPageFragment, mToolbar);
+        mPresenter = new NewsPagePresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsPageFragment, mToolbar, this);
 
         mPresenter.start(newsId);
-        final boolean rawFavorite = mPresenter.getNews().isFavorite();
+        //final boolean rawFavorite = mPresenter.getNews().isFavorite();
 
 
 
@@ -61,6 +64,26 @@ public class NewsPageActivity extends AppCompatActivity {
 
 
         mToolbar.setNavigationIcon(R.drawable.navigation);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_news_page, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    public void prepareToolbar(final boolean rawFavorite) {
         if(rawFavorite) mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite).setIcon(R.mipmap.favorite_true);
 
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -94,22 +117,6 @@ public class NewsPageActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_news_page, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(menuItem);
     }
 
 }

@@ -24,11 +24,14 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
 
     private News mNews;
 
-    public NewsPagePresenter(@NonNull NewsRepository respository, @NonNull NewsPageContract.View NewsView, Toolbar toolbar) {
+    private NewsPageActivity mActivity;
+
+    public NewsPagePresenter(@NonNull NewsRepository respository, @NonNull NewsPageContract.View NewsView, Toolbar toolbar, NewsPageActivity activity) {
         mRespository = respository;
         mView = NewsView;
         mView.setPresenter(this);
         mToolbar = toolbar;
+        mActivity = activity;
     }
 
     @Override
@@ -36,19 +39,23 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
         mRespository.getNews(newsId, new NewsDataSource.GetNewsCallback() {
             @Override
             public void onNewsLoaded(News news) {
+                Log.d("start", "onNewsLoaded: get news" + news.getTitle());
                 mNews = news;
-                mView.showNews(news);
+                mView.onGetNews();
             }
 
             @Override
             public void onDataNotAvailable() {
-
+                Log.d("start", "onNewsLoaded: not found news");
             }
         });
     }
 
     @Override
     public News getNews() {
+        if (mNews == null)
+            Log.d("getnews", "getNews: NULL");
+        Log.d("getnews", "getNews: GOOD");
         return mNews;
     }
 
@@ -59,11 +66,16 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
 
     @Override
     public void addToFavorites() {
-
+        mRespository.favoriteNews(mNews);
     }
 
     @Override
     public void removeFromFavorites() {
+        mRespository.unfavoriteNews(mNews.getId());
+    }
 
+    @Override
+    public void prepareToolbar(boolean isFavorite) {
+        mActivity.prepareToolbar(isFavorite);
     }
 }

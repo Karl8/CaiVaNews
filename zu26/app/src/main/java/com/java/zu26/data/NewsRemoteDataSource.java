@@ -98,6 +98,7 @@ public class NewsRemoteDataSource implements NewsDataSource {
                     }
                     bufferedReader.close();
                     News news = NewsDataUtil.parseNewsDetail(content.toString());
+                    Log.d("remote", "get news detail from remote " + news.getTitle());
                     callback.onNewsLoaded(news);
                 } catch (Exception e) {
                     e.printStackTrace();

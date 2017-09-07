@@ -2,6 +2,8 @@ package com.java.zu26.newsPage;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -39,7 +41,18 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
 
     private TextView mContentView;
 
+    private boolean rawFavorite;
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case 0:
+                    showNews(mPresenter.getNews());
+                    mPresenter.prepareToolbar(mPresenter.getNews().isFavorite());
+            }
+        }
+    };
 
     public static NewsPageFragment newInstance() {
         return new NewsPageFragment();
@@ -60,6 +73,8 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
         mCoverImageView = root.findViewById(R.id.news_page_cover_image);
         mIntroductionView = root.findViewById(R.id.news_page_introduction);
         mContentView = root.findViewById(R.id.news_page_content);
+
+
 
         return root;
     }
@@ -87,5 +102,13 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
 
     }
 
+    public void onGetNews () {
+        handler.sendEmptyMessage(0);
+    }
+
+    @Override
+    public boolean getFavorite() {
+        return false;
+    }
 
 }
