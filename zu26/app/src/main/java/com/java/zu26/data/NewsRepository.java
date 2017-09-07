@@ -49,28 +49,42 @@ public class NewsRepository implements NewsDataSource {
     }
 
     @Override
-    public void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback) {
+    public void getNewsList(final int page, final int category, @NonNull final LoadNewsListCallback callback) {
         Log.d("TAG", "getNewsList: ");
-        /*
         if (mCachedNewsDetail != null && mCachedNewsListId != null && mCachedNewsListId.get(category).size() >= 10 * page) {
+
             ArrayList<News> newsList = new ArrayList<>();
             for (int i = page * 10 - 10; i < page * 10; i++) {
                 String id = mCachedNewsListId.get(category).get(i);
                 newsList.add(mCachedNewsDetail.get(id));
+                Log.d("TAG", "getNewsListfrom Cache: " + mCachedNewsDetail.get(id).getTitle());
             }
             callback.onNewsListLoaded(newsList);
             return;
-        }*/
-        getNewsListFromRemoteDataSource(page, category, callback);
+        }
+        mNewsLocalDataSource.getNewsList(page, category, new LoadNewsListCallback() {
+            @Override
+            public void onNewsListLoaded(ArrayList<News> newsList) {
+                refreshNewsListCache(category, newsList);
+                callback.onNewsListLoaded(newsList);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getNewsListFromRemoteDataSource(page, category, callback);
+            }
+        });
+        //else
+        //    getNewsListFromRemoteDataSource(page, category, callback);
     }
     //public void reefreshCache()
-    public void getNewsListFromRemoteDataSource(int page, final int category, @NonNull final LoadNewsListCallback callback) {
+    public void getNewsListFromRemoteDataSource(final int page, final int category, @NonNull final LoadNewsListCallback callback) {
         Log.d("TAG", "getNewsListFromRemoteDataSource: ");
         mNewsRemoteDataSource.getNewsList(page, category, new LoadNewsListCallback() {
             @Override
             public void onNewsListLoaded(ArrayList<News> newsList) {
                 refreshNewsListCache(category, newsList);
-                //mNewsLocalDataSource.saveNewsList(newsList);
+                mNewsLocalDataSource.saveNewsList(newsList);
                 callback.onNewsListLoaded(newsList);
             }
 

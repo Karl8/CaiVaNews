@@ -3,6 +3,7 @@ package com.java.zu26.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by kaer on 2017/9/2.
@@ -20,12 +21,12 @@ public class NewsDbHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + NewsPersistenceContract.NewsEntry.TABLE_NAME + " (" +
+            "CREATE TABLE " + NewsPersistenceContract.NewsEntry.TABLE_NAME + " ( " +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_INDEX + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_AUTHOR + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_CLASS_TAG + TEXT_TYPE + COMMA_SEP +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_CATEGORY + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_PICTURES + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_SOURCE + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
@@ -40,7 +41,9 @@ public class NewsDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db)
+    {
+        Log.d("Database", "onCreate: " + SQL_CREATE_ENTRIES);
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 

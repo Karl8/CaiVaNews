@@ -78,13 +78,6 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
             }
         });
-        try {
-
-            Thread.sleep(2000);
-        }
-        catch (Exception e) {
-
-        }
     }
 
     public void processNews(int page, int category, ArrayList<News> newslist) {
