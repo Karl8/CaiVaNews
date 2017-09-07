@@ -14,13 +14,20 @@ public interface NewsPageContract {
 
         void setPresenter(NewsPagePresenter presenter);
 
-        void showNews();
+        void showNews(News news);
 
-        boolean isActive();
     }
 
     interface Presenter {
 
-        void start();
+        void start(String newsId);
+
+        News getNews();
+
+        void showShareDialog();
+
+        void addToFavorites();
+
+        void removeFromFavorites();
     }
 }

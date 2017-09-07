@@ -1,11 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-        <FrameLayout
-            android:id="@+id/contentFrame"
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:scrollbars="horizontal"
+        android:scrollbarStyle="insideInset"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="10dp"
+        android:requiresFadingEdge="horizontal"
+        android:background="@android:color/background_dark"
+        android:fadeScrollbars="true"
+        android:scrollbarThumbHorizontal="@color/colorScrollRed"
+        >
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/colorScrollBackGroundGray">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                android:layout_alignParentTop="true">
+
+                <RadioButton
+                    style="@style/radioButton"
+                    android:text="one"
+                    android:id="@+id/btn1"
+                    />
+                <RadioButton
+                    style="@style/radioButton"
+                    android:text="two"
+                    android:id="@+id/btn2"
+                    />
+                <RadioButton
+                    style="@style/radioButton"
+                    android:text="three"
+                    android:id="@+id/btn3"
+                    />
+                <RadioButton
+                    style="@style/radioButton"
+                    android:text="four"
+                    android:id="@+id/btn4"
+                    />
+                <RadioButton
+                    style="@style/radioButton"
+                    android:text="five"
+                    android:id="@+id/btn5"
+                    />
+
+
+            </RadioGroup>
+
+        </RelativeLayout>
+
+    </HorizontalScrollView>
+
+
+    <FrameLayout
+        android:id="@+id/contentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
