@@ -81,6 +81,7 @@ public class NewsListPresenter implements NewsListContract.Presenter{
 
             }
         });
+
     }
 
     public void processNews(int page, int category, ArrayList<News> newslist) {
@@ -98,8 +99,7 @@ public class NewsListPresenter implements NewsListContract.Presenter{
     @Override
     public void start()
     {
-
-        //loadNews(1, 1, true);
+        loadNews(1, 1, true);
     }
 
 

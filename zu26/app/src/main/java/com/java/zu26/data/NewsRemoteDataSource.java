@@ -81,7 +81,34 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
-    public void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback) {
+    public void getNews(@NonNull final String newsId, @NonNull final GetNewsCallback callback) {
+        new Thread() {
+            @Override
+            public void run(){
+                StringBuilder content = new StringBuilder();
+                try {
+                    URL url = new URL("http://166.111.68.66:2042/news/action/query/detail?newsId=" + newsId);
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        content.append(line + "\n");
+                    }
+                    bufferedReader.close();
+                    News news = NewsDataUtil.parseNewsDetail(content.toString());
+                    callback.onNewsLoaded(news);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("TAG", "getUrlContent failed");
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback) {
 
     }
 
@@ -91,9 +118,10 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
-    public void favoriteNews(@NonNull String newsId) {
+    public void favoriteNews(@NonNull News news) {
 
     }
+
 
     @Override
     public void unfavoriteNews(@NonNull String newsId) {
@@ -111,13 +139,20 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
+    public void updateNewsDetail(@NonNull News news) {
+
+    }
+
+    @Override
     public void searchNews(final String keyWord, final int page, @NonNull final LoadNewsListCallback callback) {
         new Thread() {
             @Override
             public void run(){
                 StringBuilder content = new StringBuilder();
                 try {
-                    URL url = new URL("http://166.111.68.66:2042/news/action/query/latest?pageNo=" + String.valueOf(page) + "&pageSize=10&category=" + keyWord);
+
+                    URL url = new URL("http://166.111.68.66:2042/news/action/query/search?pageNo=" + String.valueOf(page) + "&pageSize=10&keyword=" + keyWord);
+                    Log.d("remote", "search url: " + url.toString());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     String line;
@@ -126,6 +161,7 @@ public class NewsRemoteDataSource implements NewsDataSource {
                     }
                     bufferedReader.close();
                     Log.d("remote", "search: " + keyWord);
+                    Log.d("remot", "parse: " + content.toString());
                     ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
                     callback.onNewsListLoaded(newsList);
                 } catch (Exception e) {
@@ -135,6 +171,4 @@ public class NewsRemoteDataSource implements NewsDataSource {
             }
         }.start();
     }
-
-
 }

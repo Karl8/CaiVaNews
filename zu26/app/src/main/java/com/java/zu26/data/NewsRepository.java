@@ -126,7 +126,7 @@ public class NewsRepository implements NewsDataSource {
     }
 
     public void refreshNewsCache(News news) {
-        Log.d("TAG", "refreshNews from newsList: ");
+        Log.d("TAG", "refresh one News: ");
         if (mCachedNewsDetail == null) {
             mCachedNewsDetail = new HashMap<>();
         }
@@ -134,7 +134,50 @@ public class NewsRepository implements NewsDataSource {
     }
 
     @Override
-    public void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback) {
+    public void getNews(@NonNull final String newsId, @NonNull final GetNewsCallback callback) {
+        Log.d("TAG", "get one News ");
+
+        if (mCachedNewsDetail != null && mCachedNewsDetail.containsKey(newsId)) {
+            News news = mCachedNewsDetail.get(newsId);
+            if (news.isRead()) {
+                Log.d("local", "get one News from cache ");
+                callback.onNewsLoaded(news);
+                return;
+            }
+        }
+
+        mNewsLocalDataSource.getNews(newsId, new GetNewsCallback() {
+            @Override
+            public void onNewsLoaded(News news) {
+                Log.d("local", "get one news from local ");
+                refreshNewsCache(news);
+                callback.onNewsLoaded(news);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getNewsFromRemoteDataSource(newsId, callback);
+            }
+        });
+    }
+
+    public void getNewsFromRemoteDataSource(@NonNull String newsId, @NonNull final GetNewsCallback callback) {
+        mNewsRemoteDataSource.getNews(newsId, new GetNewsCallback() {
+            @Override
+            public void onNewsLoaded(News news) {
+                refreshNewsCache(news);
+                mNewsLocalDataSource.updateNewsDetail(news);
+                callback.onNewsLoaded(news);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+    @Override
+    public void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback) {
 
     }
 
@@ -144,15 +187,21 @@ public class NewsRepository implements NewsDataSource {
     }
 
     @Override
-    public void favoriteNews(@NonNull String newsId) {
-
+    public void favoriteNews(@NonNull News news) {
+        News _news = new News(news, true);
+        if (mCachedNewsDetail == null) {
+            mCachedNewsDetail = new HashMap<>();
+        }
+        mCachedNewsDetail.put(_news.getId(), _news);
+        mNewsLocalDataSource.favoriteNews(_news);
     }
-
 
 
     @Override
     public void unfavoriteNews(@NonNull String newsId) {
-
+        News _news = new News(mCachedNewsDetail.get(newsId), false);
+        mCachedNewsDetail.put(_news.getId(), _news);
+        mNewsLocalDataSource.unfavoriteNews(newsId);
     }
 
     @Override
@@ -162,6 +211,11 @@ public class NewsRepository implements NewsDataSource {
 
     @Override
     public void saveNews(@NonNull News news) {
+
+    }
+
+    @Override
+    public void updateNewsDetail(@NonNull News news) {
 
     }
 

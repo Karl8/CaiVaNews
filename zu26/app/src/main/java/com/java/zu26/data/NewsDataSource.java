@@ -31,16 +31,19 @@ public interface NewsDataSource {
 
     void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback);
 
+    void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback);
 
     void readNews(@NonNull String newsId);
 
-    void favoriteNews(@NonNull String newsId);
+    void favoriteNews(@NonNull News news);
 
     void unfavoriteNews(@NonNull String newsId);
 
     void saveNewsList(@NonNull ArrayList<News> newsList);
 
     void saveNews(@NonNull News news);
+
+    void updateNewsDetail(@NonNull News news);
 
     void searchNews(String keyWord, int page, @NonNull LoadNewsListCallback callback);
 

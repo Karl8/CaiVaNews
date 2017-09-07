@@ -21,6 +21,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
+import com.java.zu26.data.NewsLocalDataSource;
+import com.java.zu26.data.NewsRemoteDataSource;
+import com.java.zu26.data.NewsRepository;
 import com.java.zu26.newsPage.NewsPageActivity;
 
 import java.util.ArrayList;
@@ -58,7 +61,6 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     };
 
     public NewsListFragment() {
-
     }
 
     public static NewsListFragment newInstance() {
@@ -195,14 +197,14 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
         private Context context;
 
-        public NewsListAdapter(Context _context, ArrayList<News> _newslist) {
+        public NewsListAdapter(Context _context, ArrayList<News> _newsList) {
             this.inflater = LayoutInflater.from(_context);
-            this.newslist = _newslist;
+            this.newslist = _newsList;
             this.context = _context;
         }
 
-        public void replaceData(ArrayList<News> _newslist) {
-            this.newslist.addAll(_newslist);
+        public void replaceData(ArrayList<News> _newsList) {
+            this.newslist.addAll(_newsList);
         }
 
         public News getItem(int i) {
