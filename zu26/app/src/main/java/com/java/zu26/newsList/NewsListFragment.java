@@ -129,8 +129,10 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 intent.setClass(getContext(), NewsPageActivity.class);
 
                 Bundle bundle = new Bundle();
-                bundle.putString("newsId", mAdapter.getItem(position).getId());
-                intent.putExtras(bundle);
+                //bundle.putParcelable("news", mAdapter.getItem(position));
+                //bundle.putString("newsId", mAdapter.getItem(position).getId());
+                //intent.putExtras(bundle);
+                intent.putExtra("newsId", mAdapter.getItem(position).getId());
                 startActivity(intent);
             }
         });

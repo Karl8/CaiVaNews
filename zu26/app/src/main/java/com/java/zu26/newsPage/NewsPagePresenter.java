@@ -36,7 +36,7 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
 
     @Override
     public void start(String newsId) {
-        mRespository.getNews(newsId, new NewsDataSource.GetNewsCallback() {
+        mRespository.getNews(newsId, true, new NewsDataSource.GetNewsCallback() {
             @Override
             public void onNewsLoaded(News news) {
                 Log.d("start", "onNewsLoaded: get news" + news.getTitle());
@@ -57,6 +57,11 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
             Log.d("getnews", "getNews: NULL");
         Log.d("getnews", "getNews: GOOD");
         return mNews;
+    }
+
+    @Override
+    public boolean getFavorite() {
+        return false;
     }
 
     @Override

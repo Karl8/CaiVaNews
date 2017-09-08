@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,7 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
             switch (message.what) {
                 case 0:
                     showNews(mPresenter.getNews());
+                    Log.d("handler", "handleMessage: " + mPresenter.getNews().isFavorite());
                     mPresenter.prepareToolbar(mPresenter.getNews().isFavorite());
             }
         }
@@ -104,11 +106,6 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
 
     public void onGetNews () {
         handler.sendEmptyMessage(0);
-    }
-
-    @Override
-    public boolean getFavorite() {
-        return false;
     }
 
 }

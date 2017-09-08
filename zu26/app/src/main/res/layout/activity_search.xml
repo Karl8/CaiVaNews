@@ -6,6 +6,8 @@
         android:id="@+id/search_edit_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:selectAllOnFocus="true"
+        android:maxLines="1"
         android:hint="Search"
         />
     <FrameLayout

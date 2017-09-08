@@ -81,7 +81,7 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
-    public void getNews(@NonNull final String newsId, @NonNull final GetNewsCallback callback) {
+    public void getNews(@NonNull final String newsId, @NonNull boolean isDetailed, @NonNull final GetNewsCallback callback) {
         new Thread() {
             @Override
             public void run(){
