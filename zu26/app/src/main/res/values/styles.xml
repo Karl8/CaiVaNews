@@ -17,13 +17,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="radioButton">
-        <item name="android:layout_width">30dp</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_weight">1.0</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:button">@null</item>
+    <style name="Base.Widget.Design.TabLayout" parent="android:Widget" >
+        <item name="tabBackground">@drawable/tab_background</item>
+        <item name="tabIndicatorColor">#000000</item>
+        <item name="tabIndicatorHeight">0dp</item>
     </style>
 
 </resources>

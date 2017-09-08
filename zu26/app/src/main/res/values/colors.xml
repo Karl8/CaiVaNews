@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#EE0026 </color>
-    <color name="colorPrimaryDark">#EE0026 </color>
+    <color name="colorPrimary">#D12323 </color>
+    <color name="colorPrimaryDark">#D12323 </color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorGrayFont">#2F4F4F</color>
-    <color name="colorScrollRed">#EE0026</color>
-    <color name="colorScrollBackGroundGray">#2F4F4F</color>
+    <color name="colorGrayFont">#D7D7D7</color>
+    <color name="colorScrollRed">#CC0000</color>
+    <color name="colorScrollBackGroundGray">#525252</color>
+    <color name="colorUnselectedBackground">#525252</color>
+    <color name="colorSelectedBackground">#000000</color>
 </resources>
