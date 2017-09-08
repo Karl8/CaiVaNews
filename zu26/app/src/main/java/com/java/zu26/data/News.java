@@ -37,7 +37,7 @@ public final class News implements Parcelable {
 
     //public ()
 
-    public News(News news, boolean favorite) {
+    public News(News news, boolean read, boolean favorite) {
         mId = news.getId();
         mAuthor = news.getAuthor();
         mTitle = news.getTitle();
@@ -47,7 +47,7 @@ public final class News implements Parcelable {
         mTime = news.getTime();
         mUrl = news.getUrl();
         mIntro = news.getIntro();
-        mRead = news.isRead();
+        mRead = read;
         mContent = news.getContent();
         mFavorite = favorite;
     }
