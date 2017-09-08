@@ -41,6 +41,7 @@
             android:background="?attr/colorPrimary"
             app:tabMode="scrollable"
             app:tabIndicatorColor="@color/colorScrollRed"
+            app:tabMinWidth="100dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:tabTextColor="#FFFFFF"/>
 

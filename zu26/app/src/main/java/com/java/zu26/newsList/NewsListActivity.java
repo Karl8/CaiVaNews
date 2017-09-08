@@ -1,6 +1,7 @@
 package com.java.zu26.newsList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Handler;
@@ -20,13 +21,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.java.zu26.R;
+import com.java.zu26.category.CategoryActivity;
 import com.java.zu26.data.NewsLocalDataSource;
+import com.java.zu26.data.NewsPersistenceContract;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.util.ActivityUtils;
+import com.java.zu26.util.UserSetting;
 
 import java.util.ArrayList;
 
@@ -49,6 +54,8 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newslist);
 
+        mContext = NewsListActivity.this;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.newslist_toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -58,7 +65,9 @@ public class NewsListActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.news_list_category:
-                        
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, CategoryActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return true;
@@ -77,10 +86,28 @@ public class NewsListActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.newslist_tabs);
         tabLayout.setupWithViewPager(viewPager);
+/*
+        ViewTreeObserver viewTreeObserver = tabLayout.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
 
-        mContext = NewsListActivity.this;
+            }
+        });
+*/
         //mContext.deleteDatabase("News.db");
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ArrayList<String> cs = UserSetting.loadCategorySetting(mContext);
+        categories = new ArrayList<Integer>();
+        for(String s : cs) {
+            categories.add(Integer.valueOf(s));
+        }
+        mPagerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -122,7 +149,8 @@ public class NewsListActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return categories.get(position).toString();
+            String id = String.valueOf(categories.get(position));
+            return NewsPersistenceContract.NewsEntry.categoryDict.get(id);
         }
     }
 
