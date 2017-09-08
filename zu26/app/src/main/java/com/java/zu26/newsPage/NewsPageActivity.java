@@ -109,7 +109,7 @@ public class NewsPageActivity extends AppCompatActivity {
         else
             mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite).setIcon(R.mipmap.favorite);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-
+            private boolean isReading = false;
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
@@ -129,6 +129,14 @@ public class NewsPageActivity extends AppCompatActivity {
                         }
                         mFavorite = !mFavorite;
                         break;
+                    case R.id.news_page_toolbar_voice:
+                        if(isReading) {
+                            mPresenter.readText();
+                        }
+                        else {
+                            mPresenter.stopReadingText();
+                        }
+                        isReading = !isReading;
                 }
                 return true;
             }
