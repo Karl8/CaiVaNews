@@ -1,7 +1,6 @@
 package com.java.zu26.newsPage;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,9 +15,7 @@ import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsLocalDataSource;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
-import com.java.zu26.utils.ActivityUtils;
-
-import cn.sharesdk.framework.ShareSDK;
+import com.java.zu26.util.ActivityUtils;
 
 /**
  * Created by lucheng on 2017/9/6.

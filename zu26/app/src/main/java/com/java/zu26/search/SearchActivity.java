@@ -13,7 +13,7 @@ import com.java.zu26.data.NewsLocalDataSource;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 
-import com.java.zu26.utils.ActivityUtils;
+import com.java.zu26.util.ActivityUtils;
 
 /**
  * Created by kaer on 2017/9/7.
