@@ -95,27 +95,27 @@
     <Wechat
         Id="4"
         SortId="4"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wx7de72e0963dbdfb6"
+        AppSecret="ed48aeb63f93cf4256aa251b89f025d8"
 		userName="gh_afb25ac019c9"
 		path="pages/index/index.html?id=1"
-        BypassApproval="true"
-        Enable="true" />
+        BypassApproval="false"
+        Enable="true"/>
     
     <WechatMoments
         Id="5"
         SortId="5"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
-        BypassApproval="true"
+        AppId="wx7de72e0963dbdfb6"
+        AppSecret="ed48aeb63f93cf4256aa251b89f025d8"
+        BypassApproval="false"
         Enable="true" />
         
 	<WechatFavorite
         Id="6"
         SortId="6"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
-        Enable="true" />
+        AppId="wx7de72e0963dbdfb6"
+        AppSecret="ed48aeb63f93cf4256aa251b89f025d8"
+        Enable="true"/>
     
 	<!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
 	<QQ
@@ -123,8 +123,8 @@
         SortId="7"
         AppId="100371282"
         AppKey="aed9b0303e3ed1e27bae87c33761161d"
-        ShareByAppClient ="true"
-		BypassApproval = "false"
+        ShareByAppClient ="true" 
+		BypassApproval = "true"
         Enable="true" />
     
     <Facebook
