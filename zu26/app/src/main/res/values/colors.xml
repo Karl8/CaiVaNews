@@ -6,4 +6,7 @@
     <color name="colorGrayFont">#2F4F4F</color>
     <color name="colorScrollRed">#EE0026</color>
     <color name="colorScrollBackGroundGray">#2F4F4F</color>
+    <color name="colorCategoryGray">#666666</color>
+    <color name="colorCategoryBlue">#308BE9</color>     //蓝色
+    <color name="colorDividerGray">#d9d9d9</color>//细分割线颜色
 </resources>

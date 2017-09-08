@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="LineBreakLayout">
+    <declare-styleable name="CategoryLayout">
         <!--标签之间左右距离-->
         <attr name="leftAndRightSpace" format="dimension" />
         <!--标签行距-->

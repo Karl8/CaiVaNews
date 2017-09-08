@@ -32,6 +32,9 @@ public final class NewsPersistenceContract {
         public static final String COLUMN_NAME_FAVORITE = "favorite";
 
         public static final HashMap<String, String> categoryMap = new HashMap<>();
+
+        public static final HashMap<String, String> categoryDict = new HashMap<>();
+
         static
         {
             categoryMap.put("科技", "1");
@@ -46,7 +49,22 @@ public final class NewsPersistenceContract {
             categoryMap.put("财经", "10");
             categoryMap.put("健康", "11");
             categoryMap.put("娱乐", "12");
+
+            categoryDict.put("1", "科技");
+            categoryDict.put("2", "教育");
+            categoryDict.put("3", "军事");
+            categoryDict.put("4", "国内");
+            categoryDict.put("5", "社会");
+            categoryDict.put("6", "文化");
+            categoryDict.put("7", "汽车");
+            categoryDict.put("8", "国际");
+            categoryDict.put("9", "体育");
+            categoryDict.put("10", "财经");
+            categoryDict.put("11", "健康");
+            categoryDict.put("12", "娱乐");
         }
+
+
     }
 }
 /*
