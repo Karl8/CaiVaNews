@@ -188,7 +188,7 @@ public class NewsRepository implements NewsDataSource {
 
     @Override
     public void favoriteNews(@NonNull News news) {
-        News _news = new News(news, true);
+        News _news = new News(news, news.isRead(), true);
         if (mCachedNewsDetail == null) {
             mCachedNewsDetail = new HashMap<>();
         }
@@ -199,7 +199,7 @@ public class NewsRepository implements NewsDataSource {
 
     @Override
     public void unfavoriteNews(@NonNull String newsId) {
-        News _news = new News(mCachedNewsDetail.get(newsId), false);
+        News _news = new News(mCachedNewsDetail.get(newsId), mCachedNewsDetail.get(newsId).isRead(), false);
         mCachedNewsDetail.put(_news.getId(), _news);
         mNewsLocalDataSource.unfavoriteNews(newsId);
     }

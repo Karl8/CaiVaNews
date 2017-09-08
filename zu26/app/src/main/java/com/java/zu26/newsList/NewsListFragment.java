@@ -1,6 +1,7 @@
 package com.java.zu26.newsList;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -122,20 +123,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         });
 
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.setClass(getContext(), NewsPageActivity.class);
 
-                Bundle bundle = new Bundle();
-                //bundle.putParcelable("news", mAdapter.getItem(position));
-                //bundle.putString("newsId", mAdapter.getItem(position).getId());
-                //intent.putExtras(bundle);
-                intent.putExtra("newsId", mAdapter.getItem(position).getId());
-                startActivity(intent);
-            }
-        });
 
         return root;
     }
@@ -224,15 +212,37 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == 1) {
                 final View view = inflater.inflate(R.layout.newslist_itemlayout, parent, false);
+                RecyclerView.ViewHolder holder = new ItemViewHolder(view);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (itemListener != null)
-                            itemListener.onItemClick(v,(int)v.getTag());
+                        TextView newTitle = view.findViewById(R.id.news_title);
+                        newTitle.setTextColor(Color.rgb(158, 158, 158));
+                        Intent intent = new Intent();
+                        intent.setClass(getContext(), NewsPageActivity.class);
+                        int position = (int)view.getTag();
+                        News news = newslist.get(position);
+                        newslist.set(position, new News(news, true, news.isFavorite()));
+                        //view.
+                        //Bundle bundle = new Bundle();
+                        //bundle.putParcelable("news", mAdapter.getItem(position));
+                        //bundle.putString("newsId", mAdapter.getItem(position).getId());
+                        //intent.putExtras(bundle);
+                        intent.putExtra("newsId", mAdapter.getItem(position).getId());
+                        startActivity(intent);
+                        Log.d("news list", "onClick: " + position + newslist.get(position).getTitle() + newslist.get(position).isRead());
                     }
                 });
 
-                return new ItemViewHolder(view);
+                /*
+                mAdapter.setOnClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                    }
+                });
+                */
+                return holder;
             }
             return null;
         }
@@ -241,10 +251,17 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             Log.d("TAG", "onBindViewHolder: ");
             if(holder instanceof ItemViewHolder) {
-                Log.d("TAG", "onBindViewHolder: " + position);
                 News news = newslist.get(position);
+                Log.d("TAG", "onBindViewHolder: " + position + " read : " + news.isRead() + " " + news.getTitle());
+
                 ItemViewHolder itemHolder = (ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
+                if (news.isRead()) {
+                    Log.d("read", "onBindViewHolder: read" + String.valueOf(position));
+                    itemHolder.newsTitle.setTextColor(Color.rgb(158, 158, 158));
+                }
+                else
+                    itemHolder.newsTitle.setTextColor(Color.rgb(0, 0, 0));
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
                 String url = news.getCoverPicture();
