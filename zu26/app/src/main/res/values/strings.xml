@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">zu26</string>
     <string name="news_page_action_share">news_page_action_share</string>
+    <string name="news_page_action_voice">news_page_action_voice</string>
     <string name="news_page_action_favorite">news_page_action_favorite</string>
     <string name="news_page_action_favorite_true">news_page_action_favorite_true</string>
+    <string name="news_list_action_category">news_page_action_favorite_true</string>
     <string name="splitTimeAndSource"> | </string>
     <string name="splitSourceAndAuthor" />
     <string name="one">one</string>

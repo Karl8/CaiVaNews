@@ -16,7 +16,9 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.java.zu26.R;
 import com.java.zu26.data.News;
@@ -50,6 +52,18 @@ public class NewsListActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.getMenu().findItem(R.id.news_list_category).setIcon(R.mipmap.category);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.news_list_category:
+                        
+                        break;
+                }
+                return true;
+            }
+        });
 
         // 注意：之后每次category变化时，都要调用adapter的notify.
         for(int i = 1; i < 13; i++){
