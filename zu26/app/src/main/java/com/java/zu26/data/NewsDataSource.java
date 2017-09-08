@@ -29,7 +29,7 @@ public interface NewsDataSource {
 
     void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback);
 
-    void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback);
+    void getNews(@NonNull String newsId,@NonNull boolean isDetailed, @NonNull GetNewsCallback callback);
 
     void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback);
 

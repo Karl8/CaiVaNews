@@ -54,20 +54,18 @@ public final class News implements Parcelable {
 
 
     private News(Parcel in){
+        mId = in.readString();
         mTitle = in.readString();
         mSource = "";
-        mId = "";
-        mAuthor = "";
-        //mTitle = "";
+        mAuthor = in.readString();;
         mCategory = "";
         mPictures = "";
-        //mSource = "";
-        mTime = "";
+        mTime = in.readString();
         mUrl = "";
         mIntro = "";
         mRead = false;
         mContent = "";
-        mFavorite = false;
+        mFavorite = in.readInt() == 1;
     }
 
 
@@ -140,9 +138,11 @@ public final class News implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mId);
         parcel.writeString(mTitle);
-        //parcel.writeString(sourceUrl);
-        //parcel.writeString(updateTime);
+        parcel.writeString(mAuthor);
+        parcel.writeString(mTime);
+        parcel.writeInt(mFavorite? 1 : 0);
     }
 
     public static final Parcelable.Creator<News> CREATOR = new Parcelable.Creator<News>() {

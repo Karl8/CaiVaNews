@@ -18,8 +18,6 @@ public interface NewsPageContract {
 
         void onGetNews();
 
-        boolean getFavorite();
-
     }
 
     interface Presenter {
@@ -27,6 +25,8 @@ public interface NewsPageContract {
         void start(String newsId);
 
         News getNews();
+
+        boolean getFavorite();
 
         void showShareDialog();
 
