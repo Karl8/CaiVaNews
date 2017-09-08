@@ -1,5 +1,7 @@
 package com.java.zu26.newsPage;
 
+import android.content.Context;
+
 import com.java.zu26.data.News;
 
 import java.util.ArrayList;
@@ -35,5 +37,7 @@ public interface NewsPageContract {
         void removeFromFavorites();
 
         void prepareToolbar(boolean isFavorite);
+
+        void getContext(Context context);
     }
 }

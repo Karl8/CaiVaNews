@@ -1,5 +1,6 @@
 package com.java.zu26.newsPage;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -9,6 +10,7 @@ import com.java.zu26.R;
 import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsRepository;
+import com.java.zu26.util.NewsShareActivity;
 
 /**
  * Created by lucheng on 2017/9/7.
@@ -25,6 +27,8 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
     private News mNews;
 
     private NewsPageActivity mActivity;
+
+    private Context mContext;
 
     public NewsPagePresenter(@NonNull NewsRepository respository, @NonNull NewsPageContract.View NewsView, Toolbar toolbar, NewsPageActivity activity) {
         mRespository = respository;
@@ -61,7 +65,15 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
 
     @Override
     public void showShareDialog() {
+        NewsShareActivity a;
 
+        String url=mNews.getUrl();
+        String title=mNews.getTitle();
+        String picture=mNews.getCoverPicture();
+        String text=mNews.getContent();
+
+        a = new NewsShareActivity(mContext);
+        a.showShare(title,text,url,picture);
     }
 
     @Override
@@ -77,5 +89,10 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
     @Override
     public void prepareToolbar(boolean isFavorite) {
         mActivity.prepareToolbar(isFavorite);
+    }
+
+    @Override
+    public void getContext(Context context) {
+        mContext = context;
     }
 }

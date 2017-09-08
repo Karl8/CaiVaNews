@@ -16,6 +16,8 @@ import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.utils.ActivityUtils;
 
+import cn.sharesdk.framework.ShareSDK;
+
 /**
  * Created by lucheng on 2017/9/6.
  */
@@ -56,7 +58,7 @@ public class NewsPageActivity extends AppCompatActivity {
         mPresenter.start(newsId);
         //final boolean rawFavorite = mPresenter.getNews().isFavorite();
 
-
+        mPresenter.getContext(mContext);
 
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
