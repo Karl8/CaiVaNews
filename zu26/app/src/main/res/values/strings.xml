@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"    tools:ignore="MissingTranslation">
     <string name="app_name">zu26</string>
     <string name="news_page_action_share">news_page_action_share</string>
     <string name="news_page_action_favorite">news_page_action_favorite</string>

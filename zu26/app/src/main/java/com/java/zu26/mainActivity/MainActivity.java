@@ -9,6 +9,7 @@ import com.java.zu26.newsList.NewsListActivity;
 import com.java.zu26.newsPage.NewsPageActivity;
 import com.java.zu26.search.SearchActivity;
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
