@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.java.zu26.R;
 import com.java.zu26.newsList.NewsListActivity;
-import com.java.zu26.newsPage.NewsPageActivity;
 
 public class MainActivity extends AppCompatActivity {
 

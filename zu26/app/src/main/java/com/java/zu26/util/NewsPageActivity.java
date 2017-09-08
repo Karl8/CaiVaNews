@@ -1,4 +1,4 @@
-package com.java.zu26.newsPage;
+package com.java.zu26.util;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -18,28 +18,9 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  * Created by lucheng on 2017/9/6.
  */
 
-public class NewsPageActivity extends Activity{
-
-    private Button button1;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Bundle bundle = getIntent().getExtras();
-        News news = bundle.getParcelable("news");
-        final String url = news.getUrl();
+public class NewsShareActivity{
 
 
-
-        button1 = (Button) findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                showShare(url);
-            }
-        });
-    }
     private void showShare(String url) {
 
         OnekeyShare oks = new OnekeyShare();

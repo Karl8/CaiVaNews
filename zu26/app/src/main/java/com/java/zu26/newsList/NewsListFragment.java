@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
-import com.java.zu26.newsPage.NewsPageActivity;
+import com.java.zu26.util.NewsPageActivity;
 
 import java.util.ArrayList;
 

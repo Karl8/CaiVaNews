@@ -67,7 +67,7 @@
 
         </activity>
 
-        <activity android:name=".newsPage.NewsPageActivity">
+        <activity android:name=".util.NewsPageActivity">
 
         </activity>
 
