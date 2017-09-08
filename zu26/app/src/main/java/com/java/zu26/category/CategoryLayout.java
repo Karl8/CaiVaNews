@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.java.zu26.R;
+import com.java.zu26.data.NewsPersistenceContract;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +25,11 @@ public class CategoryLayout extends ViewGroup {
     /**
      * 所有标签
      */
-    private List<String> lables;
+    private ArrayList<String> lables;
     /**
      * 选中标签
      */
-    private List<String> lableSelected = new ArrayList<>();
+    private ArrayList<String> lableSelected = new ArrayList<>();
 
     //自定义属性
     private int LEFT_RIGHT_SPACE; //dip
@@ -130,21 +132,16 @@ public class CategoryLayout extends ViewGroup {
         }
     }
 
+    public void setSelectedLables(ArrayList<String> selectedLables) {
+        this.lableSelected = selectedLables;
+    }
+
     /**
      * 添加标签
      * @param lables 标签集合
-     * @param add 是否追加
      */
-    public void setLables(List<String> lables, boolean add){
-        if(this.lables == null){
-            this.lables = new ArrayList<>();
-        }
-        if(add){
-            this.lables.addAll(lables);
-        }else{
-            this.lables.clear();
-            this.lables = lables;
-        }
+    public void initialLables(ArrayList<String> lables){
+        this.lables = lables;
         if(lables!=null && lables.size()>0){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             for (final String lable : lables) {
@@ -181,7 +178,11 @@ public class CategoryLayout extends ViewGroup {
             }
         }
     }
-    public List<String> getSelectedLables(){
-        return lableSelected;
+    public ArrayList<String> getSelectedLables(){
+        ArrayList<String> labelId = new ArrayList<>();
+        for(String lable : lableSelected) {
+            labelId.add(NewsPersistenceContract.NewsEntry.categoryMap.get(lable));
+        }
+        return labelId;
     }
 }

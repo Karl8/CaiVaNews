@@ -99,7 +99,8 @@ public class NewsListPresenter implements NewsListContract.Presenter{
     @Override
     public void start()
     {
-        loadNews(1, 1, true);
+        if(mNewsView.getPage() > 0) return;
+        else loadNews(1, mNewsView.getCategory(), true);
     }
 
 

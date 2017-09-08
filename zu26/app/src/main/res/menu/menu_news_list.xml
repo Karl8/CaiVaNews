@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".newsPage.NewsPageActivity">
+
+    <item
+        android:id="@+id/news_list_category"
+        android:title="@string/news_list_action_category"
+        android:orderInCategory="80"
+        android:icon="@mipmap/category"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>

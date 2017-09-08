@@ -39,5 +39,9 @@ public interface NewsPageContract {
         void prepareToolbar(boolean isFavorite);
 
         void getContext(Context context);
+
+        void readText();
+
+        void stopReadingText();
     }
 }

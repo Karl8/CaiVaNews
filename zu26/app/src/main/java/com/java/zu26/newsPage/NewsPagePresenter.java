@@ -100,4 +100,14 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
     public void getContext(Context context) {
         mContext = context;
     }
+
+    @Override
+    public void readText() {
+
+    }
+
+    @Override
+    public void stopReadingText() {
+
+    }
 }

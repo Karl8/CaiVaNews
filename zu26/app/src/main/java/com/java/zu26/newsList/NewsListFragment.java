@@ -51,7 +51,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
     private int mPage = 0;
 
-    private int mCategory = 0;
+    private int mCategory = 1;
 
     Handler handler = new Handler() {
         @Override
@@ -75,6 +75,9 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_newslist, container, false);
+
+        Bundle argumentBundle = getArguments();
+        mCategory = argumentBundle.getInt("category");
 
         mRecyclerView = root.findViewById(R.id.recyclerView);
         mContext = getContext();
@@ -125,6 +128,21 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         });
 
 
+
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.setClass(getContext(), NewsPageActivity.class);
+
+                //Bundle bundle = new Bundle();
+                //bundle.putParcelable("news", mAdapter.getItem(position));
+                //bundle.putString("newsId", mAdapter.getItem(position).getId());
+                //intent.putExtras(bundle);
+                intent.putExtra("newsId", mAdapter.getItem(position).getId());
+                startActivity(intent);
+            }
+        });
 
 
         return root;
@@ -178,6 +196,15 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         return isAdded();
     }
 
+    @Override
+    public int getCategory() {
+        return mCategory;
+    }
+
+    @Override
+    public int getPage() {
+        return mPage;
+    }
 
 
     private class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

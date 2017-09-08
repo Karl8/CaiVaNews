@@ -21,6 +21,10 @@ public interface NewsListContract {
         void setLoadingIndicator(boolean active);
 
         boolean isActive();
+
+        int getCategory();
+
+        int getPage();
     }
 
     interface Presenter {
