@@ -1,14 +1,13 @@
-package com.java.zu26.newsList;
+package com.java.zu26.favorite;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -23,65 +22,55 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
-
-import com.java.zu26.data.NewsLocalDataSource;
-import com.java.zu26.data.NewsRemoteDataSource;
-import com.java.zu26.data.NewsRepository;
 import com.java.zu26.newsPage.NewsPageActivity;
 
 import java.util.ArrayList;
 
 /**
- * Created by lucheng on 2017/9/3.
+ * Created by kaer on 2017/9/8.
  */
 
-public class NewsListFragment extends Fragment implements NewsListContract.View{
+public class FavoriteFragment extends Fragment implements FavoriteContract.View{
+    private Context mContext;
 
-    private NewsListContract.Presenter mPresenter;
+    private FavoriteContract.Presenter mPresenter;
 
-    private NewsListAdapter mAdapter;
+    private FavoriteFragment.FavoriteAdapter mAdapter;
 
     private LinearLayoutManager mLayoutManager;
 
     private RecyclerView mRecyclerView;
 
-    private Context mContext;
-
     private int lastVisibleItem = 0;
 
     private int mPage = 0;
 
-    private int mCategory = 0;
+
+    public static FavoriteFragment newInstance() {
+        return new FavoriteFragment();
+    }
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
                 case 0:
-                    mAdapter.notifyDataSetChanged();
+                    //mAdapter.notifyDataSetChanged();
             }
         }
     };
 
-    public NewsListFragment() {
-    }
-
-    public static NewsListFragment newInstance() {
-        return new NewsListFragment();
-    }
-
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_newslist, container, false);
+        Log.d("favorite", "onCreateView: fragment");
+        View root = inflater.inflate(R.layout.fragment_favorite, container, false);
 
-        mRecyclerView = root.findViewById(R.id.recyclerView);
+        mRecyclerView = root.findViewById(R.id.recyclerView_favorite);
         mContext = getContext();
-        mAdapter = new NewsListAdapter(mContext, new ArrayList<News>(0));
+        mAdapter = new FavoriteFragment.FavoriteAdapter(mContext, new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1);
+        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1_favorite);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -99,7 +88,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mAdapter.getItemCount()) {
 
 
-                    mPresenter.loadNews(mPage + 1, mCategory, true);
+                    mPresenter.loadNews(mPage + 1, true);
                     //Toast.makeText(activity-context, "加载成功", Toast.LENGTH_SHORT).show();
                 }
 
@@ -112,7 +101,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
             }
         });
-
+        /*
         // 实现顶部上拉刷新(其实没有刷新23333)
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -123,9 +112,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 mPresenter.loadNews(1, mCategory, false);
             }
         });
-
-
-
+        */
 
         return root;
     }
@@ -133,44 +120,33 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     @Override
     public void onResume() {
         super.onResume();
+        mAdapter.clearData();
+        mAdapter.notifyDataSetChanged();
         mPresenter.start();
     }
 
     @Override
-    public void setPresenter(NewsListPresenter presenter) {
+    public void setPresenter(FavoritePresenter presenter) {
         mPresenter = presenter;
     }
 
     @Override
-    public void showNews(int page, int category, ArrayList<News> newslist) {
-        Log.d("TAG", "showNews: " + newslist.size());
-        mAdapter.replaceData(newslist);
+    public void showNews(int page, ArrayList<News> newsList) {
+        Log.d("TAG", "showNews: " + newsList.size());
+        mAdapter.replaceData(newsList);
         mPage = page;
-        mCategory = category;
         mRecyclerView.setVisibility(View.VISIBLE);
         handler.sendEmptyMessage(0);
     }
 
     @Override
-    public void showNoNews(int page, int category, ArrayList<News> newslist) {
+    public void showNoNews(int page, ArrayList<News> newslist) {
 
     }
 
-
     @Override
-    public void setLoadingIndicator(final boolean active) {
-        if(getView() == null){
-            return;
-        }
-        final SwipeRefreshLayout srl = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout1);
+    public void setLoadingIndicator(boolean active) {
 
-        // Make sure setRefreshing() is called after the layout is done with everything else.
-        srl.post(new Runnable() {
-            @Override
-            public void run() {
-                srl.setRefreshing(active);
-            }
-        });
     }
 
     @Override
@@ -179,29 +155,37 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     }
 
 
-
-    private class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater inflater;
 
-        private ArrayList<News> newslist;
+        private ArrayList<News> newsList;
 
-        private OnItemClickListener itemListener;
+        private FavoriteFragment.OnItemClickListener itemListener;
 
         private Context context;
 
-        public NewsListAdapter(Context _context, ArrayList<News> _newsList) {
+        public FavoriteAdapter(Context _context, ArrayList<News> _newsList) {
             this.inflater = LayoutInflater.from(_context);
-            this.newslist = _newsList;
+            this.newsList = _newsList;
             this.context = _context;
         }
 
         public void replaceData(ArrayList<News> _newsList) {
-            this.newslist.addAll(_newsList);
+            this.newsList.addAll(_newsList);
         }
 
         public News getItem(int i) {
-            return newslist.get(i);
+            return newsList.get(i);
 
+        }
+
+        public void clearData() {
+            Log.d("TAG", "onclearData:");
+            if (newsList == null) {
+                Log.d("TAG", "clearData: NULL");
+            }
+            else
+                this.newsList.clear();
         }
 
         @Override
@@ -213,25 +197,24 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == 1) {
-                final View view = inflater.inflate(R.layout.newslist_itemlayout, parent, false);
+                final View view = inflater.inflate(R.layout.favorite_itemlayout, parent, false);
                 RecyclerView.ViewHolder holder = new ItemViewHolder(view);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView newsTitle = view.findViewById(R.id.news_title);
-                        newsTitle.setTextColor(getResources().getColor(R.color.colorCategoryGray));
+                        TextView newTitle = view.findViewById(R.id.news_title);
                         Intent intent = new Intent();
                         intent.setClass(getContext(), NewsPageActivity.class);
                         int position = (int)view.getTag();
-                        News news = newslist.get(position);
-                        newslist.set(position, new News(news, true, news.isFavorite()));
+                        News news = newsList.get(position);
+                        newsList.set(position, new News(news, true, news.isFavorite()));
                         //Bundle bundle = new Bundle();
                         //bundle.putParcelable("news", mAdapter.getItem(position));
                         //bundle.putString("newsId", mAdapter.getItem(position).getId());
                         //intent.putExtras(bundle);
                         intent.putExtra("newsId", mAdapter.getItem(position).getId());
                         startActivity(intent);
-                        Log.d("news list", "onClick: " + position + newslist.get(position).getTitle() + newslist.get(position).isRead());
+                        Log.d("news list", "onClick: " + position + newsList.get(position).getTitle() + newsList.get(position).isRead());
                     }
                 });
                 return holder;
@@ -242,18 +225,11 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             Log.d("TAG", "onBindViewHolder: ");
-            if(holder instanceof ItemViewHolder) {
-                News news = newslist.get(position);
-                Log.d("TAG", "onBindViewHolder: " + position + " read : " + news.isRead() + " " + news.getTitle());
-
-                ItemViewHolder itemHolder = (ItemViewHolder)holder;
+            if(holder instanceof FavoriteFragment.ItemViewHolder) {
+                Log.d("TAG", "onBindViewHolder: " + position);
+                News news = newsList.get(position);
+                FavoriteFragment.ItemViewHolder itemHolder = (FavoriteFragment.ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
-                if (news.isRead()) {
-                    Log.d("read", "onBindViewHolder: read" + String.valueOf(position));
-                    itemHolder.newsTitle.setTextColor(Color.rgb(158, 158, 158));
-                }
-                else
-                    itemHolder.newsTitle.setTextColor(Color.rgb(0, 0, 0));
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
                 String url = news.getCoverPicture();
@@ -279,10 +255,10 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
         @Override
         public int getItemCount() {
-            return newslist.size();
+            return newsList.size();
         }
 
-        void setOnItemClickListener(OnItemClickListener listener) {
+        void setOnItemClickListener(FavoriteFragment.OnItemClickListener listener) {
             itemListener = listener;
         }
     }
@@ -296,9 +272,9 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
         public ItemViewHolder(View view) {
             super(view);
-            newsTitle = (TextView) view.findViewById(R.id.news_title);
-            newsSource = (TextView) view.findViewById(R.id.news_source);
-            newsImage = (ImageView) view.findViewById(R.id.news_image);
+            newsTitle = (TextView) view.findViewById(R.id.favorite_news_title);
+            newsSource = (TextView) view.findViewById(R.id.favorite_news_source);
+            newsImage = (ImageView) view.findViewById(R.id.favorite_news_image);
             newsTime = null;
         }
     }
@@ -306,7 +282,4 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
-
 }
-
-

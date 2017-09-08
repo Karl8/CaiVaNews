@@ -51,7 +51,7 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
                 case 0:
                     showNews(mPresenter.getNews());
                     Log.d("handler", "handleMessage: " + mPresenter.getNews().isFavorite());
-                    mPresenter.prepareToolbar(mPresenter.getNews().isFavorite());
+                    //mPresenter.prepareToolbar(mPresenter.getNews().isFavorite());
             }
         }
     };

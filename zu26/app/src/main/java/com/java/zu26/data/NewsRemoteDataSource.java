@@ -109,7 +109,7 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
-    public void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback) {
+    public void getFavoriteNewsList(int page, @NonNull LoadNewsListCallback callback) {
 
     }
 

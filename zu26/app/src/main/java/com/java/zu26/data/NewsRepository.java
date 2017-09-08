@@ -22,6 +22,8 @@ public class NewsRepository implements NewsDataSource {
 
     Map<String, News> mCachedNewsDetail;
 
+    ArrayList<String> mCachedFavoriteId;
+
     ArrayList<ArrayList<String>> mCachedNewsListId;
 
     private NewsRepository(@NonNull NewsDataSource newsRemoteDataSource,
@@ -51,10 +53,10 @@ public class NewsRepository implements NewsDataSource {
     @Override
     public void getNewsList(final int page, final int category, @NonNull final LoadNewsListCallback callback) {
         Log.d("TAG", "getNewsList: ");
-        if (mCachedNewsDetail != null && mCachedNewsListId != null && mCachedNewsListId.get(category).size() >= 10 * page) {
+        if (mCachedNewsDetail != null && mCachedNewsListId != null) {
 
             ArrayList<News> newsList = new ArrayList<>();
-            for (int i = page * 10 - 10; i < page * 10; i++) {
+            for (int i = page * 10 - 10; i < page * 10 && i < mCachedNewsListId.get(category).size(); i++) {
                 String id = mCachedNewsListId.get(category).get(i);
                 newsList.add(mCachedNewsDetail.get(id));
                 Log.d("TAG", "getNewsListfrom Cache: " + mCachedNewsDetail.get(id).getTitle());
@@ -114,13 +116,17 @@ public class NewsRepository implements NewsDataSource {
         }
     }
 
-    public void refreshNewsCache(ArrayList<News> newsList) {
+    public void refreshFavoriteNewsCache(ArrayList<News> newsList) {
         Log.d("TAG", "refreshNews from newsList: ");
         if (mCachedNewsDetail == null) {
             mCachedNewsDetail = new HashMap<>();
         }
+        if (mCachedFavoriteId == null) {
+            mCachedFavoriteId = new ArrayList<>();
+        }
         for (int i = 0; i < newsList.size(); i++) {
             Log.d("TAG", "refreshNewsListCache: " + newsList.get(i).getId());
+            mCachedFavoriteId.add(newsList.get(i).getId());
             mCachedNewsDetail.put(newsList.get(i).getId(), newsList.get(i));
         }
     }
@@ -177,8 +183,30 @@ public class NewsRepository implements NewsDataSource {
         });
     }
     @Override
-    public void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback) {
+    public void getFavoriteNewsList(int page, @NonNull final LoadNewsListCallback callback) {
+        if (mCachedFavoriteId != null && mCachedNewsDetail != null) {
+            ArrayList<News> newsList = new ArrayList<>();
+            for (int i = page * 10 - 10; i < page * 10 && i < mCachedFavoriteId.size(); i++) {
+                String id = mCachedFavoriteId.get(i);
+                newsList.add(mCachedNewsDetail.get(id));
+                Log.d("TAG", "getNewsListfrom Cache: " + mCachedNewsDetail.get(id).getTitle());
+            }
+            callback.onNewsListLoaded(newsList);
+            return;
+        }
 
+        mNewsLocalDataSource.getFavoriteNewsList(page, new LoadNewsListCallback() {
+            @Override
+            public void onNewsListLoaded(ArrayList<News> newsList) {
+                refreshFavoriteNewsCache(newsList);
+                callback.onNewsListLoaded(newsList);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
 
     @Override
@@ -192,8 +220,13 @@ public class NewsRepository implements NewsDataSource {
         if (mCachedNewsDetail == null) {
             mCachedNewsDetail = new HashMap<>();
         }
+        if (mCachedFavoriteId == null)
+            mCachedFavoriteId = new ArrayList<>();
         mCachedNewsDetail.put(_news.getId(), _news);
         mNewsLocalDataSource.favoriteNews(_news);
+        if (!mCachedFavoriteId.contains(_news.getId()))
+            mCachedFavoriteId.add(_news.getId());
+
     }
 
 
@@ -202,6 +235,8 @@ public class NewsRepository implements NewsDataSource {
         News _news = new News(mCachedNewsDetail.get(newsId), mCachedNewsDetail.get(newsId).isRead(), false);
         mCachedNewsDetail.put(_news.getId(), _news);
         mNewsLocalDataSource.unfavoriteNews(newsId);
+        if (mCachedFavoriteId.contains(newsId))
+            mCachedFavoriteId.remove(newsId);
     }
 
     @Override

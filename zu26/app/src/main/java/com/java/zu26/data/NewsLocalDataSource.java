@@ -135,8 +135,50 @@ public class NewsLocalDataSource implements NewsDataSource {
     }
 
     @Override
-    public void getFavoriteNewsList(int page, @NonNull GetNewsCallback callback) {
+    public void getFavoriteNewsList(int page, @NonNull LoadNewsListCallback callback) {
+        Log.d("LOCAL", "get Favorite NewsList: ");
+        ArrayList<News> newsList = new ArrayList<>();
+        SQLiteDatabase db = mFavoriteDbHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
+                + NewsEntry.COLUMN_NAME_FAVORITE + " = 1 ORDER BY " + NewsEntry.COLUMN_NAME_INDEX + " LIMIT 10 OFFSET " + String.valueOf(page * 10 - 10), null);
+        Log.d("LOCAL", "get Favorite NewsList: " + "SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
+                + NewsEntry.COLUMN_NAME_FAVORITE + " = 1 ORDER BY " + NewsEntry.COLUMN_NAME_INDEX + " LIMIT 10 OFFSET " + String.valueOf(page * 10 - 10));
 
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String mcategory = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CATEGORY));
+                String author = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_AUTHOR));
+                String pictures = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_PICTURES));
+                String source = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_SOURCE));
+                String time = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_TIME));
+                String title = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_TITLE));
+                String url = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_URL));
+                String intro = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_INTRO));
+                boolean read = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_READ)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_FAVORITE)) == 1;
+                String content = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CONTENT));
+                News news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite);
+                Log.d("LOCAL", "found: " + title);
+                Log.d("LOCAL", "category: " + mcategory);
+                newsList.add(news);
+            }
+        }
+        else {
+            Log.d("LOCAL", "getNewsList: not found");
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+
+        if (newsList.isEmpty()) {
+            callback.onDataNotAvailable();
+        }
+        else {
+            callback.onNewsListLoaded(newsList);
+        }
     }
 
     @Override
@@ -339,5 +381,23 @@ public class NewsLocalDataSource implements NewsDataSource {
         }
 
         db.close();
+    }
+
+    public boolean isFavorite(String newsId) {
+        SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE " + NewsEntry.COLUMN_NAME_ENTRY_ID + " = ?",
+                new String[]{newsId});
+        boolean found = false;
+        if (cursor != null && cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                found = true;
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+        return found;
     }
 }

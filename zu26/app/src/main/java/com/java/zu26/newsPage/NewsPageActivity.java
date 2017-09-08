@@ -29,8 +29,6 @@ public class NewsPageActivity extends AppCompatActivity {
 
     private Context mContext;
 
-    private News mRawNews;
-
     private String mNewsId;
 
     private boolean mFavorite;
@@ -46,18 +44,9 @@ public class NewsPageActivity extends AppCompatActivity {
         //Bundle bundle = getIntent().getExtras();
         //mRawNews = bundle.getParcelable("news");
         mNewsId = getIntent().getStringExtra("newsId");
-        newsRepository.getNews(mNewsId, false, new NewsDataSource.GetNewsCallback() {
-            @Override
-            public void onNewsLoaded(News news) {
-                mRawNews = news;
-            }
+        Log.d("new page", "onCreate: newId = " + mNewsId);
 
-            @Override
-            public void onDataNotAvailable() {
-                Log.d("news page", "get raw news failed! ");
-            }
-        });
-        mFavorite = mRawNews.isFavorite();
+        mFavorite = newsLocalDataSource.isFavorite(mNewsId);
         Log.d("News Page", "onCreate: favorite" + mFavorite);
         mToolbar = (Toolbar) findViewById(R.id.news_page_toolbar);
 
@@ -92,7 +81,7 @@ public class NewsPageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("", "onResume: presenter start");
-        mPresenter.start(mRawNews.getId());
+        mPresenter.start(mNewsId);
     }
 
     @Override

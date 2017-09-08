@@ -1,4 +1,4 @@
-package com.java.zu26.search;
+package com.java.zu26.favorite;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -6,33 +6,34 @@ import android.util.Log;
 import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsRepository;
+import com.java.zu26.search.SearchContract;
 
 import java.util.ArrayList;
 
 import static android.support.v4.util.Preconditions.checkNotNull;
 
 /**
- * Created by kaer on 2017/9/7.
+ * Created by kaer on 2017/9/8.
  */
 
-public class SearchPresenter implements SearchContract.Presenter{
+public class FavoritePresenter implements FavoriteContract.Presenter {
     private NewsRepository mNewsRepository;
 
-    private SearchContract.View mSearchView;
+    private FavoriteContract.View mFavoriteView;
 
     private boolean mFirstLoad = true;
 
-    public SearchPresenter(@NonNull NewsRepository newsRepository, @NonNull SearchContract.View newsView) {
+    public FavoritePresenter(@NonNull NewsRepository newsRepository, @NonNull FavoriteContract.View newsView) {
         mNewsRepository = checkNotNull(newsRepository, "newsRepository cannot be null");
-        mSearchView = checkNotNull(newsView, "newsView cannot be null!");
-        mSearchView.setPresenter(this);
+        mFavoriteView = checkNotNull(newsView, "newsView cannot be null!");
+        mFavoriteView.setPresenter(this);
     }
 
 
 
     @Override
-    public void loadNews(String keyWord, int page, boolean forceUpdate) {
-        loadNewsList(keyWord, page, forceUpdate || mFirstLoad, true);
+    public void loadNews(int page, boolean forceUpdate) {
+        loadNewsList(page, forceUpdate || mFirstLoad, true);
         mFirstLoad = false;
     }
 
@@ -41,33 +42,33 @@ public class SearchPresenter implements SearchContract.Presenter{
      * @param forceUpdate   Pass in true to refresh the  data in the {@link NewsDataSource}
      * @param showLoadingUI Pass in true to display a loading icon in the UI
      */
-    private void loadNewsList(final String keyWord, final int page, boolean forceUpdate, final boolean showLoadingUI) {
+    private void loadNewsList(final int page, boolean forceUpdate, final boolean showLoadingUI) {
         if(showLoadingUI) {
-            mSearchView.setLoadingIndicator(true);
+            mFavoriteView.setLoadingIndicator(true);
         }
         if(!forceUpdate) {
             if(showLoadingUI) {
-                mSearchView.setLoadingIndicator(false);
+                mFavoriteView.setLoadingIndicator(false);
             }
             return;
         }
         Log.d("TAG", "loadNewsList: ");
-        mNewsRepository.searchNews(keyWord, page, new NewsDataSource.LoadNewsListCallback() {
+        mNewsRepository.getFavoriteNewsList(page, new NewsDataSource.LoadNewsListCallback() {
 
             @Override
             public void onNewsListLoaded(ArrayList<News> news) {
                 ArrayList<News> newsToShow = new ArrayList<News>(news);
                 Log.d("TAG", "onNewsListLoaded: process news");
-                if(!mSearchView.isActive()) {
+                if(!mFavoriteView.isActive()) {
                     Log.d("TAG", "onNewsListLoaded: not active");
                     return;
                 }
 
                 if(showLoadingUI) {
-                    mSearchView.setLoadingIndicator(false);
+                    mFavoriteView.setLoadingIndicator(false);
                 }
 
-                processNews(keyWord, page, newsToShow);
+                processNews(page, newsToShow);
             }
 
             @Override
@@ -77,23 +78,22 @@ public class SearchPresenter implements SearchContract.Presenter{
         });
     }
 
-    public void processNews(String keyWord, int page, ArrayList<News> newsList) {
+    public void processNews(int page, ArrayList<News> newsList) {
         Log.d("TAG", "processNews: ");
         if(newsList.isEmpty()) {
             Log.d("TAG", "empty: ");
-            mSearchView.showNoNews(keyWord, page, newsList);
+            mFavoriteView.showNoNews(page, newsList);
         }
         else {
             Log.d("TAG", "not empty: ");
-            mSearchView.showNews(keyWord, page, newsList);
+            mFavoriteView.showNews(page, newsList);
         }
     }
-
-
 
     @Override
     public void start()
     {
-
+        Log.d("favorite presenter", "start: ");
+        loadNews(1, true);
     }
 }

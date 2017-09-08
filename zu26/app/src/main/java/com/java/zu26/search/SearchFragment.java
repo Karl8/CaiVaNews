@@ -2,6 +2,7 @@ package com.java.zu26.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -64,14 +65,14 @@ public class SearchFragment extends Fragment implements SearchContract.View{
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_newslist, container, false);
+        View root = inflater.inflate(R.layout.fragment_search, container, false);
 
-        mRecyclerView = root.findViewById(R.id.recyclerView);
+        mRecyclerView = root.findViewById(R.id.recyclerView_search);
         mContext = getContext();
         mAdapter = new SearchFragment.SearchAdapter(mContext, new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1);
+        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1_search);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -114,26 +115,18 @@ public class SearchFragment extends Fragment implements SearchContract.View{
             }
         });
         */
-
-        mAdapter.setOnItemClickListener(new SearchFragment.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.setClass(getContext(), NewsPageActivity.class);
-
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("news", mAdapter.getItem(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-
         return root;
     }
 
     @Override
-    public void setPresenter(SearchPresenter presenter) {
+    public void onResume() {
+        super.onResume();
+        mPresenter.start();
+    }
 
+    @Override
+    public void setPresenter(SearchPresenter presenter) {
+        mPresenter = presenter;
     }
 
     @Override
@@ -194,6 +187,7 @@ public class SearchFragment extends Fragment implements SearchContract.View{
             else
                 this.newsList.clear();
         }
+
         public News getItem(int i) {
             return newsList.get(i);
 
@@ -208,16 +202,27 @@ public class SearchFragment extends Fragment implements SearchContract.View{
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == 1) {
-                final View view = inflater.inflate(R.layout.newslist_itemlayout, parent, false);
+                final View view = inflater.inflate(R.layout.search_itemlayout, parent, false);
+                RecyclerView.ViewHolder holder = new ItemViewHolder(view);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (itemListener != null)
-                            itemListener.onItemClick(v,(int)v.getTag());
+                        TextView newTitle = view.findViewById(R.id.news_title);
+                        Intent intent = new Intent();
+                        intent.setClass(getContext(), NewsPageActivity.class);
+                        int position = (int)view.getTag();
+                        News news = newsList.get(position);
+                        newsList.set(position, new News(news, true, news.isFavorite()));
+                        //Bundle bundle = new Bundle();
+                        //bundle.putParcelable("news", mAdapter.getItem(position));
+                        //bundle.putString("newsId", mAdapter.getItem(position).getId());
+                        //intent.putExtras(bundle);
+                        intent.putExtra("newsId", mAdapter.getItem(position).getId());
+                        startActivity(intent);
+                        Log.d("news list", "onClick: " + position + newsList.get(position).getTitle() + newsList.get(position).isRead());
                     }
                 });
-
-                return new SearchFragment.ItemViewHolder(view);
+                return holder;
             }
             return null;
         }
@@ -272,9 +277,9 @@ public class SearchFragment extends Fragment implements SearchContract.View{
 
         public ItemViewHolder(View view) {
             super(view);
-            newsTitle = (TextView) view.findViewById(R.id.news_title);
-            newsSource = (TextView) view.findViewById(R.id.news_source);
-            newsImage = (ImageView) view.findViewById(R.id.news_image);
+            newsTitle = (TextView) view.findViewById(R.id.search_news_title);
+            newsSource = (TextView) view.findViewById(R.id.search_news_source);
+            newsImage = (ImageView) view.findViewById(R.id.search_news_image);
             newsTime = null;
         }
     }
