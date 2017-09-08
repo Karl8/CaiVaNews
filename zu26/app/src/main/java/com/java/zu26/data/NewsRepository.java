@@ -134,7 +134,7 @@ public class NewsRepository implements NewsDataSource {
     }
 
     @Override
-    public void getNews(@NonNull final String newsId, @NonNull final GetNewsCallback callback) {
+    public void getNews(@NonNull final String newsId, @NonNull boolean isDetailed, @NonNull final GetNewsCallback callback) {
         Log.d("TAG", "get one News ");
 
         if (mCachedNewsDetail != null && mCachedNewsDetail.containsKey(newsId)) {
@@ -146,7 +146,7 @@ public class NewsRepository implements NewsDataSource {
             }
         }
 
-        mNewsLocalDataSource.getNews(newsId, new GetNewsCallback() {
+        mNewsLocalDataSource.getNews(newsId, isDetailed, new GetNewsCallback() {
             @Override
             public void onNewsLoaded(News news) {
                 Log.d("local", "get one news from local ");
@@ -162,7 +162,7 @@ public class NewsRepository implements NewsDataSource {
     }
 
     public void getNewsFromRemoteDataSource(@NonNull String newsId, @NonNull final GetNewsCallback callback) {
-        mNewsRemoteDataSource.getNews(newsId, new GetNewsCallback() {
+        mNewsRemoteDataSource.getNews(newsId, true, new GetNewsCallback() {
             @Override
             public void onNewsLoaded(News news) {
                 refreshNewsCache(news);

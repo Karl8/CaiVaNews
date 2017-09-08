@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,7 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
             switch (message.what) {
                 case 0:
                     showNews(mPresenter.getNews());
+                    Log.d("handler", "handleMessage: " + mPresenter.getNews().isFavorite());
                     mPresenter.prepareToolbar(mPresenter.getNews().isFavorite());
             }
         }
@@ -87,28 +89,25 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
     @Override
     public void showNews(News news) {
         mTitleView.setText(news.getTitle());
-        mTimeView.setVisibility(View.VISIBLE);
-        mTimeView.setText(news.getTime());
-        mSourceView.setText(news.getSource());
-        mAuthorView.setText(news.getSource());
+        String time = news.getTime() + "  |  ";
+        mTimeView.setText(time);
+        String source = news.getSource() + "  ";
+        mSourceView.setText(source);
+        mAuthorView.setText(news.getAuthor());
         if(news.getCoverPicture() != null) {
             Glide.with(getContext()).load(news.getCoverPicture()).into(mCoverImageView);
         }
         else {
             mCoverImageView.setVisibility(View.GONE);
         }
-        mIntroductionView.setText(news.getIntro());
+        //mIntroductionView.setText(news.getIntro());
         mContentView.setText(news.getContent());
+        Log.d("LC::", "showNews: " + news.getContent());
 
     }
 
     public void onGetNews () {
         handler.sendEmptyMessage(0);
-    }
-
-    @Override
-    public boolean getFavorite() {
-        return false;
     }
 
 }

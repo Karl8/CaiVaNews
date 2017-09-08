@@ -28,6 +28,7 @@ public class NewsLocalDataSource implements NewsDataSource {
         //checkNotNull(context);
         Log.d("local data source", "new dbhelper ");
         mDbHelper = new NewsDbHelper(context);
+        mFavoriteDbHelper = new NewsFavoriteDbHelper(context);
     }
     public static NewsLocalDataSource getInstance(Context context) {
         if (INSTANCE == null) {
@@ -85,7 +86,7 @@ public class NewsLocalDataSource implements NewsDataSource {
     }
 
     @Override
-    public void getNews(@NonNull String newsId, @NonNull GetNewsCallback callback) {
+    public void getNews(@NonNull String newsId, @NonNull boolean isDetailed, @NonNull GetNewsCallback callback) {
         Log.d("LOCAL", "getNews: ");
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
@@ -96,7 +97,7 @@ public class NewsLocalDataSource implements NewsDataSource {
         if (cursor != null && cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
                 boolean read = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_READ)) == 1;
-                if (read == false) {
+                if (read == false && isDetailed == true) {
                     Log.d("TAG", "getNews: not read");
                     callback.onDataNotAvailable();
                     return;
@@ -156,29 +157,61 @@ public class NewsLocalDataSource implements NewsDataSource {
     @Override
     public void favoriteNews(@NonNull News news) {
         Log.d("local", "favoriteNews: " + news.getTitle());
+        //favorite DB
         SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE " + NewsEntry.COLUMN_NAME_ENTRY_ID + " = ?",
+                new String[]{news.getId()});
+        if (cursor != null && cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                ContentValues values = new ContentValues();
+                values.put(NewsEntry.COLUMN_NAME_FAVORITE, true);
+
+                String selection = NewsEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+                String[] selectionArgs = { news.getId() };
+                Log.d("favorite", "updateNewsFavorite: ");
+                db.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
+            }
+        }
+        else {
+            ContentValues values = new ContentValues();
+            values.put(NewsEntry.COLUMN_NAME_ENTRY_ID, news.getId());
+            values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
+            values.put(NewsEntry.COLUMN_NAME_TITLE, news.getTitle());
+            values.put(NewsEntry.COLUMN_NAME_CATEGORY, news.getCategory());
+            values.put(NewsEntry.COLUMN_NAME_PICTURES, news.getPictures());
+            values.put(NewsEntry.COLUMN_NAME_SOURCE, news.getSource());
+            values.put(NewsEntry.COLUMN_NAME_TIME, news.getTime());
+            values.put(NewsEntry.COLUMN_NAME_URL, news.getUrl());
+            values.put(NewsEntry.COLUMN_NAME_INTRO, news.getIntro());
+            values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
+            values.put(NewsEntry.COLUMN_NAME_FAVORITE, news.isFavorite());
+            values.put(NewsEntry.COLUMN_NAME_READ, news.isRead());
+
+            db.insert(NewsEntry.TABLE_NAME, null, values);
+            Log.d("favorite", "insert favoriteNews: ");
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+        //local db
+        db = mDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(NewsEntry.COLUMN_NAME_ENTRY_ID, news.getId());
-        values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
-        values.put(NewsEntry.COLUMN_NAME_TITLE, news.getTitle());
-        values.put(NewsEntry.COLUMN_NAME_CATEGORY, news.getCategory());
-        values.put(NewsEntry.COLUMN_NAME_PICTURES, news.getPictures());
-        values.put(NewsEntry.COLUMN_NAME_SOURCE, news.getSource());
-        values.put(NewsEntry.COLUMN_NAME_TIME, news.getTime());
-        values.put(NewsEntry.COLUMN_NAME_URL, news.getUrl());
-        values.put(NewsEntry.COLUMN_NAME_INTRO, news.getIntro());
-        values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
-        values.put(NewsEntry.COLUMN_NAME_FAVORITE, news.isFavorite());
-        values.put(NewsEntry.COLUMN_NAME_READ, news.isRead());
+        values.put(NewsEntry.COLUMN_NAME_FAVORITE, true);
 
-        db.insert(NewsEntry.TABLE_NAME, null, values);
+        String selection = NewsEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String[] selectionArgs = { news.getId() };
+
+        db.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
 
         db.close();
     }
 
     @Override
     public void unfavoriteNews(@NonNull String newsId) {
+        //favorite db
         Log.d("local", "unfavoriteNews: " + newsId);
         SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
 
@@ -187,6 +220,18 @@ public class NewsLocalDataSource implements NewsDataSource {
 
         String selection = NewsEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
         String[] selectionArgs = { newsId };
+
+        db.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        db.close();
+        //local db
+        db = mDbHelper.getWritableDatabase();
+
+        values = new ContentValues();
+        values.put(NewsEntry.COLUMN_NAME_FAVORITE, false);
+
+        selection = NewsEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        selectionArgs = new String[]{ newsId };
 
         db.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
 

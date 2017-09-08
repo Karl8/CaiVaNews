@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.java.zu26.R;
 import com.java.zu26.data.News;
+import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsLocalDataSource;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
@@ -30,15 +32,36 @@ public class NewsPageActivity extends AppCompatActivity {
 
     private Context mContext;
 
+    private News mRawNews;
+
+    private String mNewsId;
+
+    private boolean mFavorite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newspage);
+        mContext = NewsPageActivity.this;
+        NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
+        NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
+        NewsRepository newsRepository = NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource);
+        //Bundle bundle = getIntent().getExtras();
+        //mRawNews = bundle.getParcelable("news");
+        mNewsId = getIntent().getStringExtra("newsId");
+        newsRepository.getNews(mNewsId, false, new NewsDataSource.GetNewsCallback() {
+            @Override
+            public void onNewsLoaded(News news) {
+                mRawNews = news;
+            }
 
-        Bundle bundle = getIntent().getExtras();
-        String newsId = bundle.getString("newsId");
-
-
+            @Override
+            public void onDataNotAvailable() {
+                Log.d("news page", "get raw news failed! ");
+            }
+        });
+        mFavorite = mRawNews.isFavorite();
+        Log.d("News Page", "onCreate: favorite" + mFavorite);
         mToolbar = (Toolbar) findViewById(R.id.news_page_toolbar);
 
         NewsPageFragment newsPageFragment =
@@ -50,12 +73,10 @@ public class NewsPageActivity extends AppCompatActivity {
                     getSupportFragmentManager(), newsPageFragment, R.id.page_frame);
         }
 
-        mContext = NewsPageActivity.this;
-        NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
-        NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
-        mPresenter = new NewsPagePresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsPageFragment, mToolbar, this);
 
-        mPresenter.start(newsId);
+        mPresenter = new NewsPagePresenter(newsRepository, newsPageFragment, mToolbar, this);
+
+
         //final boolean rawFavorite = mPresenter.getNews().isFavorite();
 
         mPresenter.getContext(mContext);
@@ -71,9 +92,51 @@ public class NewsPageActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("", "onResume: presenter start");
+        mPresenter.start(mRawNews.getId());
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("", "onCreateOptionsMenu: ");
         getMenuInflater().inflate(R.menu.menu_news_page, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mFavorite)
+            mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite).setIcon(R.mipmap.favorite_true);
+        else
+            mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite).setIcon(R.mipmap.favorite);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.news_page_toolbar_share:
+                        mPresenter.showShareDialog();
+                        break;
+                    case R.id.news_page_toolbar_favorite:
+                        if(mFavorite) {
+                            mPresenter.removeFromFavorites();
+                            Toast.makeText(mContext, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                            menuItem.setIcon(R.mipmap.favorite);
+                        }
+                        else {
+                            mPresenter.addToFavorites();
+                            Toast.makeText(mContext, "Added to favorites", Toast.LENGTH_SHORT).show();
+                            menuItem.setIcon(R.mipmap.favorite_true);
+                        }
+                        mFavorite = !mFavorite;
+                        break;
+                }
+                return true;
+            }
+        });
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -86,39 +149,20 @@ public class NewsPageActivity extends AppCompatActivity {
     }
 
     public void prepareToolbar(final boolean rawFavorite) {
-        if(rawFavorite) mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite).setIcon(R.mipmap.favorite_true);
-
-        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            boolean isFavorite = rawFavorite;
-
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                String msg = "";
-                switch (menuItem.getItemId()) {
-                    case R.id.news_page_toolbar_share:
-                        mPresenter.showShareDialog();
-                        break;
-                    case R.id.news_page_toolbar_favorite:
-                        if(isFavorite) {
-                            mPresenter.removeFromFavorites();
-                            Toast.makeText(mContext, "Added to favorites", Toast.LENGTH_SHORT).show();
-                            menuItem.setIcon(R.mipmap.favorite);
-                        }
-                        else {
-                            mPresenter.addToFavorites();
-                            Toast.makeText(mContext, "Removed from favorites", Toast.LENGTH_SHORT).show();
-                            menuItem.setIcon(R.mipmap.favorite_true);
-                        }
-                        isFavorite = !isFavorite;
-                        break;
-                }
-
-                if (!msg.equals("")) {
-                    Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-                }
-                return true;
+        /*
+        if(rawFavorite) {
+            if (mToolbar.getMenu() == null)
+                Log.d("", "prepareToolbar: NO MENU");
+            else {
+                if (mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite) == null)
+                    Log.d("", "prepareToolbar: NO ITEM");
             }
-        });
+                //mToolbar.getMenu().findItem(R.id.news_page_toolbar_favorite).setIcon(R.mipmap.favorite_true);
+        }
+
+
+        */
     }
+
 
 }
