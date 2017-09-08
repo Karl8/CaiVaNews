@@ -113,7 +113,6 @@ public class NewsPageActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                String msg = "";
                 switch (menuItem.getItemId()) {
                     case R.id.news_page_toolbar_share:
                         mPresenter.showShareDialog();
@@ -131,10 +130,6 @@ public class NewsPageActivity extends AppCompatActivity {
                         }
                         mFavorite = !mFavorite;
                         break;
-                }
-
-                if (!msg.equals("")) {
-                    Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
