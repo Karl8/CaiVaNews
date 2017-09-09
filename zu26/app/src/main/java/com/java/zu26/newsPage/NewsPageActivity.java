@@ -16,6 +16,7 @@ import com.java.zu26.data.NewsLocalDataSource;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.util.ActivityUtils;
+import com.java.zu26.util.SpeechUtils;
 
 /**
  * Created by lucheng on 2017/9/6.
@@ -32,6 +33,8 @@ public class NewsPageActivity extends AppCompatActivity {
     private String mNewsId;
 
     private boolean mFavorite;
+
+    private SpeechUtils mSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,8 @@ public class NewsPageActivity extends AppCompatActivity {
 
 
         mToolbar.setNavigationIcon(R.drawable.navigation);
+
+        mSpeech = SpeechUtils.getsSpeechUtils(mContext);
 
 
     }
@@ -142,6 +147,13 @@ public class NewsPageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(menuItem);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSpeech.stop();
+        mSpeech.release();
+    }
+
     public void prepareToolbar(final boolean rawFavorite) {
         /*
         if(rawFavorite) {
@@ -156,6 +168,16 @@ public class NewsPageActivity extends AppCompatActivity {
 
 
         */
+    }
+
+
+    public void readText(String text) {
+
+        mSpeech.speak(text);
+    }
+
+    public void stopReadingText() {
+        mSpeech.stop();
     }
 
 

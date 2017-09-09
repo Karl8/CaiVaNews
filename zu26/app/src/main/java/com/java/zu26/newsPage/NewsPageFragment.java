@@ -64,6 +64,11 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -109,5 +114,7 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
     public void onGetNews () {
         handler.sendEmptyMessage(0);
     }
+
+
 
 }
