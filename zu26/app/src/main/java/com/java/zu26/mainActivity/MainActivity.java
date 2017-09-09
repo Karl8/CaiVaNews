@@ -17,22 +17,24 @@ import com.java.zu26.search.SearchActivity;
 import com.java.zu26.util.SpeechUtils;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity {
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-////        Button start = (Button) findViewById(R.id.button1);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+//        Button start = (Button) findViewById(R.id.button1);
 //        startActivity(new Intent(this, SearchActivity.class));
 //        startActivity(new Intent(this, CategoryActivity.class));
 //        startActivity(new Intent(this, FavoriteActivity.class));
-//
-////        SpeechUtils speechUtils = SpeechUtils.getsSpeechUtils(this);
-////        speechUtils.speak("这是一个晴朗的早晨，歌唱声伴着起床好阴");
-//        startActivity(new Intent(this, NewsListActivity.class));
-//    }
+
+//        SpeechUtils speechUtils = SpeechUtils.getsSpeechUtils(this);
+//        speechUtils.speak("这是一个晴朗的早晨，歌唱声伴着起床好阴");
+        startActivity(new Intent(this, NewsListActivity.class));
+    }
+}
+/*
 private Button start, pause, resume, stop;
     private EditText content;
     private SpeechUtils speechUtils;
@@ -84,7 +86,5 @@ private Button start, pause, resume, stop;
         speechUtils.stop();
         speechUtils.release();
     }
+*/
 
-
-
-}
