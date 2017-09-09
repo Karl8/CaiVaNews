@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-
 /**
  * Created on 2017/4/11.
  */
@@ -82,10 +81,10 @@ public class SpeechUtils {
         this.mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE, mSampleDirPath + "/"
                 + SPEECH_FEMALE_MODEL_NAME);
         // 请替换为语音开发者平台上注册应用得到的App ID (离线授权)
-        this.mSpeechSynthesizer.setAppId("9503408"/*这里只是为了让Demo运行使用的APPID,请替换成自己的id。*/);
+        this.mSpeechSynthesizer.setAppId("10114857"/*这里只是为了让Demo运行使用的APPID,请替换成自己的id。*/);
         // 请替换为语音开发者平台注册应用得到的apikey和secretkey (在线授权)
-        this.mSpeechSynthesizer.setApiKey("7jXRDE7ETDlcgVRESQSUL4Bd",
-                "696aa1e1666b071c27e82290559689de"/*这里只是为了让Demo正常运行使用APIKey,请替换成自己的APIKey*/);
+        this.mSpeechSynthesizer.setApiKey("eZTCY95R0fP2Twraf0akK7kn",
+                "9dfd4d3acd16bf716e23418ccfa9f586"/*这里只是为了让Demo正常运行使用APIKey,请替换成自己的APIKey*/);
         // 发音人（在线引擎），可用参数为0,1,2,3。。。（服务器端会动态增加，各值含义参考文档，以文档说明为准。0--普通女声，1--普通男声，2--特别男声，3--情感男声。。。）
         this.mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, "0");
         // 设置Mix模式的合成策略

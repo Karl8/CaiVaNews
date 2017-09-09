@@ -172,13 +172,11 @@ public class NewsPageActivity extends AppCompatActivity {
 
 
     public void readText(String text) {
-
         mSpeech.speak(text);
     }
 
     public void stopReadingText() {
         mSpeech.stop();
     }
-
 
 }
