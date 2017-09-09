@@ -53,7 +53,7 @@ public class NewsRepository implements NewsDataSource {
     @Override
     public void getNewsList(final int page, final int category, @NonNull final LoadNewsListCallback callback) {
         Log.d("TAG", "getNewsList: ");
-        if (mCachedNewsDetail != null && mCachedNewsListId != null) {
+        if (mCachedNewsDetail != null && mCachedNewsListId != null && mCachedNewsListId.get(category).size() >= page * 10) {
 
             ArrayList<News> newsList = new ArrayList<>();
             for (int i = page * 10 - 10; i < page * 10 && i < mCachedNewsListId.get(category).size(); i++) {
