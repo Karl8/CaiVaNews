@@ -43,5 +43,7 @@ public interface NewsPageContract {
         void readText();
 
         void stopReadingText();
+
+        String processContent(String text);
     }
 }

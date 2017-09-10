@@ -13,6 +13,9 @@ import com.java.zu26.data.NewsRepository;
 import com.java.zu26.util.NewsShareActivity;
 import com.java.zu26.util.SpeechUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by lucheng on 2017/9/7.
  */
@@ -113,5 +116,33 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
     @Override
     public void stopReadingText() {
         mActivity.stopReadingText();
+    }
+
+    @Override
+    public String processContent(String text) {
+        // add lines
+        String result = "";
+        String regex = "　";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(text);
+        int start = 0;
+        while(m.find()) {
+            if(m.start() - start == 0) {
+                result += regex;
+                start = m.end();
+                continue;
+            }
+            else if(m.start() - start <= 20) {
+                result += "<b><tt>" + text.substring(start, m.start()) + "</tt></b>";
+            }
+            else {
+                result += text.substring(start, m.start());
+            }
+            result += "<br /><br />" + regex ;
+            start = m.end();
+        }
+        result += text.substring(start, text.length() - 1);
+        return result;
+
     }
 }

@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -106,7 +107,7 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
             mCoverImageView.setVisibility(View.GONE);
         }
         //mIntroductionView.setText(news.getIntro());
-        mContentView.setText(news.getContent());
+        mContentView.setText(Html.fromHtml(mPresenter.processContent(news.getContent())));
         Log.d("LC::", "showNews: " + news.getContent());
 
     }
