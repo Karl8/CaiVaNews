@@ -9,6 +9,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
 import com.java.zu26.newsPage.NewsPageActivity;
+import com.java.zu26.util.ActivityUtils;
 
 import java.util.ArrayList;
 
@@ -75,6 +78,7 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
 
 
@@ -155,12 +159,12 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
     }
 
 
-    private class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FavoriteItemView.onSlidingButtonListener{
         private LayoutInflater inflater;
 
         private ArrayList<News> newsList;
 
-        private FavoriteFragment.OnItemClickListener itemListener;
+        private FavoriteItemView mItem = null;
 
         private Context context;
 
@@ -188,6 +192,13 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
                 this.newsList.clear();
         }
 
+        public void removeData(int pos) {
+            mPresenter.removeFromFavorites(newsList.get(pos).getId());
+            Log.d("delete", "removeData: " +newsList.get(pos).getTitle());
+            this.newsList.remove(pos);
+            notifyDataSetChanged();
+        }
+
         @Override
         public int getItemViewType(int position) {
             if(position <= getItemCount() )return 1;
@@ -197,41 +208,26 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == 1) {
-                final View view = inflater.inflate(R.layout.favorite_itemlayout, parent, false);
-                RecyclerView.ViewHolder holder = new ItemViewHolder(view);
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TextView newTitle = view.findViewById(R.id.news_title);
-                        Intent intent = new Intent();
-                        intent.setClass(getContext(), NewsPageActivity.class);
-                        int position = (int)view.getTag();
-                        News news = newsList.get(position);
-                        newsList.set(position, new News(news, true, news.isFavorite()));
-                        //Bundle bundle = new Bundle();
-                        //bundle.putParcelable("news", mAdapter.getItem(position));
-                        //bundle.putString("newsId", mAdapter.getItem(position).getId());
-                        //intent.putExtras(bundle);
-                        intent.putExtra("newsId", mAdapter.getItem(position).getId());
-                        startActivity(intent);
-                        Log.d("news list", "onClick: " + position + newsList.get(position).getTitle() + newsList.get(position).isRead());
-                    }
-                });
+
+                final FavoriteItemView view = (FavoriteItemView) inflater.inflate(R.layout.favorite_itemlayout, parent, false);
+                final ItemViewHolder holder = new ItemViewHolder(view);
+
                 return holder;
             }
             return null;
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder,final int position) {
             Log.d("TAG", "onBindViewHolder: ");
             if(holder instanceof FavoriteFragment.ItemViewHolder) {
-                Log.d("TAG", "onBindViewHolder: " + position);
+
                 News news = newsList.get(position);
                 FavoriteFragment.ItemViewHolder itemHolder = (FavoriteFragment.ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
+                Log.d("TAG", "onBindViewHolder: " + position + news.getTitle());
                 String url = news.getCoverPicture();
                 try {
                     if (url != null && url.length() > 0) {
@@ -248,7 +244,33 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
                 catch(Exception e) {
                     e.printStackTrace();
                 }
-
+                itemHolder.newsLayout.getLayoutParams().width = ActivityUtils.getScreenWidth(mContext);
+                itemHolder.newsCard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isItemOpen())
+                            closeItem();
+                        else {
+                            Intent intent = new Intent();
+                            intent.setClass(getContext(), NewsPageActivity.class);
+                            News news = newsList.get(position);
+                            newsList.set(position, new News(news, true, news.isFavorite()));
+                            //Bundle bundle = new Bundle();
+                            //bundle.putParcelable("news", mAdapter.getItem(position));
+                            //bundle.putString("newsId", mAdapter.getItem(position).getId());
+                            //intent.putExtras(bundle);
+                            intent.putExtra("newsId", mAdapter.getItem(position).getId());
+                            startActivity(intent);
+                            Log.d("news list", "onClick: " + position + newsList.get(position).getTitle() + newsList.get(position).isRead());
+                        }
+                    }
+                });
+                itemHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        removeData(position);
+                    }
+                });
                 itemHolder.itemView.setTag(position);
             }
         }
@@ -258,28 +280,57 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
             return newsList.size();
         }
 
-        void setOnItemClickListener(FavoriteFragment.OnItemClickListener listener) {
-            itemListener = listener;
+        @Override
+        public void onMenuIsOpen(View view) {
+            mItem = (FavoriteItemView) view;
         }
+
+        @Override
+        public void onDownOrMove(FavoriteItemView slidingButtonView) {
+            if(isItemOpen()){
+                if(mItem != slidingButtonView){
+                    closeItem();
+                }
+            }
+        }
+
+        public boolean isItemOpen() {
+            return mItem != null;
+        }
+
+        public void closeItem() {
+            mItem.closeItem();
+            mItem = null;
+        }
+        //void setOnItemClickListener(FavoriteFragment.OnItemClickListener listener) {
+        //    itemListener = listener;
+        //}
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView newsTime = null;
-        TextView newsTitle = null;
-        TextView newsSource = null;
-        ImageView newsImage = null;
+        public TextView newsTime = null;
+        public TextView newsTitle = null;
+        public TextView newsSource = null;
+        public TextView deleteBtn = null;
+        public CardView newsCard = null;
+        public ImageView newsImage = null;
+        public ViewGroup newsLayout = null;
 
         public ItemViewHolder(View view) {
             super(view);
             newsTitle = (TextView) view.findViewById(R.id.favorite_news_title);
             newsSource = (TextView) view.findViewById(R.id.favorite_news_source);
             newsImage = (ImageView) view.findViewById(R.id.favorite_news_image);
+            deleteBtn = (TextView) view.findViewById(R.id.favorite_delete);
+            newsCard = (CardView) view.findViewById(R.id.favorite_card_view);
+            newsLayout = (ViewGroup) view.findViewById(R.id.favorite_item_layout);
+            ((FavoriteItemView) view).setSlidingButtonListener(mAdapter);
             newsTime = null;
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
+    //public interface OnItemClickListener {
+    //    void onItemClick(View view, int position);
+    //}
 }

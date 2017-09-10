@@ -145,7 +145,7 @@ public class NewsRepository implements NewsDataSource {
 
         if (mCachedNewsDetail != null && mCachedNewsDetail.containsKey(newsId)) {
             News news = mCachedNewsDetail.get(newsId);
-            if (news.isRead()) {
+            if (news.isRead() && news.getContent() != null) {
                 Log.d("local", "get one News from cache ");
                 callback.onNewsLoaded(news);
                 return;
@@ -235,6 +235,8 @@ public class NewsRepository implements NewsDataSource {
         News _news = new News(mCachedNewsDetail.get(newsId), mCachedNewsDetail.get(newsId).isRead(), false);
         mCachedNewsDetail.put(_news.getId(), _news);
         mNewsLocalDataSource.unfavoriteNews(newsId);
+        if (mCachedFavoriteId == null)
+            mCachedFavoriteId = new ArrayList<>();
         if (mCachedFavoriteId.contains(newsId))
             mCachedFavoriteId.remove(newsId);
     }

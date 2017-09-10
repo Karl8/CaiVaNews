@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(new Intent(this, SearchActivity.class));
         //startActivity(new Intent(this, CategoryActivity.class));
         //startActivity(new Intent(this, FavoriteActivity.class));
-
         startActivity(new Intent(this, NewsListActivity.class));
 
     }

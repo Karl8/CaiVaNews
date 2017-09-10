@@ -41,7 +41,7 @@ public class FavoriteActivity extends AppCompatActivity {
         Log.d("favorite activity", "onCreate: ");
         // Create the presenter
         mContext = FavoriteActivity.this;
-        //mContext.deleteDatabase("FavoriteNews.db");
+        //mContext.deleteDatabase("NewsFavorite.db");
         NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
         mFavoritePresenter = new FavoritePresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), mFavoriteFragment);

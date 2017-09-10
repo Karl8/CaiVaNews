@@ -385,7 +385,7 @@ public class NewsLocalDataSource implements NewsDataSource {
 
     public boolean isFavorite(String newsId) {
         SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE " + NewsEntry.COLUMN_NAME_ENTRY_ID + " = ?",
+        Cursor cursor = db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE " + NewsEntry.COLUMN_NAME_ENTRY_ID + " = ? AND " + NewsEntry.COLUMN_NAME_FAVORITE + " = 1",
                 new String[]{newsId});
         boolean found = false;
         if (cursor != null && cursor.getCount() > 0) {
