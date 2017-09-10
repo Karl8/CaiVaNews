@@ -1,5 +1,6 @@
 package com.java.zu26.favorite;
 
+import android.support.v7.widget.CardView;
 import android.widget.HorizontalScrollView;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,24 +10,23 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import com.java.zu26.R;
+
 /**
  * Created by kaer on 2017/9/9.
  */
 
 public class FavoriteItemView extends HorizontalScrollView {
-    public FavoriteItemView(Context context) {
-        super(context);
-    }
-/*
-    private TextView mTextView_Delete;
 
+    //删除按钮
+    private CardView mCardView_Delete;
+
+    //滚动条可以移动距离
     private int mScrollWidth;
 
-    private IonSlidingButtonListener mIonSlidingButtonListener;
+    private onSlidingButtonListener mOnSlidingButtonListener;
 
     private Boolean isOpen = false;
-    private Boolean once = false;
-
 
     public FavoriteItemView(Context context) {
         this(context, null);
@@ -38,7 +38,6 @@ public class FavoriteItemView extends HorizontalScrollView {
 
     public FavoriteItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         this.setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
@@ -46,9 +45,8 @@ public class FavoriteItemView extends HorizontalScrollView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if(!once){
-            mTextView_Delete = (TextView) findViewById(com.mjj.slidingbutton.R.id.tv_delete);
-            once = true;
+        if(mCardView_Delete == null){
+            mCardView_Delete = (CardView) findViewById(R.id.favorite_delete_card);
         }
 
     }
@@ -58,9 +56,7 @@ public class FavoriteItemView extends HorizontalScrollView {
         super.onLayout(changed, l, t, r, b);
         if(changed){
             this.scrollTo(0,0);
-            //»ñÈ¡Ë®Æ½¹ö¶¯Ìõ¿ÉÒÔ»¬¶¯µÄ·¶Î§£¬¼´ÓÒ²à°´Å¥µÄ¿í¶È
-            mScrollWidth = mTextView_Delete.getWidth();
-            Log.i("asd", "mScrollWidth:" + mScrollWidth);
+            mScrollWidth = mCardView_Delete.getWidth() + 8;
         }
 
     }
@@ -72,7 +68,7 @@ public class FavoriteItemView extends HorizontalScrollView {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                mIonSlidingButtonListener.onDownOrMove(this);
+                mOnSlidingButtonListener.onDownOrMove(this);
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -84,34 +80,36 @@ public class FavoriteItemView extends HorizontalScrollView {
         return super.onTouchEvent(ev);
     }
 
+    //让删除按钮显示在item的背后效果
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        mTextView_Delete.setTranslationX(l - mScrollWidth);
+        Log.d("scroll", "onScrollChanged: l:" + l + " t:" + t + " oldl:" + oldl + " oldt:" + t );
+        //mTextView_Delete.setTranslationX(l - mScrollWidth);
     }
 
     public void changeScrollx(){
         if(getScrollX() >= (mScrollWidth/2)){
             this.smoothScrollTo(mScrollWidth, 0);
             isOpen = true;
-            mIonSlidingButtonListener.onMenuIsOpen(this);
+            mOnSlidingButtonListener.onMenuIsOpen(this);
         }else{
             this.smoothScrollTo(0, 0);
             isOpen = false;
         }
     }
 
-    public void openMenu()
+    public void openItem()
     {
         if (isOpen){
             return;
         }
         this.smoothScrollTo(mScrollWidth, 0);
         isOpen = true;
-        mIonSlidingButtonListener.onMenuIsOpen(this);
+        mOnSlidingButtonListener.onMenuIsOpen(this);
     }
 
-    public void closeMenu()
+    public void closeItem()
     {
         if (!isOpen){
             return;
@@ -120,17 +118,13 @@ public class FavoriteItemView extends HorizontalScrollView {
         isOpen = false;
     }
 
-
-
-
-    public void setSlidingButtonListener(IonSlidingButtonListener listener){
-        mIonSlidingButtonListener = listener;
+    public void setSlidingButtonListener(onSlidingButtonListener listener){
+        mOnSlidingButtonListener = listener;
     }
 
-    public interface IonSlidingButtonListener{
+    public interface onSlidingButtonListener{
         void onMenuIsOpen(View view);
-        void onDownOrMove(SlidingButtonView slidingButtonView);
+        void onDownOrMove(FavoriteItemView slidingButtonView);
     }
-*/
 
 }

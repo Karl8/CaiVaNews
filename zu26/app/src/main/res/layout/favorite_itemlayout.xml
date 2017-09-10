@@ -3,68 +3,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="98dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
+    android:layout_height="match_parent"
     android:clickable="true"
-    app:contentPadding="10dp"
     tools:context=".favorite.FavoriteActivity">
 
-    <TableLayout
+    <RelativeLayout
+        android:id="@+id/favorite_row"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:shrinkColumns="0">
-
-        <TableRow
+        >
+        <RelativeLayout
+            android:id="@+id/favorite_item_layout"
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:layout_height="match_parent"
+            >
+            <android.support.v7.widget.CardView
+                android:id="@+id/favorite_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:clickable="true"
+                app:contentPadding="5dp">
 
-            <RelativeLayout
-                android:layout_width = "match_parent"
-                android:layout_height = "match_parent">
-
-                <ImageView
-                    android:id="@+id/favorite_news_image"
-                    android:layout_width="140dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
-
-                <LinearLayout
-                    android:id="@+id/favorite_news_linear_layout"
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingEnd="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:layout_toRightOf="@id/favorite_news_image">
+                    android:shrinkColumns="0">
 
-                    <TextView
-                        android:id="@+id/favorite_news_title"
+                    <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/black"
-                        android:textSize="15sp"/>
+                        android:layout_height="90dp">
 
-                    <TextView
-                        android:id="@+id/favorite_news_source"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp" />
+                        <RelativeLayout
+                            android:layout_width = "match_parent"
+                            android:layout_height = "match_parent">
 
-                </LinearLayout>
+                            <ImageView
+                                android:id="@+id/favorite_news_image"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop" />
 
-            </RelativeLayout>
+                            <LinearLayout
+                                android:id="@+id/favorite_news_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingEnd="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingLeft="5dp"
+                                android:layout_toRightOf="@id/favorite_news_image">
+
+                                <TextView
+                                    android:id="@+id/favorite_news_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:textStyle="bold"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="15sp"/>
+
+                                <TextView
+                                    android:id="@+id/favorite_news_source"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
 
 
 
-        </TableRow>
+                    </TableRow>
 
-    </TableLayout>
+                </TableLayout>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+        <android.support.v7.widget.CardView
+            android:id="@+id/favorite_delete_card"
+            android:layout_width="80dp"
+            android:layout_height="98dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="8dp"
+            android:clickable="true"
+            android:layout_toRightOf ="@id/favorite_item_layout"
+            >
 
+            <TextView
+                android:id="@+id/favorite_delete"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="删 除"
+                android:background="@drawable/favorite_delete_background"
+                android:textColor="#DDFFFFFF"
+
+                />
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 </com.java.zu26.favorite.FavoriteItemView>

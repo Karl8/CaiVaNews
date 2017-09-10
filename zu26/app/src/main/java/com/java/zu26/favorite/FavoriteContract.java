@@ -22,6 +22,7 @@ public interface FavoriteContract {
         void setLoadingIndicator(boolean active);
 
         boolean isActive();
+
     }
 
     interface Presenter {
@@ -29,5 +30,7 @@ public interface FavoriteContract {
         void loadNews(int page, boolean forceUpdate);
 
         void start();
+
+        void removeFromFavorites(String newsId);
     }
 }

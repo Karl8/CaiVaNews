@@ -96,4 +96,10 @@ public class FavoritePresenter implements FavoriteContract.Presenter {
         Log.d("favorite presenter", "start: ");
         loadNews(1, true);
     }
+
+    @Override
+    public void removeFromFavorites(String newsId) {
+        mNewsRepository.unfavoriteNews(newsId);
+    }
+
 }

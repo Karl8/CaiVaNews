@@ -9,7 +9,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:clickable="true"
-    app:contentPadding="10dp"
+    app:contentPadding="5dp"
     tools:context=".search.SearchActivity">
 
     <TableLayout
