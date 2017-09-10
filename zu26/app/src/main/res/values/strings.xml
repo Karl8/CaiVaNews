@@ -8,4 +8,15 @@
     <string name="splitTimeAndSource"> | </string>
     <string name="splitSourceAndAuthor" />
     <string name="one">one</string>
+    <string name="category_action_close">category_action_close</string>
+    <string name="search_button">请输入搜索内容</string>
+    <string name="app_description">just for test</string>
+    <string name="favorites">Favorites</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="load_text_pulling_up">上拉加载更多</string>
+    <string name="load_text_loading">加载中&#8230;</string>
+    <string name="load_text_finish">加载中&#8230;</string>
 </resources>

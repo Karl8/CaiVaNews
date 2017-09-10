@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/category_item_background"
     android:paddingBottom="5dip"
-    android:paddingLeft="12dip"
-    android:paddingRight="12dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
     android:paddingTop="5dip"
     android:text="lable"
-    android:textSize="15sp"
+    android:textSize="17sp"
     android:textColor="@color/colorCategoryGray" />

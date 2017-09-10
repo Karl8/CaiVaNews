@@ -79,7 +79,8 @@
 
         </activity>
 
-        <activity android:name=".category.CategoryActivity">
+        <activity android:name=".category.CategoryActivity"
+            android:theme="@style/AppTheme.MyDialog">
 
         </activity>
 

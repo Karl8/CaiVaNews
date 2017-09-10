@@ -3,6 +3,11 @@ package com.java.zu26.newsList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Handler;
 import android.os.Message;
@@ -16,12 +21,14 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.java.zu26.R;
@@ -30,8 +37,12 @@ import com.java.zu26.data.NewsLocalDataSource;
 import com.java.zu26.data.NewsPersistenceContract;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
+import com.java.zu26.favorite.FavoriteActivity;
+import com.java.zu26.search.SearchActivity;
 import com.java.zu26.util.ActivityUtils;
 import com.java.zu26.util.UserSetting;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -39,7 +50,7 @@ import java.util.ArrayList;
  * Created by lucheng on 2017/9/3.
  */
 
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private NewsListPresenter mNewsPresenter;
 
@@ -48,6 +59,16 @@ public class NewsListActivity extends AppCompatActivity {
     private static ArrayList<Integer> categories = new ArrayList<Integer>();
 
     private static ViewPagerAdapter mPagerAdapter;
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +107,29 @@ public class NewsListActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.newslist_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        /*
+        TextView mSearch = (TextView) findViewById(R.id.newslist_searchview);
+        mSearch.setText("请输入搜索内容...");
+        mSearch.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewsListActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        */
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
 /*
         ViewTreeObserver viewTreeObserver = tabLayout.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -116,6 +160,22 @@ public class NewsListActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {  //此处处理侧边栏不同点击事件的结果
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        Intent intent = new Intent();
+        switch (id) {
+            case R.id.nav_favorites:
+                intent.setClass(this, FavoriteActivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -134,6 +194,7 @@ public class NewsListActivity extends AppCompatActivity {
             NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
             NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
             mNewsPresenter = new NewsListPresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsListFragment);
+            newsListFragment.setContext(mContext);
             return newsListFragment;
         }
 

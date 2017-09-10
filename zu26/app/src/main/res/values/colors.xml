@@ -14,4 +14,5 @@
     <color name="colorUnselectedBackground">#525252</color>
     <color name="colorSelectedBackground">#000000</color>
 
+    <color name="colorLittleTransparent">#ffffff</color>
 </resources>

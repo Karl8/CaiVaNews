@@ -1,8 +1,16 @@
 package com.java.zu26.category;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.java.zu26.R;
 import com.java.zu26.data.NewsLocalDataSource;
@@ -18,6 +26,7 @@ import com.java.zu26.util.UserSetting;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.Gravity.*;
 import static com.java.zu26.R.id.categoryLayout;
 
 /**
@@ -59,6 +68,31 @@ public class CategoryActivity extends AppCompatActivity {
         mCategoryLayout.setSelectedLables(labelSelected);
         mCategoryLayout.initialLables(labels);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.category_toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.category_close:
+                        ArrayList<String> categoryList = mCategoryLayout.getSelectedLables();
+                        UserSetting.saveCategorySetting(CategoryActivity.this, categoryList);
+                        finish();
+                        break;
+                }
+                return true;
+            }
+        });
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_category, menu);
+        return true;
     }
 
     @Override
@@ -67,4 +101,15 @@ public class CategoryActivity extends AppCompatActivity {
         ArrayList<String> categoryList = mCategoryLayout.getSelectedLables();
         UserSetting.saveCategorySetting(CategoryActivity.this, categoryList);
     }
+
+    @Override
+    public void onAttachedToWindow() {
+        View view = getWindow().getDecorView();
+        WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();
+        lp.gravity = Gravity.TOP;
+        lp.width = this.getWindowManager().getDefaultDisplay().getWidth();
+        getWindowManager().updateViewLayout(view, lp);
+
+    }
+
 }

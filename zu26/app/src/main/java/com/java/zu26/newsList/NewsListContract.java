@@ -1,5 +1,7 @@
 package com.java.zu26.newsList;
 
+import android.content.Context;
+
 import com.java.zu26.data.News;
 
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ public interface NewsListContract {
     interface View {
 
         void setPresenter(NewsListPresenter presenter);
+
+        void setContext(Context context);
 
         void showNews(int page, int category, ArrayList<News> newslist);
 
