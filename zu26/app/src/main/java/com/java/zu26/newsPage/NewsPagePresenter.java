@@ -39,7 +39,7 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
         mView.setPresenter(this);
         mToolbar = toolbar;
         mActivity = activity;
-        speech = SpeechUtils.getsSpeechUtils(mContext);
+//        speech = SpeechUtils.getsSpeechUtils(mContext);
     }
 
     @Override
