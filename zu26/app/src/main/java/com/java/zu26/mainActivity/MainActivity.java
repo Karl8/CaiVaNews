@@ -3,6 +3,10 @@ package com.java.zu26.mainActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.java.zu26.R;
 import com.java.zu26.category.CategoryActivity;
@@ -10,8 +14,9 @@ import com.java.zu26.favorite.FavoriteActivity;
 import com.java.zu26.newsList.NewsListActivity;
 import com.java.zu26.newsPage.NewsPageActivity;
 import com.java.zu26.search.SearchActivity;
+import com.java.zu26.util.SpeechUtils;
 
-
+//implements View.OnClickListener
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -22,6 +27,5 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(new Intent(this, CategoryActivity.class));
         //startActivity(new Intent(this, FavoriteActivity.class));
         startActivity(new Intent(this, NewsListActivity.class));
-
     }
 }

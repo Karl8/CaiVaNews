@@ -11,6 +11,7 @@ import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.util.NewsShareActivity;
+import com.java.zu26.util.SpeechUtils;
 
 /**
  * Created by lucheng on 2017/9/7.
@@ -30,12 +31,15 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
 
     private Context mContext;
 
+    private SpeechUtils speech;
+
     public NewsPagePresenter(@NonNull NewsRepository respository, @NonNull NewsPageContract.View NewsView, Toolbar toolbar, NewsPageActivity activity) {
         mRespository = respository;
         mView = NewsView;
         mView.setPresenter(this);
         mToolbar = toolbar;
         mActivity = activity;
+//        speech = SpeechUtils.getsSpeechUtils(mContext);
     }
 
     @Override
@@ -103,11 +107,11 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
 
     @Override
     public void readText() {
-
+        String text=mNews.getTitle()+mNews.getContent();
+        mActivity.readText(text);
     }
-
     @Override
     public void stopReadingText() {
-
+        mActivity.stopReadingText();
     }
 }
