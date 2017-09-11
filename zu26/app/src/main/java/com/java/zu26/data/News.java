@@ -28,12 +28,14 @@ public final class News implements Parcelable {
 
     private final String mIntro;
 
-    private final boolean mRead;
 
+    private final boolean mRead;
 
     private final String mContent;
 
     private final boolean mFavorite;
+
+    private final String mJson;
 
     //public ()
 
@@ -50,6 +52,7 @@ public final class News implements Parcelable {
         mRead = read;
         mContent = news.getContent();
         mFavorite = favorite;
+        mJson = news.getJson();
     }
 
 
@@ -66,6 +69,7 @@ public final class News implements Parcelable {
         mRead = false;
         mContent = "";
         mFavorite = in.readInt() == 1;
+        mJson = "";
     }
 
 
@@ -82,10 +86,11 @@ public final class News implements Parcelable {
         mRead = false;
         mContent = "";
         mFavorite = false;
+        mJson = "";
     }
 
     public News(String id, String author, String title, String category, String pictures, String source,
-                String time, String url, String intro, boolean read, String content, boolean favorite) {
+                String time, String url, String intro, boolean read, String content, boolean favorite, String json) {
         mId = id;
         mAuthor = author;
         mTitle = title;
@@ -98,6 +103,7 @@ public final class News implements Parcelable {
         mRead = read;
         mContent = content;
         mFavorite = favorite;
+        mJson = json;
     }
     // public News From json
     public String getCoverPicture() {
@@ -130,6 +136,8 @@ public final class News implements Parcelable {
     public String getContent() { return mContent; }
 
     public boolean isFavorite() { return mFavorite; }
+
+    public String getJson() { return mJson; }
 
     @Override
     public int describeContents() {

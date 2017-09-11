@@ -76,6 +76,8 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_newslist);
 
         mContext = NewsListActivity.this;
+        ///////////删除数据库以便测试！！！！！！！！！！！！！！！
+        mContext.deleteDatabase("News.db");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.newslist_toolbar);
         toolbar.setTitle("");

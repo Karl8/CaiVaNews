@@ -62,7 +62,8 @@ public class NewsLocalDataSource implements NewsDataSource {
                 boolean read = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_READ)) == 1;
                 boolean favorite = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_FAVORITE)) == 1;
                 String content = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CONTENT));
-                News news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite);
+                String json = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_JSON));
+                News news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite, json);
                 Log.d("LOCAL", "found: " + title);
                 Log.d("LOCAL", "category: " + mcategory);
                 newsList.add(news);
@@ -113,7 +114,8 @@ public class NewsLocalDataSource implements NewsDataSource {
                 String intro = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_INTRO));
                 boolean favorite = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_FAVORITE)) == 1;
                 String content = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CONTENT));
-                news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite);
+                String json = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_JSON));
+                news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite, json);
                 Log.d("LOCAL", "get one news found: " + title);
         }
         }
@@ -158,7 +160,8 @@ public class NewsLocalDataSource implements NewsDataSource {
                 boolean read = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_READ)) == 1;
                 boolean favorite = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_FAVORITE)) == 1;
                 String content = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CONTENT));
-                News news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite);
+                String json = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_JSON));
+                News news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite, json);
                 Log.d("LOCAL", "found: " + title);
                 Log.d("LOCAL", "category: " + mcategory);
                 newsList.add(news);
@@ -228,7 +231,7 @@ public class NewsLocalDataSource implements NewsDataSource {
             values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
             values.put(NewsEntry.COLUMN_NAME_FAVORITE, news.isFavorite());
             values.put(NewsEntry.COLUMN_NAME_READ, news.isRead());
-
+            values.put(NewsEntry.COLUMN_NAME_JSON, news.getJson());
             db.insert(NewsEntry.TABLE_NAME, null, values);
             Log.d("favorite", "insert favoriteNews: ");
         }
@@ -300,6 +303,7 @@ public class NewsLocalDataSource implements NewsDataSource {
             values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
             values.put(NewsEntry.COLUMN_NAME_FAVORITE, 0);
             values.put(NewsEntry.COLUMN_NAME_READ, 0);
+            values.put(NewsEntry.COLUMN_NAME_JSON, news.getJson());
             Log.d("TAG", "saveNews: " + news.getTitle());
             db.insert(NewsEntry.TABLE_NAME, null, values);
         }
@@ -323,6 +327,7 @@ public class NewsLocalDataSource implements NewsDataSource {
         values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
         values.put(NewsEntry.COLUMN_NAME_FAVORITE, news.isFavorite());
         values.put(NewsEntry.COLUMN_NAME_READ, news.isRead());
+        values.put(NewsEntry.COLUMN_NAME_JSON, news.getJson());
 
         db.insert(NewsEntry.TABLE_NAME, null, values);
 

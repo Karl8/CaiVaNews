@@ -30,6 +30,7 @@ public final class NewsPersistenceContract {
         // detail
         public static final String COLUMN_NAME_CONTENT = "content";
         public static final String COLUMN_NAME_FAVORITE = "favorite";
+        public static final String COLUMN_NAME_JSON = "json";
 
         public static final HashMap<String, String> categoryMap = new HashMap<>();
 

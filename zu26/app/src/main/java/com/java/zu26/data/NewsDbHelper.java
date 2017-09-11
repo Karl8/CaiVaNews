@@ -34,6 +34,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_INTRO + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_READ + BOOLEAN_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA_SEP +
+                    NewsPersistenceContract.NewsEntry.COLUMN_NAME_JSON + TEXT_TYPE + COMMA_SEP +
                     NewsPersistenceContract.NewsEntry.COLUMN_NAME_FAVORITE + BOOLEAN_TYPE +
                     " )";
 
