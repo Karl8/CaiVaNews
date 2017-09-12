@@ -258,6 +258,9 @@ public class NewsRepository implements NewsDataSource {
 
     }
 
+    public void saveKeywordCache(Context context) {
+        UserSetting.saveKeyWord(context, mCachedRecommendationTree);
+    }
     public void refreshRecommendId(ArrayList<News> newsList) {
         if (mCachedRecommendationId == null)
             mCachedRecommendationId = new HashSet<>();

@@ -53,6 +53,7 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
                 Log.d("start", "onNewsLoaded: get news" + news.getTitle());
                 mNews = news;
                 mView.onGetNews();
+                mRespository.saveKeywordCache(mContext);
             }
 
             @Override
@@ -101,6 +102,11 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
     @Override
     public void prepareToolbar(boolean isFavorite) {
         mActivity.prepareToolbar(isFavorite);
+    }
+
+    @Override
+    public Context getCurrentContext() {
+        return mContext;
     }
 
     @Override
