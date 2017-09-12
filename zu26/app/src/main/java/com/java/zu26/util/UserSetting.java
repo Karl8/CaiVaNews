@@ -32,6 +32,8 @@ public class UserSetting {
 
     private static final String PREFERENCE_NAME_KEYWORD = "KeywordSetting";
 
+    private static final String PREFERENCE_NAME_PICTURE = "PictureSetting";
+
     private static int category_size = 0;
 
     public UserSetting() {
@@ -78,8 +80,6 @@ public class UserSetting {
 
     public static void saveKeyWord(Context context, HashMap<String, Double> keyword) {
         Gson g = new Gson();
-
-        keyword.put("123", 123.123);
         String json = g.toJson(keyword);
         Log.d("save", "saveKeyWord: " + json);
         SharedPreferences sp = context.getSharedPreferences(PREFERENCE_NAME_KEYWORD, MODE);
@@ -102,5 +102,27 @@ public class UserSetting {
             Log.d("", "loadKeyWord: " + e.toString());
         }
         return keyword;
+    }
+
+    public static void setPictureMode(Context context, int mode) {
+        SharedPreferences sp = context.getSharedPreferences(PREFERENCE_NAME_PICTURE, MODE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("pictureMode", mode);
+        editor.commit();
+        Toast.makeText(context, "已保存设置", Toast.LENGTH_SHORT).show();
+    }
+
+    public static int getPictureMode(Context context) {
+        Context otherContext;
+        int mode = 0;
+        try {
+            otherContext = context.createPackageContext(PREFERENCE_PACKAGE, Context.CONTEXT_IGNORE_SECURITY);
+            SharedPreferences sp = otherContext.getSharedPreferences(PREFERENCE_NAME_CATEGORY, MODE);
+            mode = sp.getInt("pictureMode", 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mode;
     }
 }

@@ -29,6 +29,7 @@ import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.newsPage.NewsPageActivity;
 import com.java.zu26.search.SearchActivity;
+import com.java.zu26.util.UserSetting;
 
 import java.util.ArrayList;
 
@@ -344,7 +345,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 itemHolder.newsSource.setText(news.getSource());
                 String url = news.getCoverPicture();
                 try {
-                    if (url != null && url.length() > 0) {
+                    if (UserSetting.getPictureMode(mActivityContext) == 0 && url != null && url.length() > 0) {
                         //Picasso.with(context).load(itemHolder.url).into(itemHolder.newsImage);
                         //itemHolder.newsImage.setImageBitmap(BitmapFactory.decodeStream(myurl.openStream()));
                         Glide.with(context).load(url).placeholder(R.drawable.downloading).into(itemHolder.newsImage);

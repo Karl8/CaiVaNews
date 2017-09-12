@@ -40,6 +40,8 @@ public interface NewsPageContract {
 
         void getContext(Context context);
 
+        Context getCurrentContext();
+
         void readText();
 
         void stopReadingText();

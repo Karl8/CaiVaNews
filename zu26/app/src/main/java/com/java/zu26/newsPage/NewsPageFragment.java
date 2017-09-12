@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
 import com.java.zu26.util.NewsDataUtil;
+import com.java.zu26.util.UserSetting;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -111,7 +112,7 @@ public class NewsPageFragment extends Fragment implements NewsPageContract.View 
         String source = news.getSource() + "  ";
         mSourceView.setText(source);
         mAuthorView.setText(news.getAuthor());
-        if(news.getCoverPicture() != null) {
+        if(UserSetting.getPictureMode(mPresenter.getCurrentContext()) == 0 && news.getCoverPicture() != null) {
             Glide.with(getContext()).load(news.getCoverPicture()).into(mCoverImageView);
         }
         else {
