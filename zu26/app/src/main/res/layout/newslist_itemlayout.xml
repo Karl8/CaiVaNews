@@ -2,59 +2,73 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newslist_cardview"
     android:layout_width="match_parent"
-    android:layout_height="98dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
+    android:layout_height="121.4dp"
+    android:layout_marginBottom="1dp"
     android:clickable="true"
-    app:contentPadding="5dp"
+    android:background="?attr/colorBackground"
     tools:context=".newsList.NewsListActivity">
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/newslist_tablelayout"
+        android:background="?attr/colorBackground"
         android:shrinkColumns="0">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:background="?attr/colorBackground"
+            android:id="@+id/newslist_tablerow"
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width = "match_parent"
-                android:layout_height = "match_parent">
+                android:layout_height = "match_parent"
+                android:id="@+id/newslist_item_RelativeLayout"
+                android:background="?attr/colorBackground">
 
                 <ImageView
                     android:id="@+id/news_image"
-                    android:layout_width="140dp"
-                    android:layout_height="match_parent"
+                    android:layout_marginLeft="19.14dp"
+                    android:layout_marginTop="21.14dp"
+                    android:layout_marginBottom="21.14dp"
+                    android:layout_width="124.57dp"
+                    android:layout_height="82.86dp"
+                    android:background="?attr/colorBackground"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:id="@+id/news_linear_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="82.86dp"
+                    android:layout_marginTop="21.14dp"
+                    android:layout_marginBottom="21.14dp"
                     android:orientation="vertical"
-                    android:paddingEnd="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:layout_toRightOf="@id/news_image">
+                    android:background="?attr/colorBackground"
+                    android:layout_toRightOf="@+id/news_image">
 
                     <TextView
                         android:id="@+id/news_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="212dp"
                         android:layout_height="0dp"
+                        android:layout_marginLeft="36.57dp"
+                        android:layout_marginRight="19.14dp"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:textColor="@android:color/black"
+                        android:textColor="?attr/colorFont"
+                        android:background="?attr/colorBackground"
                         android:textSize="15sp"/>
 
                     <TextView
                         android:id="@+id/news_source"
-                        android:layout_width="match_parent"
+                        android:layout_width="212dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="36.57dp"
+                        android:layout_marginRight="19.14dp"
+                        android:textColor="?attr/colorFont"
+                        android:background="?attr/colorBackground"
                         android:textSize="12sp" />
 
                 </LinearLayout>

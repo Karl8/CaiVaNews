@@ -1,11 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorBackground">@android:color/white</item>
+        <item name="colorFont">@android:color/black</item>
+    </style>
+
+    <!--夜间主题-->
+    <style name="NightTheme" parent="Theme.AppCompat.DayNight">
+        <item name="colorPrimary">@color/colorPrimary_night</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_night</item>
+        <item name="colorAccent">@color/colorAccent_night</item>
+        <item name="colorBackground">@color/colorBackground_night</item>
+        <item name="colorFont">@color/colorFont_night</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,7 +33,6 @@
     <style name="Base.Widget.Design.TabLayout" parent="android:Widget" >
         <item name="tabBackground">@drawable/tab_background</item>
         <item name="tabIndicatorColor">@color/colorScrollRed</item>
-        <item name="tabIndicatorHeight">4dp</item>
     </style>
 
     <style name="AppTheme.MyDialog" parent="Theme.AppCompat.Dialog">
@@ -32,12 +44,26 @@
         <!-- 是否浮现在activity之上 -->
         <item name="android:windowIsFloating">true</item>
         <!-- 半透明 -->
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
         <!-- 背景透明 -->
         <item name="android:windowBackground">@color/colorLittleTransparent</item>
         <!-- 模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
 
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!--<item name="android:windowAnimationStyle">@style/Anim_scale</item>-->
+
     </style>
+
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--<style name="Anim_scale" parent="@android:style/Animation.Activity">-->
+        <!--<item name="android:activityOpenEnterAnimation">@anim/scale_in</item>-->
+        <!--<item name="android:activityOpenExitAnimation">@anim/scale_out</item>-->
+        <!--<item name="android:activityCloseEnterAnimation">@anim/scale_in</item>-->
+        <!--<item name="android:activityCloseExitAnimation">@anim/scale_out</item>-->
+    <!--</style>-->
 
 </resources>

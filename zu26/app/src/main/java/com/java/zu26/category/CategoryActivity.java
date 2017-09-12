@@ -2,9 +2,12 @@ package com.java.zu26.category;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +23,9 @@ import com.java.zu26.data.NewsRepository;
 import com.java.zu26.newsList.NewsListActivity;
 import com.java.zu26.newsList.NewsListFragment;
 import com.java.zu26.newsList.NewsListPresenter;
+import com.java.zu26.setting.SettingActivity;
 import com.java.zu26.util.ActivityUtils;
+import com.java.zu26.util.DayNight;
 import com.java.zu26.util.UserSetting;
 
 import java.util.ArrayList;
@@ -40,6 +45,7 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_category);
 
         ArrayList<String> labelSelected = new ArrayList<String>();
@@ -50,6 +56,7 @@ public class CategoryActivity extends AppCompatActivity {
             labelSelected.add(NewsPersistenceContract.NewsEntry.categoryDict.get(id));
         }
 
+        labels.add("推荐");
         labels.add("科技");
         labels.add("教育");
         labels.add("军事");
@@ -68,7 +75,7 @@ public class CategoryActivity extends AppCompatActivity {
         mCategoryLayout.setSelectedLables(labelSelected);
         mCategoryLayout.initialLables(labels);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.category_toolbar);
+/*        Toolbar toolbar = (Toolbar) findViewById(R.id.category_toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -84,16 +91,16 @@ public class CategoryActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
 
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_category, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_category, menu);
+//        return true;
+//    }
 
     @Override
     protected void onPause() {
@@ -106,8 +113,10 @@ public class CategoryActivity extends AppCompatActivity {
     public void onAttachedToWindow() {
         View view = getWindow().getDecorView();
         WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();
-        lp.gravity = Gravity.TOP;
-        lp.width = this.getWindowManager().getDefaultDisplay().getWidth();
+        //lp.gravity = Gravity.TOP;
+        lp.x = 0;
+        lp.y = -350;
+//        lp.width = this.getWindowManager().getDefaultDisplay().getWidth();
         getWindowManager().updateViewLayout(view, lp);
 
     }

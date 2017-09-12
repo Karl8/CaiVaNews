@@ -8,4 +8,11 @@
             android:title="@string/favorites" />
     </group>
 
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@mipmap/set"
+            android:title="@string/setting" />
+    </group>
+
 </menu>

@@ -6,7 +6,7 @@
             <solid android:color="#ffffff" />
             <stroke android:color="@color/colorCategoryBlue"
                 android:width="2px"/>
-            <corners android:radius="10000dip"/>
+            <corners android:radius="3dp"/>
         </shape>
     </item>
     <!--默认效果-->
@@ -15,7 +15,7 @@
             <solid android:color="#ffffff" />
             <stroke android:color="@color/colorDividerGray"
                 android:width="2px"/>
-            <corners android:radius="10000dip"/>
+            <corners android:radius="3dp"/>
         </shape>
     </item>
 </selector>

@@ -126,19 +126,27 @@ public class NewsPagePresenter implements NewsPageContract.Presenter {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(text);
         int start = 0;
+        boolean nextPadding = true;
         while(m.find()) {
             if(m.start() - start == 0) {
                 result += regex;
                 start = m.end();
                 continue;
             }
-            else if(m.start() - start <= 20) {
-                result += "<b><tt>" + text.substring(start, m.start()) + "</tt></b>";
+            else if(m.start() - start <= 30) {
+                result += "<h2><b>" + text.substring(start, m.start()) + "</b></h2>";
+                nextPadding = false;
             }
             else {
+                if(nextPadding) {
+                    result += "<br /><br />" + regex;
+                    nextPadding = false;
+                }
+                else {
+                    nextPadding = true;
+                }
                 result += text.substring(start, m.start());
             }
-            result += "<br /><br />" + regex ;
             start = m.end();
         }
         result += text.substring(start, text.length() - 1);

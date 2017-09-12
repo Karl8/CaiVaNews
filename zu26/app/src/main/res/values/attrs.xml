@@ -6,4 +6,7 @@
         <!--标签行距-->
         <attr name="rowSpace" format="dimension" />
     </declare-styleable>
+
+    <attr name="colorBackground" format="color" />
+    <attr name="colorFont" format="color" />
 </resources>

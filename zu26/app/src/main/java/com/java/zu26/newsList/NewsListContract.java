@@ -1,6 +1,7 @@
 package com.java.zu26.newsList;
 
 import android.content.Context;
+import android.util.TypedValue;
 
 import com.java.zu26.data.News;
 
@@ -29,6 +30,8 @@ public interface NewsListContract {
         int getCategory();
 
         int getPage();
+
+        void refreshUI(TypedValue background, TypedValue textColor);
     }
 
     interface Presenter {
@@ -36,5 +39,7 @@ public interface NewsListContract {
         void loadNews(int page, int category, boolean forceUpdate);
 
         void start();
+
+        void refreshUI(TypedValue background, TypedValue textColor);
     }
 }

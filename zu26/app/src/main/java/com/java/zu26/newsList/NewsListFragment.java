@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ import com.java.zu26.data.NewsRepository;
 import com.java.zu26.newsPage.NewsPageActivity;
 import com.java.zu26.search.SearchActivity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -225,6 +229,57 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         return mPage;
     }
 
+    @Override
+    public void refreshUI(TypedValue background, TypedValue textColor) {
+
+        mRecyclerView.setBackgroundResource(background.resourceId);
+
+        int childCount = mRecyclerView.getChildCount();
+        for (int childIndex = 0; childIndex < childCount; childIndex++) {
+            ViewGroup childView = (ViewGroup) mRecyclerView.getChildAt(childIndex);
+            childView.setBackgroundResource(background.resourceId);
+
+            View card = childView.findViewById(R.id.newslist_cardview);
+            card.setBackgroundResource(background.resourceId);
+            ViewGroup table = childView.findViewById(R.id.newslist_tablelayout);
+            table.setBackgroundResource(background.resourceId);
+            ViewGroup tablerow = childView.findViewById(R.id.newslist_tablelayout);
+            tablerow.setBackgroundResource(background.resourceId);
+            ViewGroup rela = childView.findViewById(R.id.newslist_item_RelativeLayout);
+            rela.setBackgroundResource(background.resourceId);
+            TextView news_title = (TextView) childView.findViewById(R.id.news_title);
+            news_title.setBackgroundResource(background.resourceId);
+            news_title.setTextColor(textColor.resourceId);
+            TextView motto = (TextView) childView.findViewById(R.id.news_source);
+            motto.setBackgroundResource(background.resourceId);
+            motto.setTextColor((textColor.resourceId));
+        }
+
+        //让 RecyclerView 缓存在 Pool 中的 Item 失效
+        //那么，如果是ListView，要怎么做呢？这里的思路是通过反射拿到 AbsListView 类中的 RecycleBin 对象，然后同样再用反射去调用 clear 方法
+        Class<RecyclerView> recyclerViewClass = RecyclerView.class;
+        try {
+            Field declaredField = recyclerViewClass.getDeclaredField("mRecycler");
+            declaredField.setAccessible(true);
+            Method declaredMethod = Class.forName(RecyclerView.Recycler.class.getName()).getDeclaredMethod("clear", (Class<?>[]) new Class[0]);
+            declaredMethod.setAccessible(true);
+            declaredMethod.invoke(declaredField.get(mRecyclerView), new Object[0]);
+            RecyclerView.RecycledViewPool recycledViewPool = mRecyclerView.getRecycledViewPool();
+            recycledViewPool.clear();
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater inflater;
@@ -410,11 +465,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
     private class SearchViewHolder extends RecyclerView.ViewHolder {
 
-        TextView searchText = null;
-
         public SearchViewHolder(View view) {
             super(view);
-            searchText = (TextView) view.findViewById(R.id.newslist_searchview);
         }
     }
 

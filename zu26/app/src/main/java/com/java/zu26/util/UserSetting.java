@@ -2,6 +2,7 @@ package com.java.zu26.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.widget.Toast;
 
 import com.java.zu26.data.News;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 public class UserSetting {
 
     private static final String PREFERENCE_NAME_CATEGORY = "CategorySetting";
+
+    private static final String PREFERENCE_NAME_DAY_NIGHT_MODE = "day_night_mode";
 
     private static final int MODE = Context.MODE_PRIVATE;
 
@@ -61,6 +64,35 @@ public class UserSetting {
                 categoryList.add(String.valueOf(i));
             }
             return categoryList;
+        }
+    }
+
+    public static void saveDayNightMode(Context context, DayNight mode) {
+        SharedPreferences sp = context.getSharedPreferences(PREFERENCE_NAME_DAY_NIGHT_MODE, MODE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("day_night_mode", mode.getName());
+        editor.commit();
+    }
+
+    public static boolean isDay(Context context) throws PackageManager.NameNotFoundException {
+        Context otherContext = context.createPackageContext(PREFERENCE_PACKAGE, Context.CONTEXT_IGNORE_SECURITY);
+        SharedPreferences sp = otherContext.getSharedPreferences(PREFERENCE_NAME_DAY_NIGHT_MODE, MODE);
+        String mode = sp.getString("day_night_mode", "");
+        if (DayNight.DAY.getName().equals(mode)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isNight(Context context) throws PackageManager.NameNotFoundException {
+        Context otherContext = context.createPackageContext(PREFERENCE_PACKAGE, Context.CONTEXT_IGNORE_SECURITY);
+        SharedPreferences sp = otherContext.getSharedPreferences(PREFERENCE_NAME_DAY_NIGHT_MODE, MODE);
+        String mode = sp.getString("day_night_mode", "");
+        if (DayNight.NIGHT.getName().equals(mode)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

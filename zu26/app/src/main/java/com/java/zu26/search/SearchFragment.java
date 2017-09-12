@@ -72,7 +72,7 @@ public class SearchFragment extends Fragment implements SearchContract.View{
         mAdapter = new SearchFragment.SearchAdapter(mContext, new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1_search);
+
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -103,18 +103,7 @@ public class SearchFragment extends Fragment implements SearchContract.View{
 
             }
         });
-        /*
-        // 实现顶部上拉刷新(其实没有刷新23333)
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-            @Override
-            public void onRefresh() {
-
-                // 其实应该改成true，但是没有关系，因为老师的数据库不会更新.
-                mPresenter.loadNews(1, mCategory, false);
-            }
-        });
-        */
         return root;
     }
 

@@ -2,34 +2,27 @@ package com.java.zu26.newsList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.java.zu26.R;
 import com.java.zu26.category.CategoryActivity;
@@ -38,11 +31,9 @@ import com.java.zu26.data.NewsPersistenceContract;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
 import com.java.zu26.favorite.FavoriteActivity;
-import com.java.zu26.search.SearchActivity;
-import com.java.zu26.util.ActivityUtils;
+import com.java.zu26.setting.SettingActivity;
+import com.java.zu26.util.DayNight;
 import com.java.zu26.util.UserSetting;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -52,13 +43,23 @@ import java.util.ArrayList;
 
 public class NewsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private NewsListPresenter mNewsPresenter;
+    private NewsListPresenter mNewsPresenter = null;
 
     private Context mContext;
 
     private static ArrayList<Integer> categories = new ArrayList<Integer>();
 
     private static ViewPagerAdapter mPagerAdapter;
+
+    private Toolbar mToolbar;
+
+    private ViewPager mViewPager;
+
+    private TabLayout mTabLayout;
+
+    private DrawerLayout mDrawerLayout;
+
+    private NavigationView mNavigationView;
 
     @Override
     public void onBackPressed() {
@@ -73,15 +74,24 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_newslist);
 
+        setContentView(R.layout.activity_newslist);
+        /*try {
+            if (UserSetting.isDay(NewsListActivity.this)) {
+                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }*/
         mContext = NewsListActivity.this;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.newslist_toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.newslist_toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
@@ -100,35 +110,26 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
             categories.add(i);
         }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.newslist_viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.newslist_viewpager);
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(mPagerAdapter);
-        viewPager.setCurrentItem(0);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(0);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.newslist_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.newslist_tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        /*
-        TextView mSearch = (TextView) findViewById(R.id.newslist_searchview);
-        mSearch.setText("请输入搜索内容...");
-        mSearch.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NewsListActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.setHomeAsUpIndicator(R.mipmap.category);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
 /*
         ViewTreeObserver viewTreeObserver = tabLayout.getViewTreeObserver();
@@ -144,6 +145,14 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
     }
 
     @Override
+    protected void onDestroy() {
+        SharedPreferences sp = mContext.getSharedPreferences("day_night_mode", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove("day_night_mode");
+        super.onDestroy();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         ArrayList<String> cs = UserSetting.loadCategorySetting(mContext);
@@ -152,11 +161,67 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
             categories.add(Integer.valueOf(s));
         }
         mPagerAdapter.notifyDataSetChanged();
+        try {
+            if (UserSetting.isDay(NewsListActivity.this)) {
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.NightTheme);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        refreshUI();
     }
 
+    /**
+     * 刷新UI界面
+     */
+    private void refreshUI() {
+        TypedValue background = new TypedValue();//背景色
+        TypedValue textColor = new TypedValue();//字体颜色
+        TypedValue toolbarColor = new TypedValue();
+        Resources.Theme theme = getTheme();
+        theme.resolveAttribute(R.attr.colorBackground, background, true);
+        theme.resolveAttribute(R.attr.colorFont, textColor, true);
+        theme.resolveAttribute(R.attr.colorPrimary, toolbarColor, true);
+
+        mDrawerLayout.setBackgroundResource(background.resourceId);
+
+        mTabLayout.setBackgroundResource(background.resourceId);
+
+        mNavigationView.setBackgroundResource(background.resourceId);
+
+        mToolbar.setBackgroundResource(toolbarColor.resourceId);
+
+        refreshStatusBar();
+
+        if(mNewsPresenter != null)mNewsPresenter.refreshUI(background, textColor);
+    }
+
+    /**
+     * 刷新 StatusBar
+     */
+    private void refreshStatusBar() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getTheme();
+            theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            getWindow().setStatusBarColor(getResources().getColor(typedValue.resourceId));
+        }
+    }
+
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu_news_list, menu);
+        final MenuItem item = menu.findItem(R.id.news_list_category);
+        final Menu m = menu;
+        item.getActionView().findViewById(R.id.menu_newslist_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                m.performIdentifierAction(item.getItemId(), 0);
+            }
+        });
         return true;
     }
 
@@ -170,8 +235,12 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
                 intent.setClass(this, FavoriteActivity.class);
                 startActivity(intent);
                 break;
-        }
+            case R.id.nav_setting:
+                intent.setClass(this, SettingActivity.class);
+                startActivity(intent);
+                break;
 
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -214,5 +283,6 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
             return NewsPersistenceContract.NewsEntry.categoryDict.get(id);
         }
     }
+
 
 }

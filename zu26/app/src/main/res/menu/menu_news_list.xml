@@ -6,10 +6,10 @@
 
     <item
         android:id="@+id/news_list_category"
-        android:title="@string/news_list_action_category"
         android:orderInCategory="80"
-        android:icon="@mipmap/category"
-        app:showAsAction="ifRoom"/>
+        android:title=""
+        app:actionLayout="@layout/menu_news_list_layout"
+        app:showAsAction="always"/>
 
 
 </menu>

@@ -152,11 +152,11 @@ public class CategoryLayout extends ViewGroup {
                 if (lableSelected.contains(lable)) {
                     //选中
                     tv.setSelected(true);
-                    tv.setTextColor(getResources().getColor(R.color.colorCategoryBlue));
+                    tv.setBackgroundColor(getResources().getColor(R.color.colorCategoryBlue));
                 } else {
                     //未选中
                     tv.setSelected(false);
-                    tv.setTextColor(getResources().getColor(R.color.colorCategoryGray));
+                    tv.setBackgroundColor(getResources().getColor(R.color.colorCategoryGray));
                 }
                 //点击标签后，重置选中效果
                 tv.setOnClickListener(new View.OnClickListener() {
@@ -164,11 +164,11 @@ public class CategoryLayout extends ViewGroup {
                     public void onClick(View v) {
                         tv.setSelected(tv.isSelected() ? false : true);
                         if (tv.isSelected()) {
-                            tv.setTextColor(getResources().getColor(R.color.colorCategoryBlue));
+                            tv.setBackgroundColor(getResources().getColor(R.color.colorCategoryBlue));
                             //将选中的标签加入到lableSelected中
                             lableSelected.add(lable);
                         } else {
-                            tv.setTextColor(getResources().getColor(R.color.colorCategoryGray));
+                            tv.setBackgroundColor(getResources().getColor(R.color.colorCategoryGray));
                             lableSelected.remove(lable);
                         }
                     }

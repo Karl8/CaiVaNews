@@ -1,11 +1,13 @@
 package com.java.zu26.newsList;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
@@ -97,12 +99,16 @@ public class NewsListPresenter implements NewsListContract.Presenter{
     }
 
     @Override
-    public void start()
-    {
+    public void start() {
         if(mNewsView.getPage() > 0) return;
         else loadNews(1, mNewsView.getCategory(), true);
     }
 
+    @Override
+    public void refreshUI(TypedValue background, TypedValue textColor) {
+        if(mFirstLoad)return;
+        mNewsView.refreshUI(background,textColor);
+    }
 
 
 }

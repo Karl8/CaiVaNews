@@ -1,8 +1,10 @@
 package com.java.zu26.newsPage;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -15,8 +17,12 @@ import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsLocalDataSource;
 import com.java.zu26.data.NewsRemoteDataSource;
 import com.java.zu26.data.NewsRepository;
+import com.java.zu26.favorite.FavoriteActivity;
+import com.java.zu26.newsList.NewsListActivity;
 import com.java.zu26.util.ActivityUtils;
+import com.java.zu26.util.DayNight;
 import com.java.zu26.util.SpeechUtils;
+import com.java.zu26.util.UserSetting;
 
 /**
  * Created by lucheng on 2017/9/6.
@@ -39,7 +45,10 @@ public class NewsPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_newspage);
+
+
         mContext = NewsPageActivity.this;
         NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
@@ -75,7 +84,7 @@ public class NewsPageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        mToolbar.setNavigationIcon(R.drawable.navigation);
+        mToolbar.setNavigationIcon(R.mipmap.navigation);
 
         mSpeech = SpeechUtils.getsSpeechUtils(mContext);
 
@@ -127,10 +136,12 @@ public class NewsPageActivity extends AppCompatActivity {
                         if(!isReading) {
                             isReading = true;
                             mPresenter.readText();
+                            menuItem.setIcon(R.mipmap.voice_true);
                         }
                         else {
                             isReading = false;
                             mPresenter.stopReadingText();
+                            menuItem.setIcon(R.mipmap.voice);
                         }
                 }
                 return true;
