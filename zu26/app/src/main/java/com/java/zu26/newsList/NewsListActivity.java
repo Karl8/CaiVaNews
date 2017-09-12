@@ -77,7 +77,7 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
 
         mContext = NewsListActivity.this;
         ///////////删除数据库以便测试！！！！！！！！！！！！！！！
-        //mContext.deleteDatabase("News.db");
+        mContext.deleteDatabase("News.db");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.newslist_toolbar);
         toolbar.setTitle("");
@@ -98,7 +98,7 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
         });
 
         // 注意：之后每次category变化时，都要调用adapter的notify.
-        for(int i = 1; i < 13; i++){
+        for(int i = 0; i < 13; i++){
             categories.add(i);
         }
 

@@ -2,11 +2,21 @@ package com.java.zu26.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.java.zu26.data.News;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * Created by kaer on 2017/9/8.
@@ -19,6 +29,8 @@ public class UserSetting {
     private static final int MODE = Context.MODE_PRIVATE;
 
     private static final String PREFERENCE_PACKAGE = "com.java.zu26";
+
+    private static final String PREFERENCE_NAME_KEYWORD = "KeywordSetting";
 
     private static int category_size = 0;
 
@@ -43,7 +55,7 @@ public class UserSetting {
         ArrayList<String> categoryList = new ArrayList<>();
         Context otherContext;
         if(category_size == 0) {
-            for (int i = 1 ; i < 13; i++) {
+            for (int i = 0 ; i < 13; i++) {
                 categoryList.add(String.valueOf(i));
             }
             return categoryList;
@@ -57,10 +69,38 @@ public class UserSetting {
             return categoryList;
         } catch (Exception e) {
             e.printStackTrace();
-            for (int i = 1 ; i < 13; i++) {
+            for (int i = 0 ; i < 13; i++) {
                 categoryList.add(String.valueOf(i));
             }
             return categoryList;
         }
+    }
+
+    public static void saveKeyWord(Context context, HashMap<String, Double> keyword) {
+        Gson g = new Gson();
+
+        keyword.put("123", 123.123);
+        String json = g.toJson(keyword);
+        Log.d("save", "saveKeyWord: " + json);
+        SharedPreferences sp = context.getSharedPreferences(PREFERENCE_NAME_KEYWORD, MODE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("keyword", json);
+        editor.commit();
+
+    }
+
+    public static HashMap<String, Double> loadKeyWord(Context context) {
+        HashMap<String, Double> keyword = null;
+        Context otherContext;
+        try {
+            otherContext = context.createPackageContext(PREFERENCE_PACKAGE, Context.CONTEXT_IGNORE_SECURITY);
+            SharedPreferences sp = otherContext.getSharedPreferences(PREFERENCE_NAME_KEYWORD, MODE);
+            Gson g = new Gson();
+            Log.d("", "loadKeyWord: " + sp.getString("keyword", ""));
+            keyword = g.fromJson(sp.getString("keyword", ""), HashMap.class);
+        } catch (Exception e) {
+            Log.d("", "loadKeyWord: " + e.toString());
+        }
+        return keyword;
     }
 }

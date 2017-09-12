@@ -105,6 +105,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
                     mAdapter.changeLoadingStatus(NewsListAdapter.LOAD_PULLING_UP);
                     mPresenter.loadNews(mPage + 1, mCategory, true);
+                    //mPresenter.loadNews(mPage + 1, , true);
                     //Toast.makeText(activity-context, "加载成功", Toast.LENGTH_SHORT).show();
                 }
 
@@ -165,6 +166,11 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     @Override
     public void onResume() {
         super.onResume();
+        if(mCategory == 0) {
+            //mPage = 0;
+            ///mAdapter.clearData();
+            //mAdapter.notifyDataSetChanged();
+        }
         mPresenter.start();
     }
 
@@ -267,6 +273,15 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
             else return TYPE_ITEM;
         }
 
+        public void clearData() {
+            Log.d("TAG", "onclearData:");
+            if (newslist == null) {
+                Log.d("TAG", "clearData: NULL");
+            }
+            else
+                this.newslist.clear();
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == TYPE_ITEM) {
@@ -315,12 +330,12 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
             Log.d("TAG", "onBindViewHolder: ");
             if(holder instanceof ItemViewHolder) {
                 News news = getItem(position - 1);
-                Log.d("TAG", "onBindViewHolder: " + position + " read : " + news.isRead() + " " + news.getTitle());
+                //Log.d("TAG", "onBindViewHolder: " + position + " read : " + news.isRead() + " " + news.getTitle());
 
                 ItemViewHolder itemHolder = (ItemViewHolder)holder;
                 itemHolder.newsTitle.setText(news.getTitle());
                 if (news.isRead()) {
-                    Log.d("read", "onBindViewHolder: read" + String.valueOf(position));
+                    //Log.d("read", "onBindViewHolder: read" + String.valueOf(position));
                     itemHolder.newsTitle.setTextColor(Color.rgb(158, 158, 158));
                 }
                 else
@@ -366,6 +381,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 return;
             }
         }
+
+
 
         @Override
         public int getItemCount() {

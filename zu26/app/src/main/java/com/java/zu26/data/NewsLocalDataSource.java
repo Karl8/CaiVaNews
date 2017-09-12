@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import com.java.zu26.data.NewsPersistenceContract.NewsEntry;
 
@@ -47,6 +48,56 @@ public class NewsLocalDataSource implements NewsDataSource {
         Log.d("LOCAL", "getNewsList: " + "SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
                 + NewsEntry.COLUMN_NAME_CATEGORY + " = '" + String.valueOf(category)
                 + "' ORDER BY " + NewsEntry.COLUMN_NAME_INDEX + " LIMIT 10 OFFSET " + String.valueOf(page * 10 - 10));
+
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_ENTRY_ID));
+                String mcategory = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CATEGORY));
+                String author = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_AUTHOR));
+                String pictures = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_PICTURES));
+                String source = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_SOURCE));
+                String time = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_TIME));
+                String title = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_TITLE));
+                String url = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_URL));
+                String intro = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_INTRO));
+                boolean read = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_READ)) == 1;
+                boolean favorite = cursor.getInt(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_FAVORITE)) == 1;
+                String content = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_CONTENT));
+                String json = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_JSON));
+                News news = new News(id, author, title, mcategory, pictures, source, time, url, intro, read, content, favorite, json);
+                Log.d("LOCAL", "found: " + title);
+                Log.d("LOCAL", "category: " + mcategory);
+                newsList.add(news);
+            }
+        }
+        else {
+            Log.d("LOCAL", "getNewsList: not found");
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+
+        if (newsList.isEmpty()) {
+            callback.onDataNotAvailable();
+        }
+        else {
+            callback.onNewsListLoaded(newsList);
+        }
+    }
+
+    @Override
+    public void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback, boolean reverse) {
+        Log.d("LOCAL", "get recommend NewsList: ");
+        ArrayList<News> newsList = new ArrayList<>();
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
+                + NewsEntry.COLUMN_NAME_CATEGORY + " = '" + String.valueOf(category)
+                + "' ORDER BY " + NewsEntry.COLUMN_NAME_INDEX + " DESC LIMIT 10 OFFSET " + String.valueOf(page * 10 - 10), null);
+        Log.d("LOCAL", "getNewsList: " + "SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
+                + NewsEntry.COLUMN_NAME_CATEGORY + " = '" + String.valueOf(category)
+                + "' ORDER BY " + NewsEntry.COLUMN_NAME_INDEX + " DESC LIMIT 10 OFFSET " + String.valueOf(page * 10 - 10));
 
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -309,6 +360,34 @@ public class NewsLocalDataSource implements NewsDataSource {
         }
         db.close();
     }
+
+    @Override
+    public void saveNewsList(@NonNull ArrayList<News> newsList, boolean recommend) {
+        Log.d("LOCAL", "saveNewsList: ");
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        for (int i = 0; i < newsList.size(); i++) {
+            News news = newsList.get(i);
+
+            ContentValues values = new ContentValues();
+            values.put(NewsEntry.COLUMN_NAME_ENTRY_ID, news.getId());
+            values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
+            values.put(NewsEntry.COLUMN_NAME_TITLE, news.getTitle());
+            values.put(NewsEntry.COLUMN_NAME_CATEGORY, 0);
+            values.put(NewsEntry.COLUMN_NAME_PICTURES, news.getPictures());
+            values.put(NewsEntry.COLUMN_NAME_SOURCE, news.getSource());
+            values.put(NewsEntry.COLUMN_NAME_TIME, news.getTime());
+            values.put(NewsEntry.COLUMN_NAME_URL, news.getUrl());
+            values.put(NewsEntry.COLUMN_NAME_INTRO, news.getIntro());
+            values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
+            values.put(NewsEntry.COLUMN_NAME_FAVORITE, 0);
+            values.put(NewsEntry.COLUMN_NAME_READ, 0);
+            values.put(NewsEntry.COLUMN_NAME_JSON, news.getJson());
+            Log.d("TAG", "saveNews: " + news.getTitle());
+            db.insert(NewsEntry.TABLE_NAME, null, values);
+        }
+        db.close();
+    }
+
     @Override
     public void saveNews(@NonNull News news) {
         Log.d("local", "save one News: ");
@@ -336,6 +415,11 @@ public class NewsLocalDataSource implements NewsDataSource {
 
     @Override
     public void searchNews(String keyWord, int page, @NonNull LoadNewsListCallback callback) {
+
+    }
+
+    @Override
+    public void searchKeywordNews(String keyWord, int count, @NonNull LoadNewsListCallback callback, HashSet<String> cache) {
 
     }
 
