@@ -62,10 +62,47 @@ public class NewsDataUtil {
             String intro = "";
             String content = newsJsonObj.getString("news_Content");
             Log.d("TAG", "parse:" + category + " " + id + " " + author + " " + intro + " " + time);
-            news = new News(id, author, title, category, pictures, source, time, url, intro, true, content, false);
+            news = new News(id, author, title, category, pictures, source, time, url, intro, true, content, false, json);
 
         }catch (Exception e){e.printStackTrace();}
         return news;
+    }
+
+    public static ArrayList<String> parsePeopleLocation(String json) {
+        Log.d("TAG", "parse people location from Json: " + json);
+        ArrayList<String> result = new ArrayList<>();
+        try{
+            JSONObject newsJsonObj = new JSONObject(json);
+            JSONArray peopleJsonArray = newsJsonObj.getJSONArray("persons");
+            JSONArray locationsJsonArray = newsJsonObj.getJSONArray("locations");
+            for (int i = 0 ; i< peopleJsonArray.length(); i++)
+            {
+                JSONObject peopleJsonObj = (JSONObject) peopleJsonArray.get(i);
+                result.add(peopleJsonObj.getString("word"));
+            }
+            for (int i = 0 ; i< locationsJsonArray.length(); i++)
+            {
+                JSONObject locationsJsonObj = (JSONObject) locationsJsonArray.get(i);
+                result.add(locationsJsonObj.getString("word"));
+            }
+
+        }catch (Exception e){e.printStackTrace();}
+        return result;
+    }
+
+    public static HashMap<String, Double> parseKeyword(String json) {
+        Log.d("TAG", "parse people location from Json: " + json);
+        HashMap<String, Double> result = new HashMap<>();
+        try{
+            JSONObject newsJsonObj = new JSONObject(json);
+            JSONArray keywordJsonArray = newsJsonObj.getJSONArray("Keywords");
+            for (int i = 0 ; i< keywordJsonArray.length(); i++)
+            {
+                JSONObject keywordJsonObj = (JSONObject) keywordJsonArray.get(i);
+                result.put(keywordJsonObj.getString("word"), keywordJsonObj.getDouble("score"));
+            }
+        }catch (Exception e){e.printStackTrace();}
+        return result;
     }
 
     public static void getUrlContent(String path) throws Exception{ // callback?

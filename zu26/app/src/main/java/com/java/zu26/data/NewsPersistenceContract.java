@@ -30,6 +30,7 @@ public final class NewsPersistenceContract {
         // detail
         public static final String COLUMN_NAME_CONTENT = "content";
         public static final String COLUMN_NAME_FAVORITE = "favorite";
+        public static final String COLUMN_NAME_JSON = "json";
 
         public static final HashMap<String, String> categoryMap = new HashMap<>();
 
@@ -37,6 +38,7 @@ public final class NewsPersistenceContract {
 
         static
         {
+            categoryMap.put("推荐", "0");
             categoryMap.put("科技", "1");
             categoryMap.put("教育", "2");
             categoryMap.put("军事", "3");
@@ -50,6 +52,7 @@ public final class NewsPersistenceContract {
             categoryMap.put("健康", "11");
             categoryMap.put("娱乐", "12");
 
+            categoryDict.put("0", "推荐");
             categoryDict.put("1", "科技");
             categoryDict.put("2", "教育");
             categoryDict.put("3", "军事");

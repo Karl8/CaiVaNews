@@ -3,6 +3,7 @@ package com.java.zu26.data;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  */
 
 public interface NewsDataSource {
+
 
     interface LoadNewsListCallback {
 
@@ -29,6 +31,8 @@ public interface NewsDataSource {
 
     void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback);
 
+    void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback, boolean reverse);
+
     void getNews(@NonNull String newsId,@NonNull boolean isDetailed, @NonNull GetNewsCallback callback);
 
     void getFavoriteNewsList(int page, @NonNull LoadNewsListCallback callback);
@@ -41,11 +45,15 @@ public interface NewsDataSource {
 
     void saveNewsList(@NonNull ArrayList<News> newsList);
 
+    void saveNewsList(@NonNull ArrayList<News> newsList, boolean recommend);
+
     void saveNews(@NonNull News news);
 
     void updateNewsDetail(@NonNull News news);
 
     void searchNews(String keyWord, int page, @NonNull LoadNewsListCallback callback);
+
+    void searchKeywordNews(String keyWord,int count, @NonNull LoadNewsListCallback callback, HashSet<String> cache);
 
     // share news callback ???
 }

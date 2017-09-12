@@ -12,10 +12,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by kaer on 2017/9/5.
@@ -81,6 +83,11 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
+    public void getNewsList(int page, int category, @NonNull LoadNewsListCallback callback, boolean reverse) {
+
+    }
+
+    @Override
     public void getNews(@NonNull final String newsId, @NonNull boolean isDetailed, @NonNull final GetNewsCallback callback) {
         new Thread() {
             @Override
@@ -135,6 +142,11 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
+    public void saveNewsList(@NonNull ArrayList<News> newsList, boolean recommend) {
+
+    }
+
+    @Override
     public void saveNews(@NonNull News news) {
 
     }
@@ -165,6 +177,46 @@ public class NewsRemoteDataSource implements NewsDataSource {
                     Log.d("remot", "parse: " + content.toString());
                     ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
                     callback.onNewsListLoaded(newsList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("TAG", "search news failed");
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void searchKeywordNews(final String keyWord, final int count, @NonNull final LoadNewsListCallback callback, final HashSet<String> cache) {
+        Log.d("", "searchKeywordNews: ");
+        new Thread() {
+            @Override
+            public void run(){
+                StringBuilder content = new StringBuilder();
+                try {
+
+                    URL url = new URL("http://166.111.68.66:2042/news/action/query/search?pageNo=1&pageSize=40&keyword=" + keyWord);
+                    Log.d("remote", "search url: " + url.toString());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        content.append(line + "\n");
+                    }
+                    bufferedReader.close();
+                    Log.d("remote", "search: " + keyWord);
+                    ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
+                    ArrayList<News> retList = new ArrayList<News>();
+                    int j = 0;
+                    Set<String> titleSet = new HashSet<String>();
+                    for (int i = 0; i < newsList.size() && j < count; i++) {
+                        String title = newsList.get(i).getTitle();
+                        if (!cache.contains(title) && !titleSet.contains(title)) {
+                            j++;
+                            titleSet.add(title);
+                            retList.add(newsList.get(i));
+                        }
+                    }
+                    callback.onNewsListLoaded(retList);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("TAG", "search news failed");
