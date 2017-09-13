@@ -259,11 +259,14 @@ public class NewsRepository implements NewsDataSource {
     }
 
     public void getCoverPicture(final News news, final GetPictureCallback callback) {
+        Log.d("PICTURE", "search Picture: " + news.getTitle());
         if (!news.getPictures().isEmpty()) {
+            Log.d("PICTURE", "found in news: " + news.getTitle() + " " + news.getCoverPicture());
             callback.onPictureLoaded(news.getCoverPicture());
             return;
         }
         if (mCachedNewsDetail != null && mCachedNewsDetail.containsKey(news.getId()) && !mCachedNewsDetail.get(news.getId()).getPictures().isEmpty()) {
+            Log.d("PICTURE", "found in cache: " + news.getTitle() + " " + mCachedNewsDetail.get(news.getId()).getCoverPicture());
             callback.onPictureLoaded(mCachedNewsDetail.get(news.getId()).getCoverPicture());
             return;
         }
@@ -272,23 +275,27 @@ public class NewsRepository implements NewsDataSource {
             public void onPictureLoaded(String picture) {
                 news.setPictures(picture);
                 mCachedNewsDetail.put(news.getId(), news);
+                Log.d("PICTURE", "found in local: " + news.getTitle() + " " + picture);
                 callback.onPictureLoaded(picture);
             }
 
             @Override
             public void onPictureNotAvailable() {
+                Log.d("PICTURE", "not found in local -> remote: " + news.getTitle());
                 getCoverPictureFromRemoteDataSource(news, callback);
             }
         });
     }
 
     public void getCoverPictureFromRemoteDataSource(final News news, @NonNull final GetPictureCallback callback) {
+        Log.d("PICTURE", "search in repository remote: " + news.getTitle());
         mNewsRemoteDataSource.getCoverPicture(news, new GetPictureCallback() {
             @Override
             public void onPictureLoaded(String picture) {
                 news.setPictures(picture);
                 mCachedNewsDetail.put(news.getId(), news);
                 mNewsLocalDataSource.updateNewsPicture(news);
+                callback.onPictureLoaded(picture);
             }
 
             @Override

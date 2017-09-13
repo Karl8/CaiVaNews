@@ -36,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //UserSetting.saveKeyWord(this, new HashMap<String, Double>());
+//        UserSetting.saveKeyWord(this, new HashMap<String, Double>());
 //        SharedPreferences sp = MainActivity.this.getSharedPreferences("CategorySetting", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sp.edit();
 //        editor.clear();
 //        editor.commit();
-        deleteDatabase("News.db");
-        deleteDatabase("NewsFavorite.db");
+//        deleteDatabase("News.db");
+//        deleteDatabase("NewsFavorite.db");
         NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(this);
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
         NewsRepository newsRepository = NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource);
@@ -65,5 +65,6 @@ public class MainActivity extends AppCompatActivity {
         //startActivity(new Intent(this, CategoryActivity.class));
         //startActivity(new Intent(this, FavoriteActivity.class));
         startActivity(new Intent(this, NewsListActivity.class));
+        finish();
     }
 }

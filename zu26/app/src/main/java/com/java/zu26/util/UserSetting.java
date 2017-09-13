@@ -158,8 +158,10 @@ public class UserSetting {
         } catch (Exception e) {
             Log.d("PICTURE_MODE", "exception: " + mode);
         }
+
         Log.d("PICTURE_MODE", "getPictureMode: " + mode);
         //return 0;
+
         return mode;
     }
 }

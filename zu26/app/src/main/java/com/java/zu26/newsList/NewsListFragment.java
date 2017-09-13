@@ -416,9 +416,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                     itemHolder.newsTitle.setTextColor(getResources().getColor(R.color.colorFont));
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
-                String url = news.getCoverPicture();
                 try {
-                    if (UserSetting.getPictureMode(mActivityContext) == 0 && url != null && url.length() > 0) {
+                    if (UserSetting.getPictureMode(mActivityContext) == 0) {
                         //Picasso.with(context).load(itemHolder.url).into(itemHolder.newsImage);
                         //itemHolder.newsImage.setImageBitmap(BitmapFactory.decodeStream(myurl.openStream()));
                         mPresenter.getCoverPicture(context, news, itemHolder.newsImage);

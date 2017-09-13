@@ -242,33 +242,46 @@ public class NewsRemoteDataSource implements NewsDataSource {
 
     @Override
     public void getCoverPicture(final News news, @NonNull final GetPictureCallback callback) {
+        Log.d("PICTURE", "search in remote: " + news.getTitle());
         new Thread() {
             @Override
             public void run() {
                 try {
+
                     URL url = new URL("http://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=" + news.getTitle());
+                    Log.d("PICTURE", "search in remote thread: " + news.getTitle() + " " + url.toString());
                     InputStream in = url.openStream();
                     InputStreamReader isr = new InputStreamReader(in);
                     BufferedReader bufr = new BufferedReader(isr);
-                    String str;
-                    String a = "\"hoverURL\":\"http:.+?\\.jpg";
+                    String str, html = "";
+                    String a = "\"hoverURL\":\"http:.+?\\.(jpg|jpeg|png|PNG)";
                     Pattern p = Pattern.compile(a);
                     while ((str = bufr.readLine()) != null) {
+                        html = html + str;
                         Matcher m = p.matcher(str);
                         while (m.find()) {
                             bufr.close();
                             isr.close();
                             in.close();
-                            callback.onPictureLoaded(m.group(0).substring(12));
+                            Log.d("PICTURE", "found in remote: " + news.getTitle() + " " + m.group().substring(12));
+                            callback.onPictureLoaded(m.group().substring(12));
                             return;
                         }
                     }
+                bufr.close();
+                isr.close();
+                in.close();
+                    Log.d("PICTURE", "not found in remote: " + news.getTitle());
+                    Log.d("PICTURE", html);
                 }
+
                 catch(Exception e) {
-                    e.printStackTrace();
+                    Log.d("PICTURE", "exception: ");
                 }
                 finally {
+
                     callback.onPictureNotAvailable();
+
                     return;
                 }
             }

@@ -3,6 +3,7 @@ package com.java.zu26.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 /**
  * Created by kaer on 2017/9/3.
@@ -107,15 +108,29 @@ public final class News implements Parcelable {
     }
     // public News From json
     public String getCoverPicture() {
+        Log.d("PICTURE", "getCoverPicture in news: " + getTitle() + " " + mPictures);
         if (mPictures == null) {
             mPictures = new String("");
             return new String("");
         }
         int pos = mPictures.indexOf(';');
-        if (pos != -1)
+        if (pos != -1) {
+            Log.d("PICTURE", "getCoverPicture in news: return " + getTitle() + " " + mPictures.substring(0, pos));
             return mPictures.substring(0, pos);
-        else if (!mPictures.isEmpty())
-            return mPictures;
+        }
+        else {
+            pos = mPictures.indexOf(' ');
+            if (pos != -1) {
+                Log.d("PICTURE", "getCoverPicture in news: return " + getTitle() + " " + mPictures.substring(0, pos));
+                return mPictures.substring(0, pos);
+            }
+            else if (!mPictures.isEmpty()) {
+
+                Log.d("PICTURE", "getCoverPicture in news: return " + getTitle() + " " + mPictures);
+                return mPictures;
+            }
+        }
+        Log.d("PICTURE", "getCoverPicture in news: return " + getTitle() + " " + "empty");
         return new String("");
     }
 
