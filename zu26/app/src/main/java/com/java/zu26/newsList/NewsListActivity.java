@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +20,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.java.zu26.R;
 import com.java.zu26.category.CategoryActivity;
@@ -43,7 +47,7 @@ import java.util.ArrayList;
 
 public class NewsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private NewsListPresenter mNewsPresenter = null;
+    private NewsListPresenter mNewsPresenter;
 
     private Context mContext;
 
@@ -76,15 +80,7 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_newslist);
-        /*try {
-            if (UserSetting.isDay(NewsListActivity.this)) {
-                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            } else {
-                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }*/
+
         mContext = NewsListActivity.this;
         ///////////删除数据库以便测试！！！！！！！！！！！！！！！
         //mContext.deleteDatabase("News.db");
@@ -133,6 +129,32 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        Switch mtest = new Switch(NewsListActivity.this);
+        MenuItemCompat.setActionView(mNavigationView.getMenu().findItem(R.id.nav_setting), mtest);
+        mtest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    UserSetting.saveDayNightMode(mContext, DayNight.NIGHT);
+                } else {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    UserSetting.saveDayNightMode(mContext, DayNight.DAY);
+                }
+//                recreate();
+            }
+        });
+
+        try {
+            if (UserSetting.isDay(NewsListActivity.this)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 /*
         ViewTreeObserver viewTreeObserver = tabLayout.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -148,9 +170,9 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onDestroy() {
-        SharedPreferences sp = mContext.getSharedPreferences("day_night_mode", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove("day_night_mode");
+//        SharedPreferences sp = mContext.getSharedPreferences("day_night_mode", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sp.edit();
+//        editor.remove("day_night_mode");
         super.onDestroy();
     }
 
@@ -163,16 +185,16 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
             categories.add(Integer.valueOf(s));
         }
         mPagerAdapter.notifyDataSetChanged();
-        try {
-            if (UserSetting.isDay(NewsListActivity.this)) {
-                setTheme(R.style.AppTheme);
-            } else {
-                setTheme(R.style.NightTheme);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        refreshUI();
+//        try {
+//            if (UserSetting.isDay(NewsListActivity.this)) {
+//                setTheme(R.style.AppTheme);
+//            } else {
+//                setTheme(R.style.NightTheme);
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        refreshUI();
     }
 
     /**
@@ -224,11 +246,25 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
                 m.performIdentifierAction(item.getItemId(), 0);
             }
         });
+
+
         return true;
     }
 
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {  //此处处理侧边栏不同点击事件的结果
+//        Switch mSwitchDayNight = (Switch)mNavigationView.getMenu().findItem(R.id.switch_daynight).getActionView();
+//        mSwitchDayNight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if(b) {
+//                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                } else {
+//                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                }
+//            }
+//        });
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent intent = new Intent();
@@ -241,6 +277,10 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
                 intent.setClass(this, SettingActivity.class);
                 startActivity(intent);
                 break;
+//            case R.id.switch_daynight:
+//                Log.d("LC::", "onNavigationItemSelected: ");
+//                Switch mSwitchDayNight = (Switch) item.getActionView();
+//                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -262,9 +302,6 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
             Bundle args = new Bundle();
             args.putInt("category", categories.get(position));
             newsListFragment.setArguments(args);
-            NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mContext);
-            NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
-            mNewsPresenter = new NewsListPresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), newsListFragment);
             newsListFragment.setContext(mContext);
             return newsListFragment;
         }

@@ -115,6 +115,7 @@ public class UserSetting {
     public static void saveKeyWord(Context context, HashMap<String, Double> keyword) {
         Gson g = new Gson();
         String json = g.toJson(keyword);
+
         Log.d("save", "saveKeyWord: " + json);
         SharedPreferences sp = context.getSharedPreferences(PREFERENCE_NAME_KEYWORD, MODE);
         SharedPreferences.Editor editor = sp.edit();

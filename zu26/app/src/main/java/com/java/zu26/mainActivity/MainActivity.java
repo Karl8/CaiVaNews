@@ -26,6 +26,7 @@ import com.java.zu26.util.SpeechUtils;
 import com.java.zu26.util.UserSetting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 //implements View.OnClickListener
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //UserSetting.saveKeyWord(this, new HashMap<String, Double>());
 //        SharedPreferences sp = MainActivity.this.getSharedPreferences("CategorySetting", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sp.edit();
 //        editor.clear();

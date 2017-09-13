@@ -83,6 +83,11 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_newslist, container, false);
 
+        NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(mActivityContext);
+        NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
+        NewsListPresenter presenter = new NewsListPresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), this);
+        this.setPresenter(presenter);
+
         Bundle argumentBundle = getArguments();
         mCategory = argumentBundle.getInt("category");
 
@@ -163,6 +168,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
             }
         });
+
 
 
         return root;
