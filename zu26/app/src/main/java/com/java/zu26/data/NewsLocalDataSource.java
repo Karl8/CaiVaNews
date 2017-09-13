@@ -435,7 +435,6 @@ public class NewsLocalDataSource implements NewsDataSource {
         if (cursor != null && cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
                 picture = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_PICTURES));
-
                 Log.d("LOCAL", "get one picture found: " + picture);
             }
         }
@@ -448,7 +447,8 @@ public class NewsLocalDataSource implements NewsDataSource {
 
         db.close();
 
-        if (news == null) {
+        if (picture == null || picture.isEmpty()) {
+            Log.d("LOCAL", "get Picture : not found" + picture);
             callback.onPictureNotAvailable();
         }
         else {

@@ -151,13 +151,12 @@ public class UserSetting {
         int mode = 0;
         try {
             otherContext = context.createPackageContext(PREFERENCE_PACKAGE, Context.CONTEXT_IGNORE_SECURITY);
-            SharedPreferences sp = otherContext.getSharedPreferences(PREFERENCE_NAME_CATEGORY, MODE);
+            SharedPreferences sp = otherContext.getSharedPreferences(PREFERENCE_NAME_PICTURE, MODE);
             mode = sp.getInt("pictureMode", 0);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
-        //return mode;
+        return mode;
     }
 }
