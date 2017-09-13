@@ -8,12 +8,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorBackground">@android:color/white</item>
-        <item name="colorFont">@android:color/black</item>
+        <item name="colorBackground">@color/colorBackground</item>
+        <item name="colorFont">@color/colorFont</item>
     </style>
 
     <!--夜间主题-->
     <style name="NightTheme" parent="Theme.AppCompat.DayNight">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary_night</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_night</item>
         <item name="colorAccent">@color/colorAccent_night</item>
@@ -46,7 +48,7 @@
         <!-- 半透明 -->
         <item name="android:windowIsTranslucent">false</item>
         <!-- 背景透明 -->
-        <item name="android:windowBackground">@color/colorLittleTransparent</item>
+        <item name="android:windowBackground">?attr/colorBackground</item>
         <!-- 模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
 

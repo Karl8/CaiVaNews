@@ -15,8 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginLeft="32.14dp"
+        android:layout_marginLeft="42.14dp"
         android:layout_marginRight="32.14dp"
-        zu26:leftAndRightSpace="19.43dp"
+        zu26:leftAndRightSpace="21.43dp"
         zu26:rowSpace="14.29dp"/>
 </LinearLayout>

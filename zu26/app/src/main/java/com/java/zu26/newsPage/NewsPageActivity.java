@@ -88,6 +88,16 @@ public class NewsPageActivity extends AppCompatActivity {
 
         mSpeech = SpeechUtils.getsSpeechUtils(mContext);
 
+        try {
+            if (UserSetting.isDay(NewsPageActivity.this)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

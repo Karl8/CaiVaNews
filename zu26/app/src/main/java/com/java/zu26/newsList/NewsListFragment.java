@@ -1,6 +1,7 @@
 package com.java.zu26.newsList;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -169,6 +171,15 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
             }
         });
 
+        try {
+            if (UserSetting.isDay(getContext())) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
         return root;
@@ -182,6 +193,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
             ///mAdapter.clearData();
             //mAdapter.notifyDataSetChanged();
         }
+
         mPresenter.start();
     }
 
@@ -244,7 +256,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
 
     @Override
     public void refreshUI(TypedValue background, TypedValue textColor) {
-
+/*
         mRecyclerView.setBackgroundResource(background.resourceId);
 
         int childCount = mRecyclerView.getChildCount();
@@ -291,7 +303,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-
+*/
     }
 
     private class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -374,7 +386,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                 view.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mActivityContext, SearchActivity.class);
+                        Intent intent = new Intent(getContext(), SearchActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -401,7 +413,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                     itemHolder.newsTitle.setTextColor(Color.rgb(158, 158, 158));
                 }
                 else
-                    itemHolder.newsTitle.setTextColor(Color.rgb(0, 0, 0));
+                    itemHolder.newsTitle.setTextColor(getResources().getColor(R.color.colorFont));
                 //itemHolder.newsTime.setText(news.getTime());
                 itemHolder.newsSource.setText(news.getSource());
                 String url = news.getCoverPicture();

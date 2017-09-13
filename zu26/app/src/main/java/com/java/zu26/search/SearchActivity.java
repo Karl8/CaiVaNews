@@ -83,5 +83,15 @@ public class SearchActivity extends AppCompatActivity {
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
         mSearchPresenter = new SearchPresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), mSearchFragment);
 
+        try {
+            if (UserSetting.isDay(SearchActivity.this)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }

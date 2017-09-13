@@ -6,14 +6,21 @@
         <item
             android:id="@+id/nav_favorites"
             android:icon="@mipmap/favorite_true"
-            android:title="@string/favorites" />
+            android:title="收藏夹" />
     </group>
 
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_setting"
-            android:icon="@mipmap/set"
-            android:title="@string/setting" />
+            android:icon="@mipmap/moon"
+            android:title="夜间模式" />
+    </group>
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_noPicture"
+            android:icon="@mipmap/network"
+            android:title="省流量模式" />
     </group>
 
     <!--<item app:actionLayout="@layout/action_view" />-->

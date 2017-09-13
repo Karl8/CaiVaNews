@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#231f1f</color>
-    <color name="colorPrimaryDark">#231f1f </color>
+    <color name="colorPrimary">#863634</color>
+    <color name="colorPrimaryDark">#863634 </color>
     <color name="colorAccent">#7b5663</color>
-    <color name="colorBackground">#5e5959</color>
+    <color name="colorBackground">#222222</color>
     <color name="colorFont">#ffffff</color>
 
-    <color name="colorGrayFont">#9E9E9E</color>
+    <color name="colorGrayFont">#FFFFFF</color>
 
-    <color name="colorCategoryGray">#666666</color>
-    <color name="colorCategoryBlue">#308BE9</color>     //蓝色
+    <color name="colorCategoryGray">#5D5D5D</color>
+    <color name="colorCategoryBlue">#d9d9d9</color>     //蓝色
     <color name="colorDividerGray">#d9d9d9</color>//细分割线颜色
 
     <color name="colorScrollRed">#CC0000</color>
@@ -21,10 +21,10 @@
     <color name="colorLittleTransparent">#ffffff</color>
     <color name="colorDeleteBackgroundRed">#D32F2F</color>
 
-    <color name="colorPrimary_night">#231f1f</color>
-    <color name="colorPrimaryDark_night">#231f1f </color>
+    <color name="colorPrimary_night">#863634</color>
+    <color name="colorPrimaryDark_night">#863634 </color>
     <color name="colorAccent_night">#7b5663</color>
-    <color name="colorBackground_night">#5e5959</color>
+    <color name="colorBackground_night">#222222</color>
     <color name="colorFont_night">#ffffff</color>
 
 </resources>

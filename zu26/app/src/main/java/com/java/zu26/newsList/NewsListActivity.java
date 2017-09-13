@@ -131,6 +131,11 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
 
         Switch mtest = new Switch(NewsListActivity.this);
         MenuItemCompat.setActionView(mNavigationView.getMenu().findItem(R.id.nav_setting), mtest);
+        try {
+            mtest.setChecked(!UserSetting.isDay(mContext));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         mtest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -141,7 +146,19 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     UserSetting.saveDayNightMode(mContext, DayNight.DAY);
                 }
-//                recreate();
+            }
+        });
+
+        Switch mNopic = new Switch(NewsListActivity.this);
+        MenuItemCompat.setActionView(mNavigationView.getMenu().findItem(R.id.nav_noPicture), mNopic);
+        mNopic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    UserSetting.setPictureMode(mContext, 1);
+                } else {
+                    UserSetting.setPictureMode(mContext, 0);
+                }
             }
         });
 
@@ -154,6 +171,8 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        if(UserSetting.getPictureMode(mContext) == 1) mNopic.setChecked(true);
 
 /*
         ViewTreeObserver viewTreeObserver = tabLayout.getViewTreeObserver();
@@ -185,16 +204,16 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
             categories.add(Integer.valueOf(s));
         }
         mPagerAdapter.notifyDataSetChanged();
-//        try {
-//            if (UserSetting.isDay(NewsListActivity.this)) {
-//                setTheme(R.style.AppTheme);
-//            } else {
-//                setTheme(R.style.NightTheme);
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        refreshUI();
+        try {
+            if (UserSetting.isDay(NewsListActivity.this)) {
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.NightTheme);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        refreshUI();
     }
 
     /**
@@ -219,7 +238,7 @@ public class NewsListActivity extends AppCompatActivity implements NavigationVie
 
         refreshStatusBar();
 
-        if(mNewsPresenter != null)mNewsPresenter.refreshUI(background, textColor);
+        //if(mNewsPresenter != null)mNewsPresenter.refreshUI(background, textColor);
     }
 
     /**

@@ -93,6 +93,17 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });*/
 
+        try {
+            if (UserSetting.isDay(CategoryActivity.this)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 

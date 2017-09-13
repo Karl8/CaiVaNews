@@ -52,5 +52,15 @@ public class FavoriteActivity extends AppCompatActivity {
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
         mFavoritePresenter = new FavoritePresenter(NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource), mFavoriteFragment);
 
+        try {
+            if (UserSetting.isDay(FavoriteActivity.this)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }

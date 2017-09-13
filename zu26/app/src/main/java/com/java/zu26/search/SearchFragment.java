@@ -2,6 +2,7 @@ package com.java.zu26.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +24,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.zu26.R;
 import com.java.zu26.data.News;
+import com.java.zu26.newsList.NewsListActivity;
 import com.java.zu26.newsList.NewsListPresenter;
 import com.java.zu26.newsPage.NewsPageActivity;
+import com.java.zu26.util.UserSetting;
 
 import java.util.ArrayList;
 
@@ -103,6 +107,17 @@ public class SearchFragment extends Fragment implements SearchContract.View{
 
             }
         });
+
+        try {
+            if (UserSetting.isDay(getContext())) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         return root;
     }
