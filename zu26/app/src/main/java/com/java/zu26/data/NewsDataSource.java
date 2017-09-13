@@ -21,6 +21,12 @@ public interface NewsDataSource {
 
 
     }
+    interface GetPictureCallback {
+
+        void onPictureLoaded(String picture);
+
+        void onPictureNotAvailable();
+    }
 
     interface GetNewsCallback {
 
@@ -51,9 +57,13 @@ public interface NewsDataSource {
 
     void updateNewsDetail(@NonNull News news);
 
+    void updateNewsPicture(@NonNull News news);
+
     void searchNews(String keyWord, int page, @NonNull LoadNewsListCallback callback);
 
     void searchKeywordNews(String keyWord,int count, @NonNull LoadNewsListCallback callback, HashSet<String> cache);
+
+    void getCoverPicture(News news, @NonNull GetPictureCallback callback);
 
     // share news callback ???
 }

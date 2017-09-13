@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
 //        SharedPreferences.Editor editor = sp.edit();
 //        editor.clear();
 //        editor.commit();
-
+        deleteDatabase("News.db");
+        deleteDatabase("NewsFavorite.db");
         NewsLocalDataSource newsLocalDataSource = NewsLocalDataSource.getInstance(this);
         NewsRemoteDataSource newsRemoteDataSource = NewsRemoteDataSource.getInstance();
         NewsRepository newsRepository = NewsRepository.getInstance(newsRemoteDataSource, newsLocalDataSource);

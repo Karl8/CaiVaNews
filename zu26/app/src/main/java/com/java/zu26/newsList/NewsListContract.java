@@ -2,7 +2,9 @@ package com.java.zu26.newsList;
 
 import android.content.Context;
 import android.util.TypedValue;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.java.zu26.data.News;
 
 import java.util.ArrayList;
@@ -41,5 +43,7 @@ public interface NewsListContract {
         void start();
 
         void refreshUI(TypedValue background, TypedValue textColor);
+
+        void getCoverPicture(Context context, News news, ImageView imageview);
     }
 }

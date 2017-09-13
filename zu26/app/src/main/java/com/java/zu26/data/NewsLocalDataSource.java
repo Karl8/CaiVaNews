@@ -423,6 +423,39 @@ public class NewsLocalDataSource implements NewsDataSource {
 
     }
 
+    @Override
+    public void getCoverPicture(News news, @NonNull GetPictureCallback callback) {
+        Log.d("LOCAL", "getNewsPicture: ");
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
+                + NewsEntry.COLUMN_NAME_ENTRY_ID + " = '" + news.getId() + "'", null);
+        Log.d("LOCAL", "SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE "
+                + NewsEntry.COLUMN_NAME_ENTRY_ID + " = '" + news.getId() + "'");
+        String picture = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                picture = cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME_PICTURES));
+
+                Log.d("LOCAL", "get one picture found: " + picture);
+            }
+        }
+        else {
+            Log.d("LOCAL", "get Picture : not found");
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+
+        if (news == null) {
+            callback.onPictureNotAvailable();
+        }
+        else {
+            callback.onPictureLoaded(picture);
+        }
+    }
+
 
     public void updateNewsDetail(@NonNull News news) {
 
@@ -439,6 +472,31 @@ public class NewsLocalDataSource implements NewsDataSource {
                 String selection = NewsEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
                 String[] selectionArgs = { news.getId() };
                 Log.d("local", "updateNewsDetail: ");
+                db.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+
+    }
+
+    public void updateNewsPicture(@NonNull News news) {
+
+        // 是否需要先查询？？？？？？？？
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT * FROM " + NewsEntry.TABLE_NAME + " WHERE " + NewsEntry.COLUMN_NAME_ENTRY_ID + " = ?",
+                new String[]{news.getId()});
+        if (cursor != null && cursor.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                ContentValues values = new ContentValues();
+                values.put(NewsEntry.COLUMN_NAME_PICTURES, news.getPictures());
+
+                String selection = NewsEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+                String[] selectionArgs = { news.getId() };
+                Log.d("local", "updateNewsPicture: ");
                 db.update(NewsEntry.TABLE_NAME, values, selection, selectionArgs);
             }
         }

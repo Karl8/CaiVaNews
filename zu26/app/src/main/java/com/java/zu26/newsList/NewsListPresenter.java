@@ -1,5 +1,6 @@
 package com.java.zu26.newsList;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.TypedValue;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.java.zu26.R;
 import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsRepository;
@@ -109,6 +113,23 @@ public class NewsListPresenter implements NewsListContract.Presenter{
         if(mFirstLoad)return;
         mNewsView.refreshUI(background,textColor);
     }
+
+    @Override
+    public void getCoverPicture(final Context context, News news, final ImageView imageview) {
+        mNewsRepository.getCoverPicture(news, new NewsDataSource.GetPictureCallback() {
+            @Override
+            public void onPictureLoaded(String picture) {
+                Glide.with(context).load(picture).placeholder(R.drawable.downloading).into(imageview);
+            }
+
+            @Override
+            public void onPictureNotAvailable() {
+                Glide.with(context).load(R.drawable.downloading).placeholder(R.drawable.downloading).into(imageview);
+            }
+        });
+
+    }
+
 
 
 }

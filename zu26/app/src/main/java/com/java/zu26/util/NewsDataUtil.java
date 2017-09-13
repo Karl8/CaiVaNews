@@ -12,7 +12,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static com.java.zu26.data.NewsPersistenceContract.NewsEntry.categoryMap;
+
+import com.java.zu26.data.NewsDataSource.GetPictureCallback;
 
 /**
  * Created by kaer on 2017/9/5.
@@ -130,4 +135,6 @@ public class NewsDataUtil {
         }
         new URLThread(path).start();
     }
+
+
 }

@@ -158,6 +158,7 @@ public class UserSetting {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return mode;
+        return 0;
+        //return mode;
     }
 }

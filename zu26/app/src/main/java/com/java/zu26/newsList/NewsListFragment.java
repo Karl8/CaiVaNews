@@ -409,7 +409,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View{
                     if (UserSetting.getPictureMode(mActivityContext) == 0 && url != null && url.length() > 0) {
                         //Picasso.with(context).load(itemHolder.url).into(itemHolder.newsImage);
                         //itemHolder.newsImage.setImageBitmap(BitmapFactory.decodeStream(myurl.openStream()));
-                        Glide.with(context).load(url).placeholder(R.drawable.downloading).into(itemHolder.newsImage);
+                        mPresenter.getCoverPicture(context, news, itemHolder.newsImage);
                     }
 
                     else {
