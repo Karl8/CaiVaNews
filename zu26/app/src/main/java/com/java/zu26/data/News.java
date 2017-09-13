@@ -18,7 +18,7 @@ public final class News implements Parcelable {
 
     private final String mCategory;
 
-    private final String mPictures;
+    private String mPictures;
 
     private final String mSource;
 
@@ -107,9 +107,15 @@ public final class News implements Parcelable {
     }
     // public News From json
     public String getCoverPicture() {
+        if (mPictures == null) {
+            mPictures = new String("");
+            return new String("");
+        }
         int pos = mPictures.indexOf(';');
         if (pos != -1)
             return mPictures.substring(0, pos);
+        else if (!mPictures.isEmpty())
+            return mPictures;
         return new String("");
     }
 
@@ -123,7 +129,9 @@ public final class News implements Parcelable {
 
     public String getSource() { return mSource; }
 
-    public String getTime() { return mTime; }
+    public String getTime() {
+        return mTime.substring(0, 4) + "年" + mTime.substring(4, 6) + "月" + mTime.substring(6, 8) + "日";
+    }
 
     public String getUrl() { return mUrl; }
 
@@ -164,6 +172,9 @@ public final class News implements Parcelable {
         }
     };
 
+    public void setPictures(String pictures) {
+        mPictures = pictures;
+    }
 
 }
 

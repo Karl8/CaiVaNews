@@ -4,9 +4,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.bumptech.glide.util.Util;
 import com.java.zu26.util.NewsDataUtil;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -18,6 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by kaer on 2017/9/5.
@@ -73,6 +77,12 @@ public class NewsRemoteDataSource implements NewsDataSource {
                     bufferedReader.close();
                     //Log.d("TAG", "run: ");
                     ArrayList<News> newsList = NewsDataUtil.parseLastedNewsListJson(content.toString());
+                    /*for (News news: newsList) {
+                        if (news.getPictures().isEmpty()) {
+                            news.setPictures(NewsDataUtil.find_image(news.getTitle()));
+                            Log.d("PICTURE", "find picture" + news.getPictures());
+                        }
+                    }*/
                     callback.onNewsListLoaded(newsList);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -157,6 +167,11 @@ public class NewsRemoteDataSource implements NewsDataSource {
     }
 
     @Override
+    public void updateNewsPicture(@NonNull News news) {
+
+    }
+
+    @Override
     public void searchNews(final String keyWord, final int page, @NonNull final LoadNewsListCallback callback) {
         new Thread() {
             @Override
@@ -222,6 +237,42 @@ public class NewsRemoteDataSource implements NewsDataSource {
                     Log.d("TAG", "search news failed");
                 }
             }
+        }.start();
+    }
+
+    @Override
+    public void getCoverPicture(final News news, @NonNull final GetPictureCallback callback) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("http://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=" + news.getTitle());
+                    InputStream in = url.openStream();
+                    InputStreamReader isr = new InputStreamReader(in);
+                    BufferedReader bufr = new BufferedReader(isr);
+                    String str;
+                    String a = "\"hoverURL\":\"http:.+?\\.jpg";
+                    Pattern p = Pattern.compile(a);
+                    while ((str = bufr.readLine()) != null) {
+                        Matcher m = p.matcher(str);
+                        while (m.find()) {
+                            bufr.close();
+                            isr.close();
+                            in.close();
+                            callback.onPictureLoaded(m.group(0).substring(12));
+                            return;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    callback.onPictureNotAvailable();
+                    return;
+                }
+            }
+
         }.start();
     }
 }

@@ -258,6 +258,47 @@ public class NewsRepository implements NewsDataSource {
 
     }
 
+    public void getCoverPicture(final News news, final GetPictureCallback callback) {
+        if (!news.getPictures().isEmpty()) {
+            callback.onPictureLoaded(news.getCoverPicture());
+            return;
+        }
+        if (mCachedNewsDetail != null && mCachedNewsDetail.containsKey(news.getId()) && !mCachedNewsDetail.get(news.getId()).getPictures().isEmpty()) {
+            callback.onPictureLoaded(mCachedNewsDetail.get(news.getId()).getCoverPicture());
+            return;
+        }
+        mNewsLocalDataSource.getCoverPicture(news, new GetPictureCallback() {
+            @Override
+            public void onPictureLoaded(String picture) {
+                news.setPictures(picture);
+                mCachedNewsDetail.put(news.getId(), news);
+                callback.onPictureLoaded(picture);
+            }
+
+            @Override
+            public void onPictureNotAvailable() {
+                getCoverPictureFromRemoteDataSource(news, callback);
+            }
+        });
+    }
+
+    public void getCoverPictureFromRemoteDataSource(final News news, @NonNull final GetPictureCallback callback) {
+        mNewsRemoteDataSource.getCoverPicture(news, new GetPictureCallback() {
+            @Override
+            public void onPictureLoaded(String picture) {
+                news.setPictures(picture);
+                mCachedNewsDetail.put(news.getId(), news);
+                mNewsLocalDataSource.updateNewsPicture(news);
+            }
+
+            @Override
+            public void onPictureNotAvailable() {
+
+            }
+        });
+    }
+
+
     public void saveKeywordCache(Context context) {
         UserSetting.saveKeyWord(context, mCachedRecommendationTree);
     }
@@ -485,6 +526,11 @@ public class NewsRepository implements NewsDataSource {
 
     @Override
     public void updateNewsDetail(@NonNull News news) {
+
+    }
+
+    @Override
+    public void updateNewsPicture(@NonNull News news) {
 
     }
 
