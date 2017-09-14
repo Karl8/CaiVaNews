@@ -1,8 +1,12 @@
 package com.java.zu26.search;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.java.zu26.R;
 import com.java.zu26.data.News;
 import com.java.zu26.data.NewsDataSource;
 import com.java.zu26.data.NewsRepository;
@@ -94,6 +98,26 @@ public class SearchPresenter implements SearchContract.Presenter{
     @Override
     public void start()
     {
+
+    }
+
+
+    @Override
+    public void getCoverPicture(final Context context, final News news, final ImageView imageview) {
+        Log.d("PICTURE", "search Picture in presenter: " + news.getTitle());
+        mNewsRepository.getCoverPicture(news, new NewsDataSource.GetPictureCallback() {
+            @Override
+            public void onPictureLoaded(String picture) {
+                Log.d("PICTURE", "found in presenter: " + news.getTitle() + " " + picture);
+                Glide.with(context).load(picture).placeholder(R.drawable.downloading).into(imageview);
+            }
+
+            @Override
+            public void onPictureNotAvailable() {
+                Glide.with(context).load(R.drawable.downloading).placeholder(R.drawable.downloading).into(imageview);
+                Log.d("PICTURE", "not found in presenter: " + news.getTitle());
+            }
+        });
 
     }
 }

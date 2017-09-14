@@ -77,7 +77,7 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
         mAdapter = new FavoriteFragment.FavoriteAdapter(mContext, new ArrayList<News>(0));
         mRecyclerView.setAdapter(mAdapter);
 
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.swipeRefreshLayout1_favorite);
+
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -109,18 +109,16 @@ public class FavoriteFragment extends Fragment implements FavoriteContract.View{
 
             }
         });
-        /*
-        // 实现顶部上拉刷新(其实没有刷新23333)
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-            @Override
-            public void onRefresh() {
 
-                // 其实应该改成true，但是没有关系，因为老师的数据库不会更新.
-                mPresenter.loadNews(1, mCategory, false);
-            }
-        });
-        */
+//        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//
+//            @Override
+//            public void onRefresh() {
+//
+//            }
+//        });
+
         try {
             if (UserSetting.isDay(getContext())) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

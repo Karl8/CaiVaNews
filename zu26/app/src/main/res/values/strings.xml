@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools"    tools:ignore="MissingTranslation">
-    <string name="app_name">2015011025_张卡尔</string>
+    <string name="app_name">26_张卡尔</string>
     <string name="news_page_action_share">news_page_action_share</string>
     <string name="news_page_action_voice">news_page_action_voice</string>
     <string name="news_page_action_favorite">news_page_action_favorite</string>

@@ -243,10 +243,10 @@ public class SearchFragment extends Fragment implements SearchContract.View{
                 itemHolder.newsSource.setText(news.getSource());
                 String url = news.getCoverPicture();
                 try {
-                    if (url != null && url.length() > 0) {
+                    if (UserSetting.getPictureMode(mContext) == 0) {
                         //Picasso.with(context).load(itemHolder.url).into(itemHolder.newsImage);
                         //itemHolder.newsImage.setImageBitmap(BitmapFactory.decodeStream(myurl.openStream()));
-                        Glide.with(context).load(url).placeholder(R.drawable.downloading).into(itemHolder.newsImage);
+                        mPresenter.getCoverPicture(context, news, itemHolder.newsImage);
                     }
 
                     else {

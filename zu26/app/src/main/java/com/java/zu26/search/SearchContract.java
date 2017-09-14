@@ -1,5 +1,8 @@
 package com.java.zu26.search;
 
+import android.content.Context;
+import android.widget.ImageView;
+
 import com.java.zu26.data.News;
 import com.java.zu26.newsList.NewsListPresenter;
 
@@ -29,6 +32,8 @@ public interface SearchContract {
         void loadNews(String keyWord, int page, boolean forceUpdate);
 
         void start();
+
+        void getCoverPicture(Context context, News news, ImageView imageview);
     }
 
 }
