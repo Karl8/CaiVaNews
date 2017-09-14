@@ -372,7 +372,7 @@ public class NewsLocalDataSource implements NewsDataSource {
             values.put(NewsEntry.COLUMN_NAME_ENTRY_ID, news.getId());
             values.put(NewsEntry.COLUMN_NAME_AUTHOR, news.getAuthor());
             values.put(NewsEntry.COLUMN_NAME_TITLE, news.getTitle());
-            values.put(NewsEntry.COLUMN_NAME_CATEGORY, 0);
+            values.put(NewsEntry.COLUMN_NAME_CATEGORY, 0);//推荐新闻的分类为0
             values.put(NewsEntry.COLUMN_NAME_PICTURES, news.getPictures());
             values.put(NewsEntry.COLUMN_NAME_SOURCE, news.getSource());
             values.put(NewsEntry.COLUMN_NAME_TIME, news.getTime());

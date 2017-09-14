@@ -136,6 +136,10 @@ public class UserSetting {
         } catch (Exception e) {
             Log.d("", "loadKeyWord: " + e.toString());
         }
+        if (keyword == null) {
+            keyword = new HashMap<>();
+            keyword.put("清华", 100.0);
+        }
         return keyword;
     }
 
