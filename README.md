@@ -15,7 +15,7 @@ final assignment for java lesson.
 - [x] 收藏
 - [x] 收藏页面
 - [x] 搜索页面
-- [ ] 报告
+- [x] 报告
 ### Bonus:
 - [x] 新闻推荐
 - [x] 语音播报
