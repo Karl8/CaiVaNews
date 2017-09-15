@@ -105,7 +105,7 @@ NewsFavoriteDbHelper.java
 
 主要使用`RecyclerView`和`RecyclerView.Adapter<RecyclerView.ViewHolder>`显示新闻列表。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/newslist.png =250x)  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/newspage.png =250x)
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/newslist.png" width = "400">  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/newspage.png" width = "400">
 
 ### 分类列表
 - **难点**：
@@ -116,9 +116,9 @@ NewsFavoriteDbHelper.java
   1. `ViewPager`的左右滑动切换效果很流畅。
   2. 标签删除操作设置为点击高亮或变暗，采用浮在界面上的标签页的风格，提升了界面的美观性和整洁性，也使用户操作方便简洁。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/category.png =250x) ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/category2.png =250x)
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/category.png" width = "400"> <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/category2.png" width = "400">
   
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/viewpager.png =250x)
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/viewpager.png" width = "400">
 
 每种分类产生的 *Fragment* 只有分类不同，其他逻辑都完全相同。而标签删除的界面通过自己实现的 *Layout* 进行手动调整外观和位置。
 ### 新闻的本地存储
@@ -132,7 +132,7 @@ NewsFavoriteDbHelper.java
 
   1. 增加了 *Footer* 栏，上拉刷新时可以实时看到刷新界面。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/footer.png =250x)
+<img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/footer.png" width = "400">
   
   2. 增加了顶部下拉刷新按钮，当界面卡死时可以在顶部下拉刷新使界面重新读取最新的新闻。
 
@@ -141,14 +141,14 @@ NewsFavoriteDbHelper.java
 ### 看过新闻的灰色标记
 在`RecyclerView`中的`onBindViewHolder`中，判断新闻是否已读，若已读则改为灰色，否则为默认字体颜色。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/gray_mark.jpg =250x)
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/gray_mark.jpg" width = "400">
 
 ### 新闻搜索
 - **亮点**：在键入关键词的过程中会实时显示搜索结果。
 
 通过新闻api获取关键词搜索结果。通过`editView.addTextChangedListener()`方法添加`TextWatcher`判断输入状态文本修改结束时获取搜索结果。
 
-![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/search_button.png =250x) ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/search.jpg =250x)
+<img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/search_button.png" width = "400"> <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/search.jpg" width = "400">
 ### 新闻分享
 - **亮点**：
 
@@ -156,14 +156,14 @@ NewsFavoriteDbHelper.java
   2. 朋友圈分享获得了微信公众平台的认证，可以分享配有标题的具体内容（类似推送）。
 
 调用第三方库 *Share SDK* 进行分享，配置过程很难。
-![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/share.jpg =250x) ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/share_qq.png =250x)
+<img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/share.jpg" width = "400"> <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/share_qq.png" width = "400">
 ### 新闻收藏
 - **亮点**：
   1. 收藏的新闻会按照收藏的时间顺序降序排序，增加了易用性
   2. 左滑删除收藏操作，且滑动过程中会自动归正为显示删除按钮或不显示按钮，快捷方便
 使用`NewsFavorite.db`数据库存储收藏新闻。自定义`FavoriteItemView`类，继承了HorizontalScrollView类，支持滑动删除和滑动归正。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/favorite.jpg =250x)             ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/favorite_newspage.jpg =250x)
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/favorite.jpg" width = "400">             <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/favorite_newspage.jpg" width = "400">
 
 ### 根据用户看过的新闻推荐相关新闻
 - **难点**：
@@ -183,7 +183,7 @@ NewsFavoriteDbHelper.java
   1. 朗读清晰，有节奏感
   2. 一键阅读，再按停止
 
-![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/voice.png =250x)
+<img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/voice.png" width = "400">
 
 调用第三方库`com.baidu.tts`。
 ### 新闻人物地点链接
@@ -194,7 +194,7 @@ NewsFavoriteDbHelper.java
 
 使用正则表达式`regex`查找新闻中的人物和地点位置，使用`SpannableString`类为文字添加`onClick()`监听事件，使用`Intent.ACTION_VIEW`启动浏览器。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/link.png =250x)
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/link.png" width = "400">
 
 ### 夜间模式
 - **亮点**：
@@ -209,13 +209,13 @@ NewsFavoriteDbHelper.java
 调用以下函数来动态切换夜间模式与正常模式：
 - `getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);`
 - `getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);`
-![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_category.png =250x)![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_drwer.png =250x) ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_newslist.png =250x) ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_newspage.png =250x)
+<img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_category.png" width = "400"><img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_drwer.png" width = "400"> <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_newslist.png" width = "400"> <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/night_newspage.png" width = "400">
 ### 文字模式和图片模式转换
 - **亮点**：将用户设置保存在`SharedPreference`中，即使用户退出程序重新打开，依然保留上一次的设置。
 
 使用SharedPreference将设置存储在本地，在加载图片之前判断模式，若为有图模式，则加载图片，否则不加载。
 
-![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/nopicture.png =250x)
+<img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/nopicture.png" width = "400">
 
 ### 根据新闻文本补上相关图片
 - **难点**：
@@ -225,15 +225,14 @@ NewsFavoriteDbHelper.java
 
 以新闻标题为关键词进行百度图片搜索，并解析得到的html，得到相关图片。
 
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/newslist.png =250x) 
+  <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/newslist.png" width = "400"> 
 
 ### 界面颜值高
 - **亮点**：
 
   通过求助美院视觉传达系五字班同学，专业化设计了app的页面结构与配色。整体界面严格按照尺寸设置，采用扁平化的设计风格。来自该同学的部分尺寸标注如下：
   
-  ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/xgy2.jpg =250x) ![](https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/xgy3.jpg =250x445)
-
+    <img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/xgy2.jpg" width = "400"><img src="https://raw.githubusercontent.com/Karl8/CaiVaNews/pictures/pictures/xgy3.jpg" width = "400">
 
 ### 使用较好的框架
 - **亮点**：采用MVP框架，上文已有详述。
